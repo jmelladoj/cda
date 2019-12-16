@@ -1,6 +1,7 @@
-window.Vue = require('vue');
-
+import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
+
 import usuario from './usuario'
 
 Vue.use(Vuex)
@@ -9,7 +10,8 @@ export default new Vuex.Store({
     state: {
         notificacion: {
             mensaje: ''
-        }
+        },
+        lugares: []
     },
     mutations: {
         msg_info(state, mensaje){
@@ -56,12 +58,6 @@ export default new Vuex.Store({
 
             state.notificacion.mensaje = ''
         }
-    },
-    actions: {
-
-    },
-    getters: {
-
     },
     modules: {
         usuario

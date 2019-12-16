@@ -6,6 +6,8 @@ Vue.use(VueRouter)
 
 import Usuarios from './components/intranet/Usuarios.vue'
 import Perfiles from './components/intranet/Perfiles.vue'
+import Lugares from './components/intranet/Lugares.vue'
+import ProductosInventario from './components/intranet/ProductosInventario.vue'
 
 
 export default new VueRouter({
@@ -18,6 +20,14 @@ export default new VueRouter({
             path: '/perfiles',
             name: 'perfiles',
             component: Perfiles
+        },{
+            path: '/lugares',
+            name: 'lugares',
+            component: Lugares
+        },{
+            path: '/inventario',
+            name: 'inventario',
+            component: ProductosInventario
         },
     ],
     mode: 'history'

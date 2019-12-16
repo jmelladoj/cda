@@ -75,7 +75,6 @@
         },
         methods: {
             ...mapMutations(['msg_success', 'msg_error']),
-            ...mapMutations('usuario', ['actualizar']),
             ingresar(){
                 if(this.$v.login.$invalid){
                     this.$v.login.$touch()
@@ -88,12 +87,7 @@
                     'usuario': me.login.usuario,
                     'password': me.login.password
                 }).then(function (response) {
-                    axios.get('/usuario/logeado').then(function (response) {
-                        me.actualizar(response.data.usuario)
-                        window.location.href = "/home";
-                        
-                        //me.saludo
-                    })
+                    window.location.href = "/home";
                 }).catch(function (error) {
                     if (error.response.status == 422){
                         me.$store.commit('msg_error', 'Las credenciales introducidas son incorrectas.')

@@ -9,7 +9,7 @@
                             <img src="assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
                         </b>
                         <span>
-                            <img src="assets/images/logo-text.png" alt="homepage" class="dark-logo" /> 
+                            <img src="assets/images/logo-text.png" alt="homepage" class="dark-logo" />
                             <img src="assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
                         </span>
                     </a>
@@ -36,8 +36,8 @@
                                             <a href="javascript:void(0)">
                                                 <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i></div>
                                                 <div class="mail-contnet">
-                                                    <h5>Luanch Admin</h5> <span class="mail-desc">Just see the my new admin!</span> 
-                                                    <span class="time">9:30 AM</span> 
+                                                    <h5>Luanch Admin</h5> <span class="mail-desc">Just see the my new admin!</span>
+                                                    <span class="time">9:30 AM</span>
                                                 </div>
                                             </a>
                                         </div>
@@ -63,16 +63,16 @@
                                             <a href="javascript:void(0)">
                                                 <div class="user-img"> <img src="assets/images/users/1.jpg" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
                                                 <div class="mail-contnet">
-                                                    <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> 
-                                                    <span class="time">9:30 AM</span> 
+                                                    <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span>
+                                                    <span class="time">9:30 AM</span>
                                                 </div>
                                             </a>
                                         </div>
                                     </li>
                                     <li>
-                                        <a class="nav-link text-center link" href="javascript:void(0);"> 
-                                            <strong>See all e-Mails</strong> 
-                                            <i class="fa fa-angle-right"></i> 
+                                        <a class="nav-link text-center link" href="javascript:void(0);">
+                                            <strong>See all e-Mails</strong>
+                                            <i class="fa fa-angle-right"></i>
                                         </a>
                                     </li>
                                 </ul>
@@ -169,38 +169,12 @@
                                 </ul>
                             </div>
                         </li>
-                        <!-- ============================================================== -->
-                        <!-- End mega menu -->
-                        <!-- ============================================================== -->
-                        <!-- ============================================================== -->
-                        <!-- User Profile -->
-                        <!-- ============================================================== -->
-                        <li class="nav-item dropdown u-pro">
-                            <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="assets/images/users/1.jpg" alt="user" class=""> 
-                            
-                            <span class="hidden-md-down">Mark &nbsp;<i class="fa fa-angle-down"></i></span> </a>
-                            <div class="dropdown-menu dropdown-menu-right animated flipInY">
-                                <!-- text-->
-                                <a href="javascript:void(0)" class="dropdown-item"><i class="ti-user"></i> My Profile</a>
-                                <!-- text-->
-                                <a href="javascript:void(0)" class="dropdown-item"><i class="ti-wallet"></i> My Balance</a>
-                                <!-- text-->
-                                <a href="javascript:void(0)" class="dropdown-item"><i class="ti-email"></i> Inbox</a>
-                                <!-- text-->
-                                <div class="dropdown-divider"></div>
-                                <!-- text-->
-                                <a href="javascript:void(0)" class="dropdown-item"><i class="ti-settings"></i> Account Setting</a>
-                                <!-- text-->
-                                <div class="dropdown-divider"></div>
-                                <!-- text-->
-                                <a href="login.html" class="dropdown-item"><i class="fa fa-power-off"></i> Logout</a>
-                                <!-- text-->
-                            </div>
-                        </li>
-                        <!-- ============================================================== -->
-                        <!-- End User Profile -->
-                        <!-- ============================================================== -->
-                        <li class="nav-item right-side-toggle"> <a class="nav-link  waves-effect waves-light" href="javascript:void(0)"><i class="ti-settings"></i></a></li>
+
+                        <li class="nav-item right-side-toggle" @click="cerrar_session"> <a class="nav-link  waves-effect waves-light" href="javascript:void(0)"><i class="ti-power-off"></i></a></li>
+
+                        <li class="nav-item" v-if="usuario"><b-button pill variant="primary" class="nav-link dropdown-toggle waves-effect waves-dark profile-pic line-height-0 margin-top-0-5" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> {{ usuario.nombre[0] }} </b-button></li>
+
+
                     </ul>
                 </div>
             </nav>
@@ -213,48 +187,87 @@
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
                         <li class="nav-small-cap">--- MENÚ</li>
-                        <li> <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">Usuarios</span></a>
+                        <li>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">Usuarios</span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><router-link to="/perfiles">Perfiles</router-link></li>
                                 <li><router-link to="/usuarios">Usuarios</router-link></li>
                             </ul>
                         </li>
-                        <li> <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-folder"></i><span class="hide-menu">Documentos</span></a>
+                        <li>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-folder"></i><span class="hide-menu">Documentos</span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="javacript:void(0)">Ordenes de compra </a></li>
                             </ul>
                         </li>
-                        <li class="nav-small-cap">--- SUPPORT</li>
+                        <li>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-archive"></i><span class="hide-menu">Inventario</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><router-link to="/lugares">Lugares</router-link></li>
+                                <li><router-link to="/inventario">Productos</router-link></li>
+                            </ul>
+                        </li>
+
                         <li> <a class="waves-effect waves-dark" href="documentation/documentation.html" aria-expanded="false"><i class="fa fa-circle-o text-danger"></i><span class="hide-menu">Documentation</span></a></li>
-                        <li> <a class="waves-effect waves-dark" href="pages-login.html" aria-expanded="false"><i class="fa fa-circle-o text-success"></i><span class="hide-menu">Log Out</span></a></li>
-                        <li> <a class="waves-effect waves-dark" href="pages-faq.html" aria-expanded="false"><i class="fa fa-circle-o text-info"></i><span class="hide-menu">FAQs</span></a></li>
                     </ul>
                 </nav>
             </div>
         </aside>
 
         <div class="page-wrapper">
-            <div class="container-fluid">
+            <b-container fluid>
                 <router-view></router-view>
-            </div>
+            </b-container>
         </div>
     </div>
-</template> 
+</template>
 
 <script>
-    import { mapGetters } from 'vuex'
-    
+    import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
+
     export default {
         data() {
             return {
-                
+
             }
         },
         computed: {
             ...mapGetters('usuario', ['saludo']),
+            ...mapState('usuario', ['usuario'])
         },
-        mounted(){
-            this.saludo
+        methods: {
+            ...mapActions('usuario', ['salir']),
+            ...mapMutations('usuario', ['actualizar']),
+            usuario_logeado(){
+                let me = this
+
+                axios.get('/usuario/logeado').then(function (response) {
+                    me.actualizar(response.data.usuario)
+                    me.saludo
+                })
+            },
+            cerrar_session(){
+
+                let me = this
+
+                axios.post('/logout').then(function (response) {
+                    if (response.status === 302 || 401) {
+                        me.salir()
+
+                        window.location.href = "/";
+                    }
+                    else {
+                        console.log(response)
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error)
+                });
+
+            }
+        },
+        created(){
+            this.usuario_logeado()
         }
     }
 </script>

@@ -1,1 +1,24 @@
 // In this scss you can overwrite all our scss, we suggested you to add your scss into this, so whenever the update comes it will not affect your code.
+.toast {
+    font-size: 1rem;
+}
+
+.line-height-0 {
+    line-height: 30px !important;
+}
+
+.margin-top-0-5{
+    margin-top: 0.5rem !important;
+}
+
+.heigth-50 {
+    height: 50px !important;
+}
+
+.modal-backdrop {
+    background-color: #000000bf !important;
+}
+
+.btn {
+    min-width: 25px !important;
+}

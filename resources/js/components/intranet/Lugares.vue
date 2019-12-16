@@ -1,6 +1,6 @@
 <template>
     <div>
-        <titulo-pagina titulo="Perfiles"></titulo-pagina>
+        <titulo-pagina titulo="Lugares spa"></titulo-pagina>
 
         <b-row>
             <b-col>
@@ -73,7 +73,7 @@
 
 
                         <template v-slot:cell(acciones)="row">
-                            <b-button size="xs" variant="warning" title="Actualizar información" @click="abrir_modal_perfil(row.item)">
+                            <b-button size="xs" variant="warning" title="Actualizar información" @click="abrir_modal_lugar(row.item)">
                                 <i class="fa fa-pencil"></i>
                             </b-button>
 
@@ -94,54 +94,30 @@
             </b-col>
         </b-row>
 
-        <b-modal ref="modal_perfil" :title="modal_perfil.titulo" size="lg" no-close-on-backdrop>
+        <b-modal ref="modal_lugar" :title="modal_lugar.titulo" no-close-on-backdrop>
             <b-form>
-                <b-form-group label="Nombre de perfil">
+                <b-form-group label="Nombre de lugar">
                     <b-form-input
-                        v-model="$v.perfil.nombre.$model"
-                        :state="$v.perfil.nombre.$dirty ? !$v.perfil.nombre.$error : null"
-                        aria-describedby="perfil-nombre"
+                        v-model="$v.lugar.nombre.$model"
+                        :state="$v.lugar.nombre.$dirty ? !$v.lugar.nombre.$error : null"
+                        aria-describedby="lugar-nombre"
                     ></b-form-input>
 
-                    <b-form-invalid-feedback id="perfil-nombre">
+                    <b-form-invalid-feedback id="lugar-nombre">
                         Campo de alfanúmerico, mínimo de 3 caracteres.
                     </b-form-invalid-feedback>
-                </b-form-group>
-
-                <hr>
-
-                <b-form-group label="Funciones">
-                    <b-row>
-                    <b-col>
-                        <b-form-group label="Usuarios">
-                            <b-form-checkbox v-model="perfil.menu_perfiles">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Perfiles</b-form-checkbox>
-                            <b-form-checkbox v-model="perfil.menu_usuarios">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Usuarios</b-form-checkbox>
-                        </b-form-group>
-                    </b-col>
-                    <b-col>
-                        <b-form-group label="Documentos">
-                            <b-form-checkbox v-model="perfil.menu_ordenes_compra">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Ordenes de compra</b-form-checkbox>
-                        </b-form-group>
-                    </b-col>
-                    <b-col>
-                        <b-form-group label="Inventario">
-                            <b-form-checkbox v-model="perfil.menu_lugares">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Lugares</b-form-checkbox>
-                            <b-form-checkbox v-model="perfil.menu_inventario">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Productos</b-form-checkbox>
-                        </b-form-group>
-                    </b-col>
-                    </b-row>
                 </b-form-group>
             </b-form>
 
             <template slot="modal-footer">
-                <b-button :disabled="$v.perfil.$invalid" v-show="modal_perfil.accion == 1" size="md" variant="success" @click="crear_actualizar_perfil"> Guardar </b-button>
-                <b-button :disabled="$v.perfil.$invalid" v-show="modal_perfil.accion == 2" size="md" variant="warning" @click="crear_actualizar_perfil"> Actualizar </b-button>
-                <b-button size="md" variant="danger" @click="cerrar_modal_perfil"> Cerrar </b-button>
+                <b-button :disabled="$v.lugar.$invalid" v-show="modal_lugar.accion == 1" size="md" variant="success" @click="crear_actualizar_lugar"> Guardar </b-button>
+                <b-button :disabled="$v.lugar.$invalid" v-show="modal_lugar.accion == 2" size="md" variant="warning" @click="crear_actualizar_lugar"> Actualizar </b-button>
+                <b-button size="md" variant="danger" @click="cerrar_modal_lugar"> Cerrar </b-button>
             </template>
         </b-modal>
 
         <div class="fixed-bottom mb-5 mr-5">
-            <b-button pill variant="success" size="lg" class="pull-right heigth-50" @click="abrir_modal_perfil"><i class="ti-plus"></i></b-button>
+            <b-button pill variant="success" size="lg" class="pull-right heigth-50" @click="abrir_modal_lugar"><i class="ti-plus"></i></b-button>
         </div>
     </div>
 </template>
@@ -168,23 +144,18 @@
                 sortDirection: 'asc',
                 filter: null,
                 filterOn: [],
-                modal_perfil: {
+                modal_lugar: {
                     titulo: '',
                     accion: 0
                 },
-                perfil: {
+                lugar: {
                     id: 0,
-                    nombre: '',
-                    menu_perfiles : false,
-                    menu_usuarios : false,
-                    menu_ordenes_compra : false,
-                    menu_lugares : false,
-                    menu_inventario : false
+                    nombre: ''
                 }
             }
         },
         validations:{
-            perfil: {
+            lugar: {
                 nombre: {
                     required,
                     minLength: minLength(4)
@@ -204,75 +175,61 @@
                 this.totalRows = filteredItems.length
                 this.currentPage = 1
             },
-            listar_perfiles(){
+            listar_lugares(){
                 let me = this
 
-                axios.get('/perfiles/1').then(function (response) {
-                    me.items = response.data.perfiles
+                axios.get('/lugares/1').then(function (response) {
+                    me.items = response.data.lugares
                     me.totalRows = me.items.length;
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
             },
-            abrir_modal_perfil(data = []) {
+            abrir_modal_lugar(data = []) {
                 let me = this
 
-                me.limpiar_datos_perfil()
-                me.modal_perfil.titulo = data.id == undefined ? "Agregar perfil" : "Modificar perfil"
-                me.modal_perfil.accion = data.id == undefined ? 1 : 2
+                me.limpiar_datos_lugar()
+                me.modal_lugar.titulo = data.id == undefined ? "Agregar lugar" : "Modificar lugar"
+                me.modal_lugar.accion = data.id == undefined ? 1 : 2
 
-                if(me.modal_perfil.accion == 2){
-                    me.perfil.id = data.id
-                    me.perfil.nombre = data.nombre
-                    me.perfil.menu_perfiles = data.menu_perfiles == 1 ? true : false
-                    me.perfil.menu_usuarios = data.menu_usuarios == 1 ? true : false
-                    me.perfil.menu_ordenes_compra = data.menu_ordenes_compra == 1 ? true : false
-                    me.perfil.menu_lugares = data.menu_lugares == 1 ? true : false
-                    me.perfil.menu_inventario = data.menu_inventario == 1 ? true : false
+                if(me.modal_lugar.accion == 2){
+                    me.lugar.id = data.id
+                    me.lugar.nombre = data.nombre
                 }
 
-                this.$refs['modal_perfil'].show()
+                this.$refs['modal_lugar'].show()
             },
-            cerrar_modal_perfil() {
-                this.modal_perfil.titulo = ""
-                this.modal_perfil.accion = 0
-                this.$refs['modal_perfil'].hide()
+            cerrar_modal_lugar() {
+                this.modal_lugar.titulo = ""
+                this.modal_lugar.accion = 0
+                this.$refs['modal_lugar'].hide()
             },
-            limpiar_datos_perfil() {
-                this.perfil.id = 0
-                this.perfil.nombre = ''
-                this.perfil.menu_perfiles = false
-                this.perfil.menu_usuarios = false
-                this.perfil.menu_ordenes_compra = false
-                this.perfil.menu_lugares = false
-                this.perfil.menu_inventario = false
+            limpiar_datos_lugar() {
+                this.lugar.id = 0
+                this.lugar.nombre = ''
 
                 this.$v.$reset();
             },
-            crear_actualizar_perfil() {
-                if(this.$v.perfil.$invalid){
-                    this.$v.perfil.$touch()
+            crear_actualizar_lugar() {
+                if(this.$v.lugar.$invalid){
+                    this.$v.lugar.$touch()
                     return
                 }
 
                 let me = this
 
-                axios.post('/perfil/crear/actualizar',{
-                        'id': me.perfil.id,
-                        'nombre': me.perfil.nombre,
-                        'menu_perfiles': me.perfil.menu_perfiles,
-                        'menu_usuarios': me.perfil.menu_usuarios,
-                        'menu_ordenes_compra': me.perfil.menu_ordenes_compra,
-                        'menu_lugares': me.perfil.menu_lugares,
-                        'menu_inventario': me.perfil.menu_inventario
+                axios.post('/lugar/crear/actualizar',{
+                        'id': me.lugar.id,
+                        'nombre': me.lugar.nombre
                     }).then(function (response) {
-                        me.listar_perfiles()
-                        me.$store.commit('msg_success', me.perfil.id == 0 ? 'Registro agregado exitosamente.' :  'Registro actualizado exitosamente.')
+                        me.listar_lugares()
+                        me.$store.commit('msg_success', me.lugar.id == 0 ? 'Registro agregado exitosamente.' :  'Registro actualizado exitosamente.')
 
-                        if(me.perfil.id == 0){
-                            me.limpiar_datos_perfil()
+                        if(me.lugar.id == 0){
+                            me.limpiar_datos_lugar()
                         }
+
                     }).catch(function (error) {
                         console.log(error)
                 })
@@ -289,10 +246,10 @@
                 }).then((result) => {
                     if (result.value) {
                         let me = this
-                        axios.post('/perfil/borrar',{
+                        axios.post('/lugar/borrar',{
                             'id': id
                         }).then(function (response) {
-                            me.listar_perfiles();
+                            me.listar_lugares();
                             me.$store.commit('msg_success', 'Registro eliminado exitosamente.')
                         }).catch(function (error) {
                             console.log(error);
@@ -302,7 +259,7 @@
             }
         },
         mounted() {
-            this.listar_perfiles()
+            this.listar_lugares()
         }
     }
 </script>

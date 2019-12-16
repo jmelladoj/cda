@@ -7,6 +7,7 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+window.swal = require('sweetalert2');
 
 //Componentes
 import Vuelidate from 'vuelidate'
@@ -14,6 +15,7 @@ import BootstrapVue from 'bootstrap-vue'
 import Vuex from 'vuex'
 import VueToast from 'vue-toast-notification'
 import VueRouter from 'vue-router'
+import VueCurrencyFilter from 'vue-currency-filter'
 
 //Estilos
 import 'vue-toast-notification/dist/index.css'
@@ -22,12 +24,21 @@ import 'vue-toast-notification/dist/index.css'
 import store from './store/index.js'
 import router from './routes.js'
 
- 
+
 Vue.use(VueToast)
 Vue.use(Vuelidate)
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
 Vue.use(VueRouter)
+
+Vue.use(VueCurrencyFilter,{
+    symbol : '$',
+    thousandsSeparator: '.',
+    fractionCount: 0,
+    fractionSeparator: ',',
+    symbolPosition: 'front',
+    symbolSpacing: true
+})
 
 /**
  * The following block of code may be used to automatically register your
@@ -52,6 +63,7 @@ Vue.component('titulo-pagina', require('./components/general/Titulo.vue').defaul
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
 
 const app = new Vue({
     el: '#app',
