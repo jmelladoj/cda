@@ -25,6 +25,7 @@
                                 v-model="$v.login.password.$model"
                                 :state="$v.login.password.$dirty ? !$v.login.password.$error : null"
                                 aria-describedby="password-input"
+                                @keyup.enter="ingresar"
                             ></b-form-input>
 
                             <b-form-invalid-feedback id="password-input">

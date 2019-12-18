@@ -1,7 +1,8 @@
 export default {
     namespaced: true,
     state: {
-        usuario: null
+        usuario: null,
+        estado_saludo: 0
     },
     mutations: {
         actualizar(state, usuario){
@@ -15,11 +16,16 @@ export default {
     },
     getters: {
         saludo(state) {
-            Vue.$toast.open({
-                message: '!Hola ' + state.usuario.nombre + '¡',
-                type: 'success',
-                duration: 5000
-            })
+            if(state.estado_saludo == 0){
+                Vue.$toast.open({
+                    message: '!Hola ' + state.usuario.nombre + '¡',
+                    type: 'success',
+                    duration: 5000
+                })
+
+                state.estado_saludo = 1
+            }
+
         }
     }
 }

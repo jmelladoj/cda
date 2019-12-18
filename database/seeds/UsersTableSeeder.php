@@ -17,7 +17,9 @@ class UsersTableSeeder extends Seeder
             [
                 'nombre' => 'Administrador',
                 'usuario' => 'admin',
-                'password' => bcrypt('123456')
+                'password' => bcrypt('123456'),
+                'perfil_id' => 1,
+                'ruta_inicio' => 'usuarios'
             ]
         );
     }

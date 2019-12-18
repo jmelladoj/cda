@@ -19,7 +19,7 @@ class ProductoInventarioController extends Controller
         }
     }
 
-    public function crear_atualizar(Request $request){
+    public function crear_actualizar(Request $request){
         ProductoInventario::updateOrCreate(
             ['id' => $request->id],
             [

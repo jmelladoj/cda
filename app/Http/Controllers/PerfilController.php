@@ -19,7 +19,7 @@ class PerfilController extends Controller
         }
     }
 
-    public function crear_atualizar(Request $request){
+    public function crear_actualizar(Request $request){
         Perfil::updateOrCreate(
             ['id' => $request->id],
             [

@@ -187,7 +187,7 @@
             perfil: {
                 nombre: {
                     required,
-                    minLength: minLength(4)
+                    minLength: minLength(3)
                 }
             }
         },
@@ -230,6 +230,8 @@
                     me.perfil.menu_ordenes_compra = data.menu_ordenes_compra == 1 ? true : false
                     me.perfil.menu_lugares = data.menu_lugares == 1 ? true : false
                     me.perfil.menu_inventario = data.menu_inventario == 1 ? true : false
+
+                    this.$v.perfil.$touch(true)
                 }
 
                 this.$refs['modal_perfil'].show()
@@ -272,6 +274,8 @@
 
                         if(me.perfil.id == 0){
                             me.limpiar_datos_perfil()
+                        } else {
+                            me.cerrar_modal_perfil()
                         }
                     }).catch(function (error) {
                         console.log(error)

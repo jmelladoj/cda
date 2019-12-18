@@ -383,7 +383,7 @@
             producto_inventario: {
                 nombre: {
                     required,
-                    minLength: minLength(4)
+                    minLength: minLength(3)
                 },
                 stock: {
                     required,
@@ -445,8 +445,7 @@
                 let me = this
 
                 axios.get('/lugares/1').then(function (response) {
-                    me.items = response.data.lugares
-                    me.totalRows = me.items.length
+                    me.lugares = response.data.lugares
 
                     me.tabla_salida = []
 
@@ -487,6 +486,8 @@
                     me.producto_inventario.stock_critico = data.stock_critico
                     me.producto_inventario.valor_actual = data.valor_actual
                     me.producto_inventario.valor_ultimo = data.valor_ultimo
+
+                    this.$v.producto_inventario.$touch(true)
                 }
 
                 this.$refs['modal_productos_inventario'].show()
@@ -544,6 +545,8 @@
 
                         if(me.producto_inventario.id == 0){
                             me.limpiar_datos_producto_inventario()
+                        } else {
+                            me.cerrar_modal_productos_inventario()
                         }
 
                     }).catch(function (error) {

@@ -86,6 +86,18 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./node_modules/@babel/runtime/regenerator/index.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/regenerator-runtime/runtime.js");
+
+
+/***/ }),
+
 /***/ "./node_modules/axios/index.js":
 /*!*************************************!*\
   !*** ./node_modules/axios/index.js ***!
@@ -2169,6 +2181,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2432,7 +2445,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     lugar: {
       nombre: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(4)
+        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3)
       }
     }
   },
@@ -2472,6 +2485,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (me.modal_lugar.accion == 2) {
         me.lugar.id = data.id;
         me.lugar.nombre = data.nombre;
+        this.$v.lugar.$touch(true);
       }
 
       this.$refs['modal_lugar'].show();
@@ -2502,6 +2516,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         if (me.lugar.id == 0) {
           me.limpiar_datos_lugar();
+        } else {
+          me.cerrar_modal_lugar();
         }
       })["catch"](function (error) {
         console.log(error);
@@ -2755,7 +2771,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     perfil: {
       nombre: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(4)
+        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3)
       }
     }
   },
@@ -2800,6 +2816,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         me.perfil.menu_ordenes_compra = data.menu_ordenes_compra == 1 ? true : false;
         me.perfil.menu_lugares = data.menu_lugares == 1 ? true : false;
         me.perfil.menu_inventario = data.menu_inventario == 1 ? true : false;
+        this.$v.perfil.$touch(true);
       }
 
       this.$refs['modal_perfil'].show();
@@ -2840,6 +2857,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         if (me.perfil.id == 0) {
           me.limpiar_datos_perfil();
+        } else {
+          me.cerrar_modal_perfil();
         }
       })["catch"](function (error) {
         console.log(error);
@@ -3316,7 +3335,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     producto_inventario: {
       nombre: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(4)
+        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3)
       },
       stock: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
@@ -3381,8 +3400,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     listar_lugares: function listar_lugares() {
       var me = this;
       axios.get('/lugares/1').then(function (response) {
-        me.items = response.data.lugares;
-        me.totalRows = me.items.length;
+        me.lugares = response.data.lugares;
         me.tabla_salida = [];
         me.lugares.forEach(function (lugar) {
           var fila = new Object();
@@ -3418,6 +3436,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         me.producto_inventario.stock_critico = data.stock_critico;
         me.producto_inventario.valor_actual = data.valor_actual;
         me.producto_inventario.valor_ultimo = data.valor_ultimo;
+        this.$v.producto_inventario.$touch(true);
       }
 
       this.$refs['modal_productos_inventario'].show();
@@ -3473,6 +3492,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         if (me.producto_inventario.id == 0) {
           me.limpiar_datos_producto_inventario();
+        } else {
+          me.cerrar_modal_productos_inventario();
         }
       })["catch"](function (error) {
         console.log(error);
@@ -3520,6 +3541,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -3618,121 +3652,187 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      items: [{
-        isActive: true,
-        age: 40,
-        name: {
-          first: 'Dickerson',
-          last: 'Macdonald'
-        }
-      }, {
-        isActive: false,
-        age: 21,
-        name: {
-          first: 'Larsen',
-          last: 'Shaw'
-        }
-      }, {
-        isActive: false,
-        age: 9,
-        name: {
-          first: 'Mini',
-          last: 'Navarro'
-        },
-        _rowVariant: 'success'
-      }, {
-        isActive: false,
-        age: 89,
-        name: {
-          first: 'Geneva',
-          last: 'Wilson'
-        }
-      }, {
-        isActive: true,
-        age: 38,
-        name: {
-          first: 'Jami',
-          last: 'Carney'
-        }
-      }, {
-        isActive: false,
-        age: 27,
-        name: {
-          first: 'Essie',
-          last: 'Dunlap'
-        }
-      }, {
-        isActive: true,
-        age: 40,
-        name: {
-          first: 'Thor',
-          last: 'Macdonald'
-        }
-      }, {
-        isActive: true,
-        age: 87,
-        name: {
-          first: 'Larsen',
-          last: 'Shaw'
-        },
-        _cellVariants: {
-          age: 'danger',
-          isActive: 'warning'
-        }
-      }, {
-        isActive: false,
-        age: 26,
-        name: {
-          first: 'Mitzi',
-          last: 'Navarro'
-        }
-      }, {
-        isActive: false,
-        age: 22,
-        name: {
-          first: 'Genevieve',
-          last: 'Wilson'
-        }
-      }, {
-        isActive: true,
-        age: 38,
-        name: {
-          first: 'John',
-          last: 'Carney'
-        }
-      }, {
-        isActive: false,
-        age: 29,
-        name: {
-          first: 'Dick',
-          last: 'Dunlap'
-        }
-      }],
+      items: [],
+      perfiles: [],
       fields: [{
-        key: 'name',
-        label: 'Person Full name',
-        sortable: true,
-        sortDirection: 'desc'
-      }, {
-        key: 'age',
-        label: 'Person age',
+        key: 'index',
+        label: '#',
         sortable: true,
         "class": 'text-center'
       }, {
-        key: 'isActive',
-        label: 'is Active',
-        formatter: function formatter(value, key, item) {
-          return value ? 'Yes' : 'No';
-        },
+        key: 'nombre',
+        label: 'Nombre',
         sortable: true,
-        sortByFormatted: true,
-        filterByFormatted: true
+        "class": 'text-left'
       }, {
-        key: 'actions',
-        label: 'Actions'
+        key: 'usuario',
+        label: 'Nombre usuario',
+        sortable: true,
+        "class": 'text-left'
+      }, {
+        key: 'nombre_perfil',
+        label: 'Perfil asociado',
+        sortable: true,
+        "class": 'text-left'
+      }, {
+        key: 'correo',
+        label: 'Correo asociado',
+        sortable: true,
+        "class": 'text-left'
+      }, {
+        key: 'acciones',
+        label: 'Acciones',
+        "class": 'text-center'
       }],
       totalRows: 1,
       currentPage: 1,
@@ -3742,8 +3842,103 @@ __webpack_require__.r(__webpack_exports__);
       sortDesc: false,
       sortDirection: 'asc',
       filter: null,
-      filterOn: []
+      filterOn: [],
+      modal_usuario: {
+        titulo: '',
+        accion: 0
+      },
+      modal_clave: {
+        titulo: ''
+      },
+      usuario: {
+        id: 0,
+        nombre: '',
+        usuario: '',
+        email: '',
+        password: '',
+        ruta_inicio: null,
+        perfil_id: null
+      },
+      cambio_clave: {
+        clave: ''
+      }
     };
+  },
+  validations: {
+    usuario: {
+      nombre: {
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
+        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["minLength"])(3)
+      },
+      usuario: {
+        required: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["requiredIf"])(function () {
+          return this.modal_usuario.accion == 1 ? false : true;
+        }),
+        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["minLength"])(3),
+        isUnique: function isUnique(value) {
+          var response;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function isUnique$(_context) {
+            while (1) {
+              switch (_context.prev = _context.next) {
+                case 0:
+                  if (!(this.modal_usuario.accion == 2)) {
+                    _context.next = 2;
+                    break;
+                  }
+
+                  return _context.abrupt("return", true);
+
+                case 2:
+                  if (!(value === '' || value.length < 3)) {
+                    _context.next = 4;
+                    break;
+                  }
+
+                  return _context.abrupt("return", true);
+
+                case 4:
+                  _context.next = 6;
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch("/usuarios/unico/".concat(value)));
+
+                case 6:
+                  response = _context.sent;
+                  _context.next = 9;
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(response.json());
+
+                case 9:
+                  return _context.abrupt("return", _context.sent);
+
+                case 10:
+                case "end":
+                  return _context.stop();
+              }
+            }
+          }, null, this);
+        }
+      },
+      email: {
+        email: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["email"],
+        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["minLength"])(3)
+      },
+      password: {
+        required: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["requiredIf"])(function () {
+          return this.modal_usuario.accion == 2 ? false : true;
+        }),
+        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["minLength"])(3)
+      },
+      ruta_inicio: {
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"]
+      },
+      perfil_id: {
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"]
+      }
+    },
+    cambio_clave: {
+      clave: {
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
+        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["minLength"])(3)
+      }
+    }
   },
   computed: {
     sortOptions: function sortOptions() {
@@ -3757,14 +3952,156 @@ __webpack_require__.r(__webpack_exports__);
       });
     }
   },
-  methods: {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapMutations"])(['msg_success', 'msg_error']), {
     onFiltered: function onFiltered(filteredItems) {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
+    },
+    cargar_datos: function cargar_datos() {
+      this.listar_usuarios();
+      this.listar_perfiles();
+    },
+    listar_usuarios: function listar_usuarios() {
+      var me = this;
+      axios.get('/usuarios/1').then(function (response) {
+        me.items = response.data.usuarios;
+        me.totalRows = me.items.length;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    listar_perfiles: function listar_perfiles() {
+      var me = this;
+      axios.get('/perfiles/1').then(function (response) {
+        me.perfiles = response.data.perfiles;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    abrir_modal_usuario: function abrir_modal_usuario() {
+      var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var me = this;
+      me.limpiar_datos_usuario();
+      me.modal_usuario.titulo = data.id == undefined ? "Agregar usuario" : "Modificar usuario";
+      me.modal_usuario.accion = data.id == undefined ? 1 : 2;
+
+      if (me.modal_usuario.accion == 2) {
+        me.usuario.id = data.id;
+        me.usuario.nombre = data.nombre;
+        me.usuario.usuario = data.usuario;
+        me.usuario.email = data.email;
+        me.usuario.ruta_inicio = data.ruta_inicio;
+        me.usuario.perfil_id = data.perfil_id;
+        this.$v.usuario.$touch(true);
+      }
+
+      this.$refs['modal_usuario'].show();
+    },
+    abrir_modal_clave: function abrir_modal_clave() {
+      var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var me = this;
+      me.limpiar_datos_clave();
+      me.usuario.id = data.id;
+      me.modal_clave.titulo = 'Cambiar clave a ' + data.nombre;
+      this.$refs['modal_clave'].show();
+    },
+    cerrar_modal_clave: function cerrar_modal_clave() {
+      this.modal_clave.titulo = "";
+      this.$refs['modal_clave'].hide();
+    },
+    cerrar_modal_usuario: function cerrar_modal_usuario() {
+      this.modal_usuario.titulo = "";
+      this.modal_usuario.accion = 0;
+      this.$refs['modal_usuario'].hide();
+    },
+    limpiar_datos_usuario: function limpiar_datos_usuario() {
+      this.usuario.id = 0;
+      this.usuario.nombre = '';
+      this.usuario.usuario = '';
+      this.usuario.email = '';
+      this.usuario.password = '';
+      this.usuario.ruta_inicio = null;
+      this.usuario.perfil_id = null;
+      this.$v.$reset();
+    },
+    limpiar_datos_clave: function limpiar_datos_clave() {
+      this.usuario.id = 0;
+      this.cambio_clave.clave = '';
+      this.$v.$reset();
+    },
+    crear_actualizar_usuario: function crear_actualizar_usuario() {
+      if (this.$v.usuario.$invalid) {
+        this.$v.usuario.$touch();
+        return;
+      }
+
+      var me = this;
+      axios.post('/usuario/crear/actualizar', {
+        'id': me.usuario.id,
+        'nombre': me.usuario.nombre,
+        'usuario': me.usuario.usuario,
+        'email': me.usuario.email,
+        'password': me.usuario.password,
+        'ruta_inicio': me.usuario.ruta_inicio,
+        'perfil_id': me.usuario.perfil_id
+      }).then(function (response) {
+        me.cargar_datos();
+        me.$store.commit('msg_success', me.usuario.id == 0 ? 'Registro agregado exitosamente.' : 'Registro actualizado exitosamente.');
+
+        if (me.usuario.id == 0) {
+          me.limpiar_datos_usuario();
+        } else {
+          me.cerrar_modal_usuario();
+        }
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    borrar: function borrar(id) {
+      var _this = this;
+
+      swal.fire({
+        title: '¿Deseas borrar el registro?',
+        text: "¡No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, ¡bórralo!'
+      }).then(function (result) {
+        if (result.value) {
+          var me = _this;
+          axios.post('/usuario/borrar', {
+            'id': id
+          }).then(function (response) {
+            me.cargar_datos();
+            me.$store.commit('msg_success', 'Registro eliminado exitosamente.');
+          })["catch"](function (error) {
+            console.log(error);
+          });
+        }
+      });
+    },
+    actualizar_clave: function actualizar_clave() {
+      if (this.$v.cambio_clave.$invalid) {
+        this.$v.cambio_clave.$touch();
+        return;
+      }
+
+      var me = this;
+      axios.post('/usuario/actualizar/clave', {
+        'id': me.usuario.id,
+        'password': me.cambio_clave.clave
+      }).then(function (response) {
+        me.$store.commit('msg_success', 'Registro actualizado exitosamente.');
+        me.cerrar_modal_clave();
+      })["catch"](function (error) {
+        console.log(error);
+      });
     }
-  },
+  }),
   mounted: function mounted() {
-    this.totalRows = this.items.length;
+    this.cargar_datos();
   }
 });
 
@@ -68264,6 +68601,743 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
+/***/ "./node_modules/regenerator-runtime/runtime.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/regenerator-runtime/runtime.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+var runtime = (function (exports) {
+  "use strict";
+
+  var Op = Object.prototype;
+  var hasOwn = Op.hasOwnProperty;
+  var undefined; // More compressible than void 0.
+  var $Symbol = typeof Symbol === "function" ? Symbol : {};
+  var iteratorSymbol = $Symbol.iterator || "@@iterator";
+  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
+  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
+    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
+    var generator = Object.create(protoGenerator.prototype);
+    var context = new Context(tryLocsList || []);
+
+    // The ._invoke method unifies the implementations of the .next,
+    // .throw, and .return methods.
+    generator._invoke = makeInvokeMethod(innerFn, self, context);
+
+    return generator;
+  }
+  exports.wrap = wrap;
+
+  // Try/catch helper to minimize deoptimizations. Returns a completion
+  // record like context.tryEntries[i].completion. This interface could
+  // have been (and was previously) designed to take a closure to be
+  // invoked without arguments, but in all the cases we care about we
+  // already have an existing method we want to call, so there's no need
+  // to create a new function object. We can even get away with assuming
+  // the method takes exactly one argument, since that happens to be true
+  // in every case, so we don't have to touch the arguments object. The
+  // only additional allocation required is the completion record, which
+  // has a stable shape and so hopefully should be cheap to allocate.
+  function tryCatch(fn, obj, arg) {
+    try {
+      return { type: "normal", arg: fn.call(obj, arg) };
+    } catch (err) {
+      return { type: "throw", arg: err };
+    }
+  }
+
+  var GenStateSuspendedStart = "suspendedStart";
+  var GenStateSuspendedYield = "suspendedYield";
+  var GenStateExecuting = "executing";
+  var GenStateCompleted = "completed";
+
+  // Returning this object from the innerFn has the same effect as
+  // breaking out of the dispatch switch statement.
+  var ContinueSentinel = {};
+
+  // Dummy constructor functions that we use as the .constructor and
+  // .constructor.prototype properties for functions that return Generator
+  // objects. For full spec compliance, you may wish to configure your
+  // minifier not to mangle the names of these two functions.
+  function Generator() {}
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
+
+  // This is a polyfill for %IteratorPrototype% for environments that
+  // don't natively support it.
+  var IteratorPrototype = {};
+  IteratorPrototype[iteratorSymbol] = function () {
+    return this;
+  };
+
+  var getProto = Object.getPrototypeOf;
+  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+  if (NativeIteratorPrototype &&
+      NativeIteratorPrototype !== Op &&
+      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+    // This environment has a native %IteratorPrototype%; use it instead
+    // of the polyfill.
+    IteratorPrototype = NativeIteratorPrototype;
+  }
+
+  var Gp = GeneratorFunctionPrototype.prototype =
+    Generator.prototype = Object.create(IteratorPrototype);
+  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+  GeneratorFunctionPrototype.constructor = GeneratorFunction;
+  GeneratorFunctionPrototype[toStringTagSymbol] =
+    GeneratorFunction.displayName = "GeneratorFunction";
+
+  // Helper for defining the .next, .throw, and .return methods of the
+  // Iterator interface in terms of a single ._invoke method.
+  function defineIteratorMethods(prototype) {
+    ["next", "throw", "return"].forEach(function(method) {
+      prototype[method] = function(arg) {
+        return this._invoke(method, arg);
+      };
+    });
+  }
+
+  exports.isGeneratorFunction = function(genFun) {
+    var ctor = typeof genFun === "function" && genFun.constructor;
+    return ctor
+      ? ctor === GeneratorFunction ||
+        // For the native GeneratorFunction constructor, the best we can
+        // do is to check its .name property.
+        (ctor.displayName || ctor.name) === "GeneratorFunction"
+      : false;
+  };
+
+  exports.mark = function(genFun) {
+    if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
+    } else {
+      genFun.__proto__ = GeneratorFunctionPrototype;
+      if (!(toStringTagSymbol in genFun)) {
+        genFun[toStringTagSymbol] = "GeneratorFunction";
+      }
+    }
+    genFun.prototype = Object.create(Gp);
+    return genFun;
+  };
+
+  // Within the body of any async function, `await x` is transformed to
+  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
+  // `hasOwn.call(value, "__await")` to determine if the yielded value is
+  // meant to be awaited.
+  exports.awrap = function(arg) {
+    return { __await: arg };
+  };
+
+  function AsyncIterator(generator) {
+    function invoke(method, arg, resolve, reject) {
+      var record = tryCatch(generator[method], generator, arg);
+      if (record.type === "throw") {
+        reject(record.arg);
+      } else {
+        var result = record.arg;
+        var value = result.value;
+        if (value &&
+            typeof value === "object" &&
+            hasOwn.call(value, "__await")) {
+          return Promise.resolve(value.__await).then(function(value) {
+            invoke("next", value, resolve, reject);
+          }, function(err) {
+            invoke("throw", err, resolve, reject);
+          });
+        }
+
+        return Promise.resolve(value).then(function(unwrapped) {
+          // When a yielded Promise is resolved, its final value becomes
+          // the .value of the Promise<{value,done}> result for the
+          // current iteration.
+          result.value = unwrapped;
+          resolve(result);
+        }, function(error) {
+          // If a rejected Promise was yielded, throw the rejection back
+          // into the async generator function so it can be handled there.
+          return invoke("throw", error, resolve, reject);
+        });
+      }
+    }
+
+    var previousPromise;
+
+    function enqueue(method, arg) {
+      function callInvokeWithMethodAndArg() {
+        return new Promise(function(resolve, reject) {
+          invoke(method, arg, resolve, reject);
+        });
+      }
+
+      return previousPromise =
+        // If enqueue has been called before, then we want to wait until
+        // all previous Promises have been resolved before calling invoke,
+        // so that results are always delivered in the correct order. If
+        // enqueue has not been called before, then it is important to
+        // call invoke immediately, without waiting on a callback to fire,
+        // so that the async generator function has the opportunity to do
+        // any necessary setup in a predictable way. This predictability
+        // is why the Promise constructor synchronously invokes its
+        // executor callback, and why async functions synchronously
+        // execute code before the first await. Since we implement simple
+        // async functions in terms of async generators, it is especially
+        // important to get this right, even though it requires care.
+        previousPromise ? previousPromise.then(
+          callInvokeWithMethodAndArg,
+          // Avoid propagating failures to Promises returned by later
+          // invocations of the iterator.
+          callInvokeWithMethodAndArg
+        ) : callInvokeWithMethodAndArg();
+    }
+
+    // Define the unified helper method that is used to implement .next,
+    // .throw, and .return (see defineIteratorMethods).
+    this._invoke = enqueue;
+  }
+
+  defineIteratorMethods(AsyncIterator.prototype);
+  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
+    return this;
+  };
+  exports.AsyncIterator = AsyncIterator;
+
+  // Note that simple async functions are implemented on top of
+  // AsyncIterator objects; they just return a Promise for the value of
+  // the final result produced by the iterator.
+  exports.async = function(innerFn, outerFn, self, tryLocsList) {
+    var iter = new AsyncIterator(
+      wrap(innerFn, outerFn, self, tryLocsList)
+    );
+
+    return exports.isGeneratorFunction(outerFn)
+      ? iter // If outerFn is a generator, return the full iterator.
+      : iter.next().then(function(result) {
+          return result.done ? result.value : iter.next();
+        });
+  };
+
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = GenStateSuspendedStart;
+
+    return function invoke(method, arg) {
+      if (state === GenStateExecuting) {
+        throw new Error("Generator is already running");
+      }
+
+      if (state === GenStateCompleted) {
+        if (method === "throw") {
+          throw arg;
+        }
+
+        // Be forgiving, per 25.3.3.3.3 of the spec:
+        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+        return doneResult();
+      }
+
+      context.method = method;
+      context.arg = arg;
+
+      while (true) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+
+        if (context.method === "next") {
+          // Setting context._sent for legacy support of Babel's
+          // function.sent implementation.
+          context.sent = context._sent = context.arg;
+
+        } else if (context.method === "throw") {
+          if (state === GenStateSuspendedStart) {
+            state = GenStateCompleted;
+            throw context.arg;
+          }
+
+          context.dispatchException(context.arg);
+
+        } else if (context.method === "return") {
+          context.abrupt("return", context.arg);
+        }
+
+        state = GenStateExecuting;
+
+        var record = tryCatch(innerFn, self, context);
+        if (record.type === "normal") {
+          // If an exception is thrown from innerFn, we leave state ===
+          // GenStateExecuting and loop back for another invocation.
+          state = context.done
+            ? GenStateCompleted
+            : GenStateSuspendedYield;
+
+          if (record.arg === ContinueSentinel) {
+            continue;
+          }
+
+          return {
+            value: record.arg,
+            done: context.done
+          };
+
+        } else if (record.type === "throw") {
+          state = GenStateCompleted;
+          // Dispatch the exception by looping back around to the
+          // context.dispatchException(context.arg) call above.
+          context.method = "throw";
+          context.arg = record.arg;
+        }
+      }
+    };
+  }
+
+  // Call delegate.iterator[context.method](context.arg) and handle the
+  // result, either by returning a { value, done } result from the
+  // delegate iterator, or by modifying context.method and context.arg,
+  // setting context.delegate to null, and returning the ContinueSentinel.
+  function maybeInvokeDelegate(delegate, context) {
+    var method = delegate.iterator[context.method];
+    if (method === undefined) {
+      // A .throw or .return when the delegate iterator has no .throw
+      // method always terminates the yield* loop.
+      context.delegate = null;
+
+      if (context.method === "throw") {
+        // Note: ["return"] must be used for ES3 parsing compatibility.
+        if (delegate.iterator["return"]) {
+          // If the delegate iterator has a return method, give it a
+          // chance to clean up.
+          context.method = "return";
+          context.arg = undefined;
+          maybeInvokeDelegate(delegate, context);
+
+          if (context.method === "throw") {
+            // If maybeInvokeDelegate(context) changed context.method from
+            // "return" to "throw", let that override the TypeError below.
+            return ContinueSentinel;
+          }
+        }
+
+        context.method = "throw";
+        context.arg = new TypeError(
+          "The iterator does not provide a 'throw' method");
+      }
+
+      return ContinueSentinel;
+    }
+
+    var record = tryCatch(method, delegate.iterator, context.arg);
+
+    if (record.type === "throw") {
+      context.method = "throw";
+      context.arg = record.arg;
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    var info = record.arg;
+
+    if (! info) {
+      context.method = "throw";
+      context.arg = new TypeError("iterator result is not an object");
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    if (info.done) {
+      // Assign the result of the finished delegate to the temporary
+      // variable specified by delegate.resultName (see delegateYield).
+      context[delegate.resultName] = info.value;
+
+      // Resume execution at the desired location (see delegateYield).
+      context.next = delegate.nextLoc;
+
+      // If context.method was "throw" but the delegate handled the
+      // exception, let the outer generator proceed normally. If
+      // context.method was "next", forget context.arg since it has been
+      // "consumed" by the delegate iterator. If context.method was
+      // "return", allow the original .return call to continue in the
+      // outer generator.
+      if (context.method !== "return") {
+        context.method = "next";
+        context.arg = undefined;
+      }
+
+    } else {
+      // Re-yield the result returned by the delegate method.
+      return info;
+    }
+
+    // The delegate iterator is finished, so forget it and continue with
+    // the outer generator.
+    context.delegate = null;
+    return ContinueSentinel;
+  }
+
+  // Define Generator.prototype.{next,throw,return} in terms of the
+  // unified ._invoke helper method.
+  defineIteratorMethods(Gp);
+
+  Gp[toStringTagSymbol] = "Generator";
+
+  // A Generator should always return itself as the iterator object when the
+  // @@iterator function is called on it. Some browsers' implementations of the
+  // iterator prototype chain incorrectly implement this, causing the Generator
+  // object to not be returned from this call. This ensures that doesn't happen.
+  // See https://github.com/facebook/regenerator/issues/274 for more details.
+  Gp[iteratorSymbol] = function() {
+    return this;
+  };
+
+  Gp.toString = function() {
+    return "[object Generator]";
+  };
+
+  function pushTryEntry(locs) {
+    var entry = { tryLoc: locs[0] };
+
+    if (1 in locs) {
+      entry.catchLoc = locs[1];
+    }
+
+    if (2 in locs) {
+      entry.finallyLoc = locs[2];
+      entry.afterLoc = locs[3];
+    }
+
+    this.tryEntries.push(entry);
+  }
+
+  function resetTryEntry(entry) {
+    var record = entry.completion || {};
+    record.type = "normal";
+    delete record.arg;
+    entry.completion = record;
+  }
+
+  function Context(tryLocsList) {
+    // The root entry object (effectively a try statement without a catch
+    // or a finally block) gives us a place to store values thrown from
+    // locations where there is no enclosing try statement.
+    this.tryEntries = [{ tryLoc: "root" }];
+    tryLocsList.forEach(pushTryEntry, this);
+    this.reset(true);
+  }
+
+  exports.keys = function(object) {
+    var keys = [];
+    for (var key in object) {
+      keys.push(key);
+    }
+    keys.reverse();
+
+    // Rather than returning an object with a next method, we keep
+    // things simple and return the next function itself.
+    return function next() {
+      while (keys.length) {
+        var key = keys.pop();
+        if (key in object) {
+          next.value = key;
+          next.done = false;
+          return next;
+        }
+      }
+
+      // To avoid creating an additional object, we just hang the .value
+      // and .done properties off the next function object itself. This
+      // also ensures that the minifier will not anonymize the function.
+      next.done = true;
+      return next;
+    };
+  };
+
+  function values(iterable) {
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+      if (iteratorMethod) {
+        return iteratorMethod.call(iterable);
+      }
+
+      if (typeof iterable.next === "function") {
+        return iterable;
+      }
+
+      if (!isNaN(iterable.length)) {
+        var i = -1, next = function next() {
+          while (++i < iterable.length) {
+            if (hasOwn.call(iterable, i)) {
+              next.value = iterable[i];
+              next.done = false;
+              return next;
+            }
+          }
+
+          next.value = undefined;
+          next.done = true;
+
+          return next;
+        };
+
+        return next.next = next;
+      }
+    }
+
+    // Return an iterator with no values.
+    return { next: doneResult };
+  }
+  exports.values = values;
+
+  function doneResult() {
+    return { value: undefined, done: true };
+  }
+
+  Context.prototype = {
+    constructor: Context,
+
+    reset: function(skipTempReset) {
+      this.prev = 0;
+      this.next = 0;
+      // Resetting context._sent for legacy support of Babel's
+      // function.sent implementation.
+      this.sent = this._sent = undefined;
+      this.done = false;
+      this.delegate = null;
+
+      this.method = "next";
+      this.arg = undefined;
+
+      this.tryEntries.forEach(resetTryEntry);
+
+      if (!skipTempReset) {
+        for (var name in this) {
+          // Not sure about the optimal order of these conditions:
+          if (name.charAt(0) === "t" &&
+              hasOwn.call(this, name) &&
+              !isNaN(+name.slice(1))) {
+            this[name] = undefined;
+          }
+        }
+      }
+    },
+
+    stop: function() {
+      this.done = true;
+
+      var rootEntry = this.tryEntries[0];
+      var rootRecord = rootEntry.completion;
+      if (rootRecord.type === "throw") {
+        throw rootRecord.arg;
+      }
+
+      return this.rval;
+    },
+
+    dispatchException: function(exception) {
+      if (this.done) {
+        throw exception;
+      }
+
+      var context = this;
+      function handle(loc, caught) {
+        record.type = "throw";
+        record.arg = exception;
+        context.next = loc;
+
+        if (caught) {
+          // If the dispatched exception was caught by a catch block,
+          // then let that catch block handle the exception normally.
+          context.method = "next";
+          context.arg = undefined;
+        }
+
+        return !! caught;
+      }
+
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        var record = entry.completion;
+
+        if (entry.tryLoc === "root") {
+          // Exception thrown outside of any try block that could handle
+          // it, so set the completion value of the entire function to
+          // throw the exception.
+          return handle("end");
+        }
+
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc");
+          var hasFinally = hasOwn.call(entry, "finallyLoc");
+
+          if (hasCatch && hasFinally) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            } else if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else if (hasCatch) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            }
+
+          } else if (hasFinally) {
+            if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else {
+            throw new Error("try statement without catch or finally");
+          }
+        }
+      }
+    },
+
+    abrupt: function(type, arg) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc <= this.prev &&
+            hasOwn.call(entry, "finallyLoc") &&
+            this.prev < entry.finallyLoc) {
+          var finallyEntry = entry;
+          break;
+        }
+      }
+
+      if (finallyEntry &&
+          (type === "break" ||
+           type === "continue") &&
+          finallyEntry.tryLoc <= arg &&
+          arg <= finallyEntry.finallyLoc) {
+        // Ignore the finally entry if control is not jumping to a
+        // location outside the try/catch block.
+        finallyEntry = null;
+      }
+
+      var record = finallyEntry ? finallyEntry.completion : {};
+      record.type = type;
+      record.arg = arg;
+
+      if (finallyEntry) {
+        this.method = "next";
+        this.next = finallyEntry.finallyLoc;
+        return ContinueSentinel;
+      }
+
+      return this.complete(record);
+    },
+
+    complete: function(record, afterLoc) {
+      if (record.type === "throw") {
+        throw record.arg;
+      }
+
+      if (record.type === "break" ||
+          record.type === "continue") {
+        this.next = record.arg;
+      } else if (record.type === "return") {
+        this.rval = this.arg = record.arg;
+        this.method = "return";
+        this.next = "end";
+      } else if (record.type === "normal" && afterLoc) {
+        this.next = afterLoc;
+      }
+
+      return ContinueSentinel;
+    },
+
+    finish: function(finallyLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.finallyLoc === finallyLoc) {
+          this.complete(entry.completion, entry.afterLoc);
+          resetTryEntry(entry);
+          return ContinueSentinel;
+        }
+      }
+    },
+
+    "catch": function(tryLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc === tryLoc) {
+          var record = entry.completion;
+          if (record.type === "throw") {
+            var thrown = record.arg;
+            resetTryEntry(entry);
+          }
+          return thrown;
+        }
+      }
+
+      // The context.catch method must only be called with a location
+      // argument that corresponds to a known catch block.
+      throw new Error("illegal catch attempt");
+    },
+
+    delegateYield: function(iterable, resultName, nextLoc) {
+      this.delegate = {
+        iterator: values(iterable),
+        resultName: resultName,
+        nextLoc: nextLoc
+      };
+
+      if (this.method === "next") {
+        // Deliberately forget the last sent value so that we don't
+        // accidentally pass it on to the delegate.
+        this.arg = undefined;
+      }
+
+      return ContinueSentinel;
+    }
+  };
+
+  // Regardless of whether this script is executing as a CommonJS module
+  // or not, return the runtime object so that we can declare the variable
+  // regeneratorRuntime in the outer scope, which allows this module to be
+  // injected easily by `bin/regenerator --include-runtime script.js`.
+  return exports;
+
+}(
+  // If this script is executing as a CommonJS module, use module.exports
+  // as the regeneratorRuntime namespace. Otherwise create a new empty
+  // object. Either way, the resulting object will be used to initialize
+  // the regeneratorRuntime variable at the top of this file.
+   true ? module.exports : undefined
+));
+
+try {
+  regeneratorRuntime = runtime;
+} catch (accidentalStrictMode) {
+  // This module should not be running in strict mode, so the above
+  // assignment should always work unless something is misconfigured. Just
+  // in case runtime.js accidentally runs in strict mode, we can escape
+  // strict mode using a global Function call. This could conceivably fail
+  // if a Content Security Policy forbids using Function, but in that case
+  // the proper solution is to fix the accidental strict mode problem. If
+  // you've misconfigured your bundler to force strict mode and applied a
+  // CSP to forbid Function, and you're not willing to fix either of those
+  // problems, please detail your unique predicament in a GitHub issue.
+  Function("r", "regeneratorRuntime = r")(runtime);
+}
+
+
+/***/ }),
+
 /***/ "./node_modules/setimmediate/setImmediate.js":
 /*!***************************************************!*\
   !*** ./node_modules/setimmediate/setImmediate.js ***!
@@ -73056,6 +74130,23 @@ var render = function() {
                           : null,
                         "aria-describedby": "password-input"
                       },
+                      on: {
+                        keyup: function($event) {
+                          if (
+                            !$event.type.indexOf("key") &&
+                            _vm._k(
+                              $event.keyCode,
+                              "enter",
+                              13,
+                              $event.key,
+                              "Enter"
+                            )
+                          ) {
+                            return null
+                          }
+                          return _vm.ingresar($event)
+                        }
+                      },
                       model: {
                         value: _vm.$v.login.password.$model,
                         callback: function($$v) {
@@ -76146,20 +77237,8 @@ var render = function() {
                                 [
                                   _c(
                                     "b-form-checkbox",
-                                    { attrs: { value: "name" } },
-                                    [_vm._v("      Name")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "b-form-checkbox",
-                                    { attrs: { value: "age" } },
-                                    [_vm._v("       Age")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "b-form-checkbox",
-                                    { attrs: { value: "isActive" } },
-                                    [_vm._v("       Active")]
+                                    { attrs: { value: "nombre" } },
+                                    [_vm._v("      Nombre")]
                                   )
                                 ],
                                 1
@@ -76242,6 +77321,7 @@ var render = function() {
                       "show-empty": "",
                       small: "",
                       striped: "",
+                      outlined: "",
                       stacked: "md",
                       items: _vm.items,
                       fields: _vm.fields,
@@ -76280,53 +77360,88 @@ var render = function() {
                         }
                       },
                       {
-                        key: "cell(name)",
+                        key: "cell(index)",
                         fn: function(row) {
                           return [
                             _vm._v(
                               "\n                        " +
-                                _vm._s(row.value.first) +
-                                " " +
-                                _vm._s(row.value.last) +
+                                _vm._s(row.index + 1) +
                                 "\n                    "
                             )
                           ]
                         }
                       },
                       {
-                        key: "cell(actions)",
+                        key: "cell(correo)",
+                        fn: function(row) {
+                          return [
+                            !!row.item.email
+                              ? _c("label", {
+                                  domProps: {
+                                    textContent: _vm._s(row.item.email)
+                                  }
+                                })
+                              : _c("label", {
+                                  domProps: {
+                                    textContent: _vm._s("Sin correo asociado")
+                                  }
+                                })
+                          ]
+                        }
+                      },
+                      {
+                        key: "cell(acciones)",
                         fn: function(row) {
                           return [
                             _c(
                               "b-button",
                               {
-                                staticClass: "mr-1",
-                                attrs: { size: "sm" },
+                                attrs: {
+                                  size: "xs",
+                                  variant: "success",
+                                  title: "Cambiar clave"
+                                },
                                 on: {
                                   click: function($event) {
-                                    return _vm.info(
-                                      row.item,
-                                      row.index,
-                                      $event.target
-                                    )
+                                    return _vm.abrir_modal_clave(row.item)
                                   }
                                 }
                               },
-                              [_vm._v("Info modal")]
+                              [_c("i", { staticClass: "fa fa-key" })]
                             ),
                             _vm._v(" "),
                             _c(
                               "b-button",
                               {
-                                attrs: { size: "sm" },
-                                on: { click: row.toggleDetails }
+                                attrs: {
+                                  size: "xs",
+                                  variant: "warning",
+                                  title: "Actualizar información"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.abrir_modal_usuario(row.item)
+                                  }
+                                }
                               },
-                              [
-                                _vm._v(
-                                  _vm._s(row.detailsShowing ? "Hide" : "Show") +
-                                    " Details"
-                                )
-                              ]
+                              [_c("i", { staticClass: "fa fa-pencil" })]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "b-button",
+                              {
+                                attrs: {
+                                  size: "xs",
+                                  variant: "danger",
+                                  title: "Eliminar registro"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.borrar(row.item.id)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "fa fa-trash" })]
                             )
                           ]
                         }
@@ -76362,14 +77477,509 @@ var render = function() {
       ),
       _vm._v(" "),
       _c(
+        "b-modal",
+        {
+          ref: "modal_usuario",
+          attrs: {
+            title: _vm.modal_usuario.titulo,
+            size: "lg",
+            "no-close-on-backdrop": ""
+          }
+        },
+        [
+          _c(
+            "b-form",
+            [
+              _c(
+                "b-row",
+                [
+                  _c(
+                    "b-col",
+                    [
+                      _c(
+                        "b-form-group",
+                        { attrs: { label: "Nombre de usuario" } },
+                        [
+                          _c("b-form-input", {
+                            attrs: {
+                              state: _vm.$v.usuario.nombre.$dirty
+                                ? !_vm.$v.usuario.nombre.$error
+                                : null,
+                              "aria-describedby": "usuario_nombre"
+                            },
+                            model: {
+                              value: _vm.$v.usuario.nombre.$model,
+                              callback: function($$v) {
+                                _vm.$set(_vm.$v.usuario.nombre, "$model", $$v)
+                              },
+                              expression: "$v.usuario.nombre.$model"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-invalid-feedback",
+                            { attrs: { id: "usuario_nombre" } },
+                            [
+                              _vm._v(
+                                "\n                            Campo de alfanúmerico, mínimo de 3 caracteres.\n                        "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-col",
+                    [
+                      _c(
+                        "b-form-group",
+                        { attrs: { label: "Usuario" } },
+                        [
+                          _c("b-form-input", {
+                            attrs: {
+                              state: _vm.$v.usuario.usuario.$dirty
+                                ? !_vm.$v.usuario.usuario.$error
+                                : null,
+                              "aria-describedby": "usuario_usuario",
+                              readonly: _vm.modal_usuario.accion == 2
+                            },
+                            model: {
+                              value: _vm.$v.usuario.usuario.$model,
+                              callback: function($$v) {
+                                _vm.$set(_vm.$v.usuario.usuario, "$model", $$v)
+                              },
+                              expression: "$v.usuario.usuario.$model"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-invalid-feedback",
+                            { attrs: { id: "usuario_usuario" } },
+                            [
+                              _vm._v(
+                                "\n                            Campo de alfanúmerico, mínimo de 3 caracteres y no debe de estar en la base de datos.\n                        "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-row",
+                [
+                  _c(
+                    "b-col",
+                    [
+                      _c(
+                        "b-form-group",
+                        {
+                          attrs: { label: "Email (En caso de enviar correos)" }
+                        },
+                        [
+                          _c("b-form-input", {
+                            attrs: {
+                              state: _vm.$v.usuario.email.$dirty
+                                ? !_vm.$v.usuario.email.$error
+                                : null,
+                              "aria-describedby": "usuario_email"
+                            },
+                            model: {
+                              value: _vm.$v.usuario.email.$model,
+                              callback: function($$v) {
+                                _vm.$set(_vm.$v.usuario.email, "$model", $$v)
+                              },
+                              expression: "$v.usuario.email.$model"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-invalid-feedback",
+                            { attrs: { id: "usuario_email" } },
+                            [
+                              _vm._v(
+                                "\n                            Campo de alfanúmerico, mínimo de 3 caracteres y formato de email.\n                        "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-col",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.modal_usuario.accion == 1,
+                          expression: "modal_usuario.accion == 1"
+                        }
+                      ]
+                    },
+                    [
+                      _c(
+                        "b-form-group",
+                        { attrs: { label: "Contraseña" } },
+                        [
+                          _c("b-form-input", {
+                            attrs: {
+                              type: "password",
+                              state: _vm.$v.usuario.password.$dirty
+                                ? !_vm.$v.usuario.password.$error
+                                : null,
+                              "aria-describedby": "usuario_password"
+                            },
+                            model: {
+                              value: _vm.$v.usuario.password.$model,
+                              callback: function($$v) {
+                                _vm.$set(_vm.$v.usuario.password, "$model", $$v)
+                              },
+                              expression: "$v.usuario.password.$model"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-invalid-feedback",
+                            { attrs: { id: "usuario_password" } },
+                            [
+                              _vm._v(
+                                "\n                            Campo de alfanúmerico, mínimo de 3 caracteres.\n                        "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-row",
+                [
+                  _c(
+                    "b-col",
+                    [
+                      _c(
+                        "b-form-group",
+                        { attrs: { label: "Menú de inicio" } },
+                        [
+                          _c(
+                            "b-form-select",
+                            {
+                              attrs: {
+                                state: _vm.$v.usuario.ruta_inicio.$dirty
+                                  ? !_vm.$v.usuario.ruta_inicio.$error
+                                  : null,
+                                "aria-describedby": "usuario_ruta_inicio"
+                              },
+                              model: {
+                                value: _vm.$v.usuario.ruta_inicio.$model,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.$v.usuario.ruta_inicio,
+                                    "$model",
+                                    $$v
+                                  )
+                                },
+                                expression: "$v.usuario.ruta_inicio.$model"
+                              }
+                            },
+                            [
+                              _c("option", { domProps: { value: null } }, [
+                                _vm._v("Selecciona una opción")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "usuarios" } }, [
+                                _vm._v("Sección usuarios")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "perfiles" } }, [
+                                _vm._v("Sección perfiles")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "lugares" } }, [
+                                _vm._v("Sección lugares")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "inventario" } }, [
+                                _vm._v("Sección inventario")
+                              ])
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-invalid-feedback",
+                            { attrs: { id: "usuario_ruta_inicio" } },
+                            [
+                              _vm._v(
+                                "\n                            Debes de seleccionar una opción.\n                        "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-col",
+                    [
+                      _c(
+                        "b-form-group",
+                        { attrs: { label: "Perfil de usuario" } },
+                        [
+                          _c(
+                            "b-form-select",
+                            {
+                              attrs: {
+                                state: _vm.$v.usuario.perfil_id.$dirty
+                                  ? !_vm.$v.usuario.perfil_id.$error
+                                  : null,
+                                "aria-describedby": "usuario_perfil_id"
+                              },
+                              model: {
+                                value: _vm.$v.usuario.perfil_id.$model,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.$v.usuario.perfil_id,
+                                    "$model",
+                                    $$v
+                                  )
+                                },
+                                expression: "$v.usuario.perfil_id.$model"
+                              }
+                            },
+                            [
+                              _c("option", { domProps: { value: null } }, [
+                                _vm._v("Selecciona una opción")
+                              ]),
+                              _vm._v(" "),
+                              _vm._l(_vm.perfiles, function(perfil) {
+                                return _c("option", {
+                                  key: perfil.id,
+                                  domProps: {
+                                    value: perfil.id,
+                                    textContent: _vm._s(perfil.nombre)
+                                  }
+                                })
+                              })
+                            ],
+                            2
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-invalid-feedback",
+                            { attrs: { id: "usuario_perfil_id" } },
+                            [
+                              _vm._v(
+                                "\n                            Debes de seleccionar una opción.\n                        "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "template",
+            { slot: "modal-footer" },
+            [
+              _c(
+                "b-button",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.modal_usuario.accion == 1,
+                      expression: "modal_usuario.accion == 1"
+                    }
+                  ],
+                  attrs: {
+                    disabled: _vm.$v.usuario.$invalid,
+                    size: "md",
+                    variant: "success"
+                  },
+                  on: { click: _vm.crear_actualizar_usuario }
+                },
+                [_vm._v(" Guardar ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.modal_usuario.accion == 2,
+                      expression: "modal_usuario.accion == 2"
+                    }
+                  ],
+                  attrs: {
+                    disabled: _vm.$v.usuario.$invalid,
+                    size: "md",
+                    variant: "warning"
+                  },
+                  on: { click: _vm.crear_actualizar_usuario }
+                },
+                [_vm._v(" Actualizar ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                {
+                  attrs: { size: "md", variant: "danger" },
+                  on: { click: _vm.cerrar_modal_usuario }
+                },
+                [_vm._v(" Cerrar ")]
+              )
+            ],
+            1
+          )
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c(
+        "b-modal",
+        {
+          ref: "modal_clave",
+          attrs: {
+            title: _vm.modal_clave.titulo,
+            size: "md",
+            "no-close-on-backdrop": ""
+          }
+        },
+        [
+          _c(
+            "b-form",
+            [
+              _c(
+                "b-row",
+                [
+                  _c(
+                    "b-col",
+                    [
+                      _c(
+                        "b-form-group",
+                        { attrs: { label: "Nueva contraseña" } },
+                        [
+                          _c("b-form-input", {
+                            attrs: {
+                              type: "password",
+                              state: _vm.$v.cambio_clave.clave.$dirty
+                                ? !_vm.$v.cambio_clave.clave.$error
+                                : null,
+                              "aria-describedby": "cambio_clave_clave"
+                            },
+                            model: {
+                              value: _vm.$v.cambio_clave.clave.$model,
+                              callback: function($$v) {
+                                _vm.$set(
+                                  _vm.$v.cambio_clave.clave,
+                                  "$model",
+                                  $$v
+                                )
+                              },
+                              expression: "$v.cambio_clave.clave.$model"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-invalid-feedback",
+                            { attrs: { id: "cambio_clave_clave" } },
+                            [
+                              _vm._v(
+                                "\n                            Campo de alfanúmerico, mínimo de 3 caracteres.\n                        "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "template",
+            { slot: "modal-footer" },
+            [
+              _c(
+                "b-button",
+                {
+                  attrs: {
+                    disabled: _vm.$v.cambio_clave.$invalid,
+                    size: "md",
+                    variant: "warning"
+                  },
+                  on: { click: _vm.actualizar_clave }
+                },
+                [_vm._v(" Cambiar clave ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                {
+                  attrs: { size: "md", variant: "danger" },
+                  on: { click: _vm.cerrar_modal_clave }
+                },
+                [_vm._v(" Cerrar ")]
+              )
+            ],
+            1
+          )
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c(
         "div",
         { staticClass: "fixed-bottom mb-5 mr-5" },
         [
           _c(
             "b-button",
             {
-              staticClass: "pull-right",
-              attrs: { pill: "", variant: "success", size: "lg" }
+              staticClass: "pull-right heigth-50",
+              attrs: { pill: "", variant: "success", size: "lg" },
+              on: { click: _vm.abrir_modal_usuario }
             },
             [_c("i", { staticClass: "ti-plus" })]
           )
@@ -95195,7 +96805,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   namespaced: true,
   state: {
-    usuario: null
+    usuario: null,
+    estado_saludo: 0
   },
   mutations: {
     actualizar: function actualizar(state, usuario) {
@@ -95210,11 +96821,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   getters: {
     saludo: function saludo(state) {
-      Vue.$toast.open({
-        message: '!Hola ' + state.usuario.nombre + '¡',
-        type: 'success',
-        duration: 5000
-      });
+      if (state.estado_saludo == 0) {
+        Vue.$toast.open({
+          message: '!Hola ' + state.usuario.nombre + '¡',
+          type: 'success',
+          duration: 5000
+        });
+        state.estado_saludo = 1;
+      }
     }
   }
 });

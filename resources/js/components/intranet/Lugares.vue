@@ -158,7 +158,7 @@
             lugar: {
                 nombre: {
                     required,
-                    minLength: minLength(4)
+                    minLength: minLength(3)
                 }
             }
         },
@@ -196,6 +196,8 @@
                 if(me.modal_lugar.accion == 2){
                     me.lugar.id = data.id
                     me.lugar.nombre = data.nombre
+
+                    this.$v.lugar.$touch(true)
                 }
 
                 this.$refs['modal_lugar'].show()
@@ -228,6 +230,8 @@
 
                         if(me.lugar.id == 0){
                             me.limpiar_datos_lugar()
+                        } else {
+                            me.cerrar_modal_lugar()
                         }
 
                     }).catch(function (error) {

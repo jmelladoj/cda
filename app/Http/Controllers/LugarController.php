@@ -19,7 +19,7 @@ class LugarController extends Controller
         }
     }
 
-    public function crear_atualizar(Request $request){
+    public function crear_actualizar(Request $request){
         Lugar::updateOrCreate(
             ['id' => $request->id],
             [
