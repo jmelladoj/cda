@@ -172,10 +172,25 @@
                                 :state="$v.usuario.ruta_inicio.$dirty ? !$v.usuario.ruta_inicio.$error : null"
                                 aria-describedby="usuario_ruta_inicio">
                                 <option :value="null">Selecciona una opción</option>
-                                <option value="usuarios">Sección usuarios</option>
-                                <option value="perfiles">Sección perfiles</option>
-                                <option value="lugares">Sección lugares</option>
-                                <option value="inventario">Sección inventario</option>
+
+                                <optgroup label="Usuarios">
+                                    <option value="usuarios">Sección usuarios</option>
+                                    <option value="perfiles">Sección perfiles</option>
+                                </optgroup>
+
+                                <optgroup label="Empresas">
+                                    <option value="proveedores">Sección proveedores</option>
+                                </optgroup>
+
+                                <optgroup label="Documentos">
+                                    <option value="ordenescompra">Sección ordenes de compra</option>
+                                </optgroup>
+
+                                <optgroup label="Inventario">
+                                    <option value="lugares">Sección lugares</option>
+                                    <option value="categoriasproducto">Sección categorías de productos</option>
+                                    <option value="inventario">Sección inventario</option>
+                                </optgroup>
                             </b-form-select>
 
                             <b-form-invalid-feedback id="usuario_ruta_inicio">

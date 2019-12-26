@@ -21,6 +21,9 @@ class CreatePerfilsTable extends Migration
             $table->boolean('menu_ordenes_compra')->default(false);
             $table->boolean('menu_lugares')->default(false);
             $table->boolean('menu_inventario')->default(false);
+            $table->boolean('menu_proveedores')->default(false);
+            $table->boolean('menu_categorias_productos')->default(false);
+
             $table->softDeletes();
             $table->timestamps();
         });

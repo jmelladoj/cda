@@ -88,9 +88,13 @@
                     'usuario': me.login.usuario,
                     'password': me.login.password
                 }).then(function (response) {
-                    window.location.href = "/home";
+                    axios.get('/usuario/logeado').then(function (response) {
+                        window.location.href = "/" + response.data.usuario.ruta_inicio
+                    })
+
                 }).catch(function (error) {
                     if (error.response.status == 422){
+                        me.login.password = ''
                         me.$store.commit('msg_error', 'Las credenciales introducidas son incorrectas.')
                     }
                 })

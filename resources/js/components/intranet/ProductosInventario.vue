@@ -186,13 +186,13 @@
             </b-form>
 
             <template slot="modal-footer">
-                <b-button :disabled="$v.producto_inventario.$invalid" v-show="modal_productos_inventario.accion == 1" size="md" variant="success" @click="crear_actualizar_lugar"> Guardar </b-button>
-                <b-button :disabled="$v.producto_inventario.$invalid" v-show="modal_productos_inventario.accion == 2" size="md" variant="warning" @click="crear_actualizar_lugar"> Actualizar </b-button>
+                <b-button :disabled="$v.producto_inventario.$invalid" v-show="modal_productos_inventario.accion == 1" size="md" variant="success" @click="crear_actualizar_productos_inventario"> Guardar </b-button>
+                <b-button :disabled="$v.producto_inventario.$invalid" v-show="modal_productos_inventario.accion == 2" size="md" variant="warning" @click="crear_actualizar_productos_inventario"> Actualizar </b-button>
                 <b-button size="md" variant="danger" @click="cerrar_modal_productos_inventario"> Cerrar </b-button>
             </template>
         </b-modal>
 
-        <b-modal ref="modal_productos_ingreso" :title="modal_productos_ingreso.titulo" no-close-on-backdrop>
+        <b-modal ref="modal_productos_ingreso" :title="modal_productos_ingreso.titulo" size="lg" no-close-on-backdrop>
             <b-form>
                 <b-row>
                     <b-col>
@@ -240,65 +240,78 @@
             </b-form>
 
             <template slot="modal-footer">
-                <b-button :disabled="$v.ingreso_producto.$invalid" size="md" variant="success" @click="crear_actualizar_lugar"> Ingresar </b-button>
+                <b-button :disabled="$v.ingreso_producto.$invalid" size="md" variant="success" @click="agregar_stock"> Ingresar </b-button>
                 <b-button size="md" variant="danger" @click="cerrar_modal_productos_ingreso"> Cerrar </b-button>
             </template>
         </b-modal>
 
-        <b-modal ref="modal_productos_salida" :title="modal_productos_salida.titulo" no-close-on-backdrop>
+        <b-modal ref="modal_productos_salida" :title="modal_productos_salida.titulo" size="lg" no-close-on-backdrop>
             <b-form>
-                <b-form-group label="Cantidad de retiro">
-                    <b-form-input
-                        v-model="$v.salida_producto.cantidad_salida.$model"
-                        :state="$v.salida_producto.cantidad_salida.$dirty ? !$v.salida_producto.cantidad_salida.$error : null"
-                        aria-describedby="salida-cantidad-retiro"
-                    ></b-form-input>
-
-                    <b-form-invalid-feedback id="salida-cantidad-retiro">
-                        Campo númerico, valor mínimo 1.
-                    </b-form-invalid-feedback>
-                </b-form-group>
-
-
                 <b-row>
                     <b-col>
-                        <b-form-group label="Valor actual de producto">
-                            <b-form-input
-                                v-model="$v.producto_inventario.valor_actual.$model"
-                                :state="$v.producto_inventario.valor_actual.$dirty ? !$v.producto_inventario.valor_actual.$error : null"
-                                aria-describedby="producto-valor-actual"
-                            ></b-form-input>
-
-                            <b-form-invalid-feedback id="producto-valor-actual">
-                                Campo númerico, valor mínimo 1.
-                            </b-form-invalid-feedback>
-                        </b-form-group>
-                    </b-col>
-                    <b-col>
-                        <b-form-group label="Último valor de producto">
-                            <b-form-input
-                                v-model="$v.producto_inventario.valor_ultimo.$model"
-                                :state="$v.producto_inventario.valor_ultimo.$dirty ? !$v.producto_inventario.valor_ultimo.$error : null"
-                                aria-describedby="producto-valor-ultimo"
-                            ></b-form-input>
-
-                            <b-form-invalid-feedback id="producto-valor-ultimo">
-                                Campo númerico, valor mínimo 0.
-                            </b-form-invalid-feedback>
-                        </b-form-group>
-                    </b-col>
-                </b-row>
-
-                <b-row>
-                    <b-col>
-                        <b-form-group label="Lugares">
-                            <b-table show-empty small striped hover outlined :items="items_ingreso" :fields="fields_ingreso">
+                        <b-form-group>
+                            <b-table show-empty small striped hover outlined :items="items_salida" :fields="fields_salida">
                                 <template v-slot:empty="scope">
                                     <center><h6>No hay registros</h6></center>
                                 </template>
 
                                 <template v-slot:cell(index)="data">
                                     {{ data.index + 1 }}
+                                </template>
+
+                                <template v-slot:cell(retiro)="data">
+                                    <b-form-group class="mb-0">
+                                        <b-form-input
+                                            v-model="$v.items_salida.$each[data.index].cantidad_retiro.$model"
+                                            :state="$v.items_salida.$each[data.index].cantidad_retiro.$dirty ? !$v.items_salida.$each[data.index].cantidad_retiro.$error : null"
+                                            :aria-describedby="'producto-cantidad-salida-' + data.index"
+                                            @keyup="calcular_costo(data.index)"
+                                        ></b-form-input>
+
+                                        <b-form-invalid-feedback :id="'producto-cantidad-salida-' + data.index">
+                                            Campo númerico, valor mínimo 0.
+                                        </b-form-invalid-feedback>
+                                    </b-form-group>
+                                </template>
+
+                                <template v-slot:cell(costo)="data">
+                                    <b-form-group class="mb-0">
+                                        <b-form-input
+                                            v-model="$v.items_salida.$each[data.index].costo_salida.$model"
+                                            :state="$v.items_salida.$each[data.index].costo_salida.$dirty ? !$v.items_salida.$each[data.index].costo_salida.$error : null"
+                                            :aria-describedby="'producto-costo-salida-' + data.index"
+                                            readonly
+                                        ></b-form-input>
+
+                                        <b-form-invalid-feedback :id="'producto-costo-salida-' + data.index">
+                                            Campo númerico, valor mínimo 0.
+                                        </b-form-invalid-feedback>
+                                    </b-form-group>
+                                </template>
+
+                            </b-table>
+                        </b-form-group>
+                    </b-col>
+                </b-row>
+
+                <b-row>
+                    <b-col>
+                        <b-form-group label="Detalle de salidas">
+                            <b-table show-empty small striped hover outlined :items="detalle_salida" :fields="fields_detalle_salida">
+                                <template v-slot:empty="scope">
+                                    <center><h6>No hay registros</h6></center>
+                                </template>
+
+                                <template v-slot:cell(index)="data">
+                                    {{ data.index + 1 }}
+                                </template>
+
+                                <template v-slot:cell(retiro)="data">
+                                   <label>Se han retirado {{ data.item.cantidad_retiro }}  unidades en stock</label>
+                                </template>
+
+                                <template v-slot:cell(valor_retiro)="data">
+                                    {{ data.item.valor_retiro | currency }}
                                 </template>
                             </b-table>
                         </b-form-group>
@@ -307,7 +320,7 @@
             </b-form>
 
             <template slot="modal-footer">
-                <b-button :disabled="$v.salida_producto.$invalid" size="md" variant="success" @click="crear_actualizar_lugar"> Retirar </b-button>
+                <b-button :disabled="$v.items_salida.$invalid" size="md" variant="success" @click="retirar_stock"> Retirar </b-button>
                 <b-button size="md" variant="danger" @click="cerrar_modal_productos_salida"> Cerrar </b-button>
             </template>
         </b-modal>
@@ -327,8 +340,9 @@
             return {
                 items: [],
                 items_ingreso: [],
+                items_salida: [],
+                detalle_salida: [],
                 lugares: [],
-                tabla_salida: [],
                 fields: [
                     { key: 'index', label: '#', sortable: true, class: 'text-center' },
                     { key: 'nombre', label: 'Nombre', sortable: true, class: 'text-left' },
@@ -341,7 +355,20 @@
                 fields_ingreso: [
                     { key: 'index', label: '#', sortable: true, class: 'text-center' },
                     { key: 'detalle', label: 'Detalle', sortable: true, class: 'text-left' },
-                    { key: 'encargado', label: 'Usuario', sortable: true, class: 'text-left' },
+                    { key: 'created_at', label: 'Fecha', sortable: true, class: 'text-center' }
+                ],
+                fields_salida: [
+                    { key: 'index', label: '#', sortable: true, class: 'text-center' },
+                    { key: 'nombre', label: 'Lugar', sortable: true, class: 'text-left' },
+                    { key: 'retiro', label: 'Unidades a retirar', sortable: true, class: 'text-left' },
+                    { key: 'costo', label: 'Costo de retiro', sortable: true, class: 'text-left' }
+                ],
+                fields_detalle_salida: [
+                    { key: 'index', label: '#', sortable: true, class: 'text-center' },
+                    { key: 'lugar_nombre', label: 'Lugar', sortable: true, class: 'text-left' },
+                    { key: 'retiro', label: 'Detalle', sortable: true, class: 'text-left' },
+                    { key: 'valor_retiro', label: 'Costo', sortable: true, class: 'text-left' },
+                    { key: 'created_at', label: 'Fecha', sortable: true, class: 'text-center' }
                 ],
                 totalRows: 1,
                 currentPage: 1,
@@ -373,9 +400,6 @@
                 ingreso_producto: {
                     cantidad_ingreso: null,
                     valor_ingreso: null
-                },
-                salida_producto:{
-                    cantidad_salida: null
                 }
             }
         },
@@ -413,10 +437,14 @@
                     minValue: minValue(1)
                 }
             },
-            salida_producto: {
-                cantidad_salida: {
-                    required,
-                    minValue: minValue(1)
+            items_salida: {
+                $each: {
+                    cantidad_retiro: {
+                        numeric
+                    },
+                    costo_salida: {
+                        numeric
+                    }
                 }
             }
         },
@@ -429,6 +457,9 @@
         },
         methods: {
             ...mapMutations(['msg_success', 'msg_error']),
+            calcular_costo(indice){
+                this.items_salida[indice].costo_salida = this.producto_inventario.valor_actual * this.items_salida[indice].cantidad_retiro
+            },
             clase_fila(item, type) {
                 if (!item) return
                 if (item.stock < item.stock_critico) return 'table-danger'
@@ -447,15 +478,18 @@
                 axios.get('/lugares/1').then(function (response) {
                     me.lugares = response.data.lugares
 
-                    me.tabla_salida = []
+                    me.items_salida = []
 
-                    me.lugares.forEach( function(lugar) {
+                    me.lugares.forEach( function(lugar, index) {
                         var fila = new Object()
+                        fila.index = index
                         fila.lugar_id = lugar.id
                         fila.nombre = lugar.nombre
                         fila.cantidad_retiro = 0
-                        me.tabla_salida.push(fila)
+                        fila.costo_salida = 0
+                        me.items_salida.push(fila)
                     })
+
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -467,6 +501,26 @@
                 axios.get('/inventario/1').then(function (response) {
                     me.items = response.data.productos
                     me.totalRows = me.items.length;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+            listar_detalle_stock_productos(accion, id){
+                let me = this
+
+                axios.get('/inventario/detalle/' + accion + '/' + id).then(function (response) {
+                    me.items_ingreso = response.data.detalle
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+            listar_detalle_salida_productos(id){
+                let me = this
+
+                axios.get('/inventario/stock/salida/' + id).then(function (response) {
+                    me.detalle_salida = response.data.detalle
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -498,21 +552,41 @@
                 this.$refs['modal_productos_inventario'].hide()
             },
             abrir_modal_productos_ingreso(data = []){
+                this.limpiar_datos_productos_ingreso()
+
+                this.listar_detalle_stock_productos(1, data.id)
                 this.modal_productos_ingreso.titulo = "Ingresar stock a : " + data.nombre
 
+                this.producto_inventario.id = data.id
                 this.ingreso_producto.valor_ingreso = data.valor_actual
 
                 this.$refs['modal_productos_ingreso'].show()
             },
             abrir_modal_productos_salida(data = []){
+                this.producto_inventario.id = data.id
+                this.producto_inventario.valor_actual = data.valor_actual
+                this.producto_inventario.stock = data.stock
+
                 this.modal_productos_salida.titulo = "Retirar stock de : " + data.nombre
                 this.$refs['modal_productos_salida'].show()
+
+                this.listar_detalle_salida_productos(data.id)
+
+                this.$v.items_salida.$touch(true)
             },
             cerrar_modal_productos_ingreso() {
                 this.$refs['modal_productos_ingreso'].hide()
             },
             cerrar_modal_productos_salida() {
+                this.producto_inventario.id = 0
+                this.producto_inventario.valor_actual = null
+                this.producto_inventario.stock = null
+
+                this.listar_lugares()
+
                 this.$refs['modal_productos_salida'].hide()
+
+                this.$v.items_salida.$touch(false)
             },
             limpiar_datos_producto_inventario() {
                 this.producto_inventario.id = 0
@@ -524,7 +598,17 @@
 
                 this.$v.$reset();
             },
-            crear_actualizar_lugar() {
+            limpiar_datos_productos_ingreso() {
+                this.producto_inventario.id = 0
+                this.ingreso_producto.cantidad_ingreso = null
+                this.ingreso_producto.valor_ingreso = null
+                this.items_ingreso = []
+
+                this.modal_productos_ingreso.titulo = ''
+
+                this.$v.$reset()
+            },
+            crear_actualizar_productos_inventario() {
                 if(this.$v.producto_inventario.$invalid){
                     this.$v.producto_inventario.$touch()
                     return
@@ -575,7 +659,68 @@
                         })
                     }
                 })
-            }
+            },
+            agregar_stock() {
+                if(this.$v.ingreso_producto.$invalid){
+                    this.$v.ingreso_producto.$touch()
+                    return
+                }
+
+                let me = this
+
+                axios.post('/inventario/agregar',{
+                    'producto_id': me.producto_inventario.id,
+                    'cantidad_ingreso': me.ingreso_producto.cantidad_ingreso,
+                    'valor_ingreso': me.ingreso_producto.valor_ingreso
+                }).then(function (response) {
+                    me.listar_detalle_stock_productos(1, me.producto_inventario.id)
+                    me.obtener_registros()
+                    me.ingreso_producto.cantidad_ingreso = null
+                    me.$v.$reset()
+                    me.$store.commit('msg_success','Stock agregado exitosamente.')
+
+                }).catch(function (error) {
+                    console.log(error)
+                })
+            },
+            retirar_stock() {
+                if(this.$v.items_salida.$invalid){
+                    this.$v.items_salida.$touch()
+                    return
+                }
+
+                let me = this
+
+                let retiro = me.items_salida.filter(s => s.cantidad_retiro > 0);
+
+                if(retiro.length == 0){
+                    return
+                }
+
+                let suma = 0
+
+                me.items_salida.forEach(item => suma += parseInt(item.cantidad_retiro));
+
+                var resultado = parseInt(me.producto_inventario.stock) - parseInt(suma)
+
+                if(resultado < 0){
+                    me.$store.commit('msg_error','Sin stock suficente para retiro.')
+                    return
+                }
+
+                axios.post('/inventario/retirar',{
+                    'producto_id': me.producto_inventario.id,
+                    'valor_retiro': me.producto_inventario.valor_actual,
+                    'detalle_retiro': retiro
+                }).then(function (response) {
+                    me.listar_productos_inventario()
+                    me.listar_detalle_salida_productos(me.producto_inventario.id)
+                    me.$store.commit('msg_success','Stock retirado exitosamente.')
+
+                }).catch(function (error) {
+                    console.log(error)
+                })
+            },
         },
         mounted() {
             this.obtener_registros()

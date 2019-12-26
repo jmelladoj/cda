@@ -16,6 +16,10 @@ import Vuex from 'vuex'
 import VueToast from 'vue-toast-notification'
 import VueRouter from 'vue-router'
 import VueCurrencyFilter from 'vue-currency-filter'
+import { rutInputDirective } from 'vue-dni'
+import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
+
+Vue.directive('rut', rutInputDirective)
 
 //Estilos
 import 'vue-toast-notification/dist/index.css'
@@ -30,6 +34,7 @@ Vue.use(Vuelidate)
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
 Vue.use(VueRouter)
+Vue.component('vue-bootstrap-typeahead', VueBootstrapTypeahead)
 
 Vue.use(VueCurrencyFilter,{
     symbol : '$',
@@ -39,6 +44,8 @@ Vue.use(VueCurrencyFilter,{
     symbolPosition: 'front',
     symbolSpacing: true
 })
+
+Vue.directive('rut', rutInputDirective)
 
 /**
  * The following block of code may be used to automatically register your
