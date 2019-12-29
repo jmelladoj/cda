@@ -67,6 +67,17 @@
                 <b-card>
                     <b-row>
                         <b-col lg="6" class="my-1">
+                            <b-form-group label="Búsqueda" label-cols-sm="2" label-align-sm="left" label-size="sm" label-for="filterInput" class="mb-0" >
+                            <b-input-group size="sm">
+                                <b-form-input v-model="filter" type="search" id="filterInput" placeholder="Escribe para buscar"></b-form-input>
+                                <b-input-group-append>
+                                    <b-button :disabled="!filter" @click="filter = ''">Limpiar</b-button>
+                                </b-input-group-append>
+                            </b-input-group>
+                            </b-form-group>
+                        </b-col>
+
+                        <b-col lg="6" class="my-1">
                             <b-form-group label="Ordenar" label-cols-sm="2" label-align-sm="left" label-size="sm" label-for="sortBySelect" class="mb-0">
                                 <b-input-group size="sm">
                                     <b-form-select v-model="sortBy" id="sortBySelect" :options="sortOptions" class="w-75">
@@ -83,35 +94,6 @@
                         </b-col>
 
                         <b-col lg="6" class="my-1">
-                            <b-form-group label="Orden inicial" label-cols-sm="2" label-align-sm="left" label-size="sm" label-for="initialSortSelect" class="mb-0">
-                                <b-form-select v-model="sortDirection" id="initialSortSelect" size="sm">
-                                    <option value="asc">Ascendente</option>
-                                    <option value="desc">Descendente</option>
-                                    <option value="last">Último</option>
-                                </b-form-select>
-                            </b-form-group>
-                        </b-col>
-
-                        <b-col lg="6" class="my-1">
-                            <b-form-group label="Búsqueda" label-cols-sm="2" label-align-sm="left" label-size="sm" label-for="filterInput" class="mb-0" >
-                            <b-input-group size="sm">
-                                <b-form-input v-model="filter" type="search" id="filterInput" placeholder="Escribe para buscar"></b-form-input>
-                                <b-input-group-append>
-                                    <b-button :disabled="!filter" @click="filter = ''">Limpiar</b-button>
-                                </b-input-group-append>
-                            </b-input-group>
-                            </b-form-group>
-                        </b-col>
-
-                        <b-col lg="6" class="my-1">
-                            <b-form-group label="Filtrar en" label-cols-sm="2" label-align-sm="left" label-size="sm" class="mb-0">
-                                <b-form-checkbox-group v-model="filterOn" class="mt-1">
-                                    <b-form-checkbox value="nombre">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nombre</b-form-checkbox>
-                                </b-form-checkbox-group>
-                            </b-form-group>
-                        </b-col>
-
-                        <b-col lg="6" class="my-1">
                             <b-form-group label="Por página" label-cols-sm="2" label-align-sm="left" label-size="sm" label-for="perPageSelect" class="mb-0">
                                 <b-form-select v-model="perPage" id="perPageSelect" size="sm" :options="pageOptions"></b-form-select>
                             </b-form-group>
@@ -122,7 +104,7 @@
                         </b-col>
                     </b-row>
 
-                    <b-table class="my-3" show-empty small striped outlined stacked="md" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :filterIncludedFields="filterOn" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :sort-direction="sortDirection" @filtered="onFiltered" >
+                    <b-table class="my-3" show-empty small striped outlined stacked="md" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" >
                         <template v-slot:empty="scope">
                             <center><h5>No hay registros</h5></center>
                         </template>
@@ -453,7 +435,7 @@
             </b-form>
 
             <template slot="modal-footer">
-                <b-button :disabled="$v.orden_compra.$invalid" size="md" variant="success" @click="crear_orden_compra(1)" v-show="usuario.email"> Guardar y enviar </b-button>
+                <b-button :disabled="$v.orden_compra.$invalid" size="md" variant="success" @click="crear_orden_compra(1)" v-if="usuario && usuario.email"> Guardar y enviar </b-button>
                 <b-button :disabled="$v.orden_compra.$invalid" size="md" variant="success" @click="crear_orden_compra()"> Guardar </b-button>
                 <b-button size="md" variant="danger" @click="cerrar_modal_orden_compra"> Cerrar </b-button>
             </template>
@@ -480,7 +462,7 @@
                     { key: 'proveedor_nombre', label: 'Proveedor', sortable: true, class: 'text-left' },
                     { key: 'asunto', label: 'Asunto', sortable: true, class: 'text-left' },
                     { key: 'total', label: 'Total', sortable: true, class: 'text-left' },
-                    { key: 'user_id', label: 'Emisor', sortable: true, class: 'text-left' },
+                    { key: 'emisor', label: 'Emisor', sortable: true, class: 'text-left' },
                     { key: 'created_at', label: 'Fecha', sortable: true, class: 'text-left' },
                     { key: 'acciones', label: 'Acciones', class: 'text-center'}
                 ],
@@ -499,9 +481,7 @@
                 pageOptions: [15, 50, 100, 150, 200, 150],
                 sortBy: '',
                 sortDesc: false,
-                sortDirection: 'asc',
                 filter: null,
-                filterOn: [],
                 modal_orden_compra: {
                     titulo: '',
                     accion: 0
@@ -608,9 +588,7 @@
 
         },
         computed: {
-            usuario(){
-                return this.$store.state.usuario.usuario
-            },
+            ...mapState('usuario', ['usuario']),
             sortOptions() {
                 return this.fields.filter(f => f.sortable).map(f => {
                     return { text: f.label, value: f.key }
@@ -775,7 +753,7 @@
                     }
 
                     setTimeout(function(){ me.cambiar_nombres(productos_nombre) },2000);
-                    
+
                 } else {
                     this.agregar_fila()
                 }
@@ -912,16 +890,14 @@
                 }).then((result) => {
                     if (result.value) {
                         let me = this
-                        axios.post('/orden/descargar',{
-                            'id': id
-                        }).then(function (response) {
-                            const link = document.createElement('a');
-                            link.href = window.URL.createObjectURL(new Blob([response.data]));
-                            link.download = 'OrdenDeCompra.pdf';
-                            document.body.append(link)
-                            link.click()
-                            link.remove()
 
+                        axios.get('/orden/descargar/' + id, {responseType: 'blob'}).then(function (response){
+                            const url = window.URL.createObjectURL(new Blob([response.data]))
+                            const link = document.createElement('a')
+                            link.href = url
+                            link.setAttribute('download', 'OrdenDeCompra.pdf')
+                            document.body.appendChild(link)
+                            link.click()
                             me.$store.commit('msg_success', 'Registro descargado exitosamente.')
                         }).catch(function (error) {
                             console.log(error);

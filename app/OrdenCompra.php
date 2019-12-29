@@ -12,6 +12,7 @@ class OrdenCompra extends Model
 
     protected $table = 'orden_compras';
     protected $guarded = ['id'];
+    protected $appends = ['emisor'];
 
     public function proveedor(){
         return $this->belongsTo(Proveedor::class, 'proveedor_id');
@@ -35,5 +36,9 @@ class OrdenCompra extends Model
 
     public function usuario(){
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function getEmisorAttribute(){
+        return empty($this->usuario) ? 'Desconocido' : $this->usuario->nombre;
     }
 }

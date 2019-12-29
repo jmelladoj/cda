@@ -118,9 +118,9 @@ class OrdenCompraController extends Controller
         Mail::to($proveedor->correo)->send(new AppOrdenCompra($proveedor, $orden_compra));
     }
 
-    public function descargar(Request $request){
-        $orden_compra = OrdenCompra::find($request->id);
+    public function descargar($id){
 
+        $orden_compra = OrdenCompra::find($id);
         $data = ['orden_compra' => $orden_compra];
 
         return PDF::loadView('pdf/orden_compra', $data)->setPaper('a4')->output();

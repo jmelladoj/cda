@@ -4,8 +4,53 @@
 
         <b-row>
             <b-col>
+                <b-card-group>
+                    <b-card class="mt-0 mb-0">
+                            <b-col cols="12">
+                                <div class="d-flex no-block align-items-center">
+                                    <div>
+                                        <h4><i class="fa fa-usd"></i></h4>
+                                        <p class="text-muted"><b>Valorización aproximada stock</b></p>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <h4 class="counter text-primary">{{ total_valorizacion_stock | currency}}</h4>
+                                    </div>
+                                </div>
+                            </b-col>
+                    </b-card>
+                    <b-card class="mt-0 mb-0">
+
+                            <b-col cols="12">
+                                <div class="d-flex no-block align-items-center">
+                                    <div>
+                                        <h4><i class="fa fa-product-hunt"></i></h4>
+                                        <p class="text-muted"><b>Productos con stock crítico</b></p>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <h4 class="counter text-warning">{{ total_productos_critico }}</h4>
+                                    </div>
+                                </div>
+                            </b-col>
+                    </b-card>
+                </b-card-group>
+            </b-col>
+        </b-row>
+
+        <b-row>
+            <b-col>
                 <b-card>
                     <b-row>
+                        <b-col lg="6" class="my-1">
+                            <b-form-group label="Búsqueda" label-cols-sm="2" label-align-sm="left" label-size="sm" label-for="filterInput" class="mb-0" >
+                            <b-input-group size="sm">
+                                <b-form-input v-model="filter" type="search" id="filterInput" placeholder="Escribe para buscar"></b-form-input>
+                                <b-input-group-append>
+                                    <b-button :disabled="!filter" @click="filter = ''">Limpiar</b-button>
+                                </b-input-group-append>
+                            </b-input-group>
+                            </b-form-group>
+                        </b-col>
+
                         <b-col lg="6" class="my-1">
                             <b-form-group label="Ordenar" label-cols-sm="2" label-align-sm="left" label-size="sm" label-for="sortBySelect" class="mb-0">
                                 <b-input-group size="sm">
@@ -23,35 +68,6 @@
                         </b-col>
 
                         <b-col lg="6" class="my-1">
-                            <b-form-group label="Orden inicial" label-cols-sm="2" label-align-sm="left" label-size="sm" label-for="initialSortSelect" class="mb-0">
-                                <b-form-select v-model="sortDirection" id="initialSortSelect" size="sm">
-                                    <option value="asc">Ascendente</option>
-                                    <option value="desc">Descendente</option>
-                                    <option value="last">Último</option>
-                                </b-form-select>
-                            </b-form-group>
-                        </b-col>
-
-                        <b-col lg="6" class="my-1">
-                            <b-form-group label="Búsqueda" label-cols-sm="2" label-align-sm="left" label-size="sm" label-for="filterInput" class="mb-0" >
-                            <b-input-group size="sm">
-                                <b-form-input v-model="filter" type="search" id="filterInput" placeholder="Escribe para buscar"></b-form-input>
-                                <b-input-group-append>
-                                    <b-button :disabled="!filter" @click="filter = ''">Limpiar</b-button>
-                                </b-input-group-append>
-                            </b-input-group>
-                            </b-form-group>
-                        </b-col>
-
-                        <b-col lg="6" class="my-1">
-                            <b-form-group label="Filtrar en" label-cols-sm="2" label-align-sm="left" label-size="sm" class="mb-0">
-                                <b-form-checkbox-group v-model="filterOn" class="mt-1">
-                                    <b-form-checkbox value="nombre">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nombre</b-form-checkbox>
-                                </b-form-checkbox-group>
-                            </b-form-group>
-                        </b-col>
-
-                        <b-col lg="6" class="my-1">
                             <b-form-group label="Por página" label-cols-sm="2" label-align-sm="left" label-size="sm" label-for="perPageSelect" class="mb-0">
                                 <b-form-select v-model="perPage" id="perPageSelect" size="sm" :options="pageOptions"></b-form-select>
                             </b-form-group>
@@ -62,7 +78,7 @@
                         </b-col>
                     </b-row>
 
-                    <b-table class="my-3" show-empty small striped outlined stacked="md" :tbody-tr-class="clase_fila" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :filterIncludedFields="filterOn" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :sort-direction="sortDirection" @filtered="onFiltered" >
+                    <b-table class="my-3" show-empty small striped outlined stacked="md" :tbody-tr-class="clase_fila" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" >
                         <template v-slot:empty="scope">
                             <center><h5>No hay registros</h5></center>
                         </template>
@@ -81,6 +97,9 @@
                             {{ data.item.valor_ultimo | currency }}
                         </template>
 
+                        <template v-slot:cell(valorizacion)="data" variant="danger">
+                            {{ data.item.valorizacion | currency }}
+                        </template>
 
                         <template v-slot:cell(acciones)="row">
                             <b-button size="xs" variant="info" title="Ingresar stock" @click="abrir_modal_productos_ingreso(row.item)">
@@ -112,7 +131,7 @@
             </b-col>
         </b-row>
 
-        <b-modal ref="modal_productos_inventario" :title="modal_productos_inventario.titulo" no-close-on-backdrop>
+        <b-modal ref="modal_productos_inventario" :title="modal_productos_inventario.titulo" no-close-on-backdrop scrollable static>
             <b-form>
                 <b-form-group label="Nombre de producto">
                     <b-form-input
@@ -192,7 +211,7 @@
             </template>
         </b-modal>
 
-        <b-modal ref="modal_productos_ingreso" :title="modal_productos_ingreso.titulo" size="lg" no-close-on-backdrop>
+        <b-modal ref="modal_productos_ingreso" :title="modal_productos_ingreso.titulo" size="lg" no-close-on-backdrop scrollable static>
             <b-form>
                 <b-row>
                     <b-col>
@@ -245,7 +264,7 @@
             </template>
         </b-modal>
 
-        <b-modal ref="modal_productos_salida" :title="modal_productos_salida.titulo" size="lg" no-close-on-backdrop>
+        <b-modal ref="modal_productos_salida" :title="modal_productos_salida.titulo" size="lg" no-close-on-backdrop scrollable static>
             <b-form>
                 <b-row>
                     <b-col>
@@ -350,6 +369,7 @@
                     { key: 'stock_critico', label: 'Stock crítico', sortable: true, class: 'text-left' },
                     { key: 'valor_actual', label: 'Valor actual', sortable: true, class: 'text-left' },
                     { key: 'valor_ultimo', label: 'Último valor', sortable: true, class: 'text-left' },
+                    { key: 'valorizacion', label: 'Valorización stock', sortable: true, class: 'text-left' },
                     { key: 'acciones', label: 'Acciones', class: 'text-center'}
                 ],
                 fields_ingreso: [
@@ -376,9 +396,7 @@
                 pageOptions: [15, 50, 100, 150, 200, 150],
                 sortBy: '',
                 sortDesc: false,
-                sortDirection: 'asc',
                 filter: null,
-                filterOn: [],
                 modal_productos_inventario: {
                     titulo: '',
                     accion: 0
@@ -453,6 +471,20 @@
                 return this.fields.filter(f => f.sortable).map(f => {
                     return { text: f.label, value: f.key }
                 })
+            },
+            total_valorizacion_stock() {
+                var total = 0
+
+                this.items.forEach(i => total += i.valorizacion)
+
+                return total
+            },
+            total_productos_critico(){
+                var total = 0
+
+                this.items.forEach(i => i.stock <= i.stock_critico ? total += 1 : total += 0)
+
+                return total
             }
         },
         methods: {

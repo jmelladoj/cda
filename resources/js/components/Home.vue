@@ -38,26 +38,26 @@
                         <li class="nav-small-cap">--- MENÚ</li>
                         <li :class="usuario.perfil.menu_perfiles == 0 && usuario.perfil.menu_usuarios == 0 ? 'd-none' : ''">
                             <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">Usuarios</span></a>
-                            <ul aria-expanded="false" :class="usuario.perfil.menu_perfiles == 1 || usuario.perfil.menu_usuarios == 1 ? 'collapse' : ''">
+                            <ul aria-expanded="false">
                                 <li :class="usuario.perfil.menu_perfiles == 0 ? 'd-none' : ''"><router-link to="/perfiles">Perfiles</router-link></li>
                                 <li :class="usuario.perfil.menu_usuarios == 0 ? 'd-none' : ''"><router-link to="/usuarios">Usuarios</router-link></li>
                             </ul>
                         </li>
                         <li :class="usuario.perfil.menu_proveedores == 0 ? 'd-none' : ''">
                             <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-building"></i><span class="hide-menu">Empresas</span></a>
-                            <ul aria-expanded="false" :class="usuario.perfil.menu_proveedores == 1 ? 'collapse' : ''">
+                            <ul aria-expanded="false">
                                 <li><router-link to="/proveedores">Proveedores</router-link></li>
                             </ul>
                         </li>
                         <li :class="usuario.perfil.menu_ordenes_compra == 0 ? 'd-none' : ''">
                             <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-folder"></i><span class="hide-menu">Documentos</span></a>
-                            <ul aria-expanded="false" :class="usuario.perfil.menu_ordenes_compra == 1 ? 'collapse' : ''">
+                            <ul aria-expanded="false">
                                 <li><router-link to="/ordenescompra">Ordenes de compra</router-link></li>
                             </ul>
                         </li>
                         <li :class="usuario.perfil.menu_categorias_productos == 0 && usuario.perfil.menu_lugares == 0 && usuario.perfil.menu_inventario == 0 ? 'd-none' : ''">
                             <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-archive"></i><span class="hide-menu">Inventario</span></a>
-                            <ul aria-expanded="false" :class="usuario.perfil.menu_categorias_productos == 1 || usuario.perfil.perfil == 1 || usuario.perfil.menu_inventario == 1 ? 'collapse' : ''">
+                            <ul aria-expanded="false">
                                 <li :class="usuario.perfil.menu_categorias_productos == 0 ? 'd-none' : ''"><router-link to="/categoriasproducto">Categorías producto</router-link></li>
                                 <li :class="usuario.perfil.menu_lugares == 0 ? 'd-none' : ''"><router-link to="/lugares">Lugares</router-link></li>
                                 <li :class="usuario.perfil.menu_inventario == 0 ? 'd-none' : ''"><router-link to="/inventario">Productos</router-link></li>
@@ -89,9 +89,7 @@
         },
         computed: {
             ...mapGetters('usuario', ['saludo']),
-            usuario(){
-                return this.$store.state.usuario.usuario
-            }
+            ...mapState('usuario', ['usuario'])
         },
         methods: {
             ...mapActions('usuario', ['salir']),

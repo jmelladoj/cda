@@ -11,4 +11,9 @@ class ProductoInventario extends Model
     use SoftDeletes;
 
     protected $guarded = ['id'];
+    protected $appends = ['valorizacion'];
+
+    public function getValorizacionAttribute(){
+        return $this->stock * $this->valor_actual;
+    }
 }

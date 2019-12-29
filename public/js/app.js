@@ -1942,11 +1942,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {};
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])('usuario', ['saludo']), {
-    usuario: function usuario() {
-      return this.$store.state.usuario.usuario;
-    }
-  }),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])('usuario', ['saludo']), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])('usuario', ['usuario'])),
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('usuario', ['salir']), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])('usuario', ['actualizar']), {
     usuario_logeado: function usuario_logeado() {
       var me = this;
@@ -2252,24 +2248,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2297,9 +2275,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       pageOptions: [15, 50, 100, 150, 200, 150],
       sortBy: '',
       sortDesc: false,
-      sortDirection: 'asc',
       filter: null,
-      filterOn: [],
       modal_categoria: {
         titulo: '',
         accion: 0
@@ -2549,24 +2525,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2594,9 +2552,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       pageOptions: [15, 50, 100, 150, 200, 150],
       sortBy: '',
       sortDesc: false,
-      sortDirection: 'asc',
       filter: null,
-      filterOn: [],
       modal_lugar: {
         titulo: '',
         accion: 0
@@ -3189,24 +3145,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3236,7 +3174,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         sortable: true,
         "class": 'text-left'
       }, {
-        key: 'user_id',
+        key: 'emisor',
         label: 'Emisor',
         sortable: true,
         "class": 'text-left'
@@ -3292,9 +3230,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       pageOptions: [15, 50, 100, 150, 200, 150],
       sortBy: '',
       sortDesc: false,
-      sortDirection: 'asc',
       filter: null,
-      filterOn: [],
       modal_orden_compra: {
         titulo: '',
         accion: 0
@@ -3385,10 +3321,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     }
   },
-  computed: {
-    usuario: function usuario() {
-      return this.$store.state.usuario.usuario;
-    },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])('usuario', ['usuario']), {
     sortOptions: function sortOptions() {
       return this.fields.filter(function (f) {
         return f.sortable;
@@ -3399,7 +3332,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         };
       });
     }
-  },
+  }),
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])(['msg_success', 'msg_error']), {
     numero_orden: function numero_orden() {
       var max = 0;
@@ -3680,15 +3613,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }).then(function (result) {
         if (result.value) {
           var me = _this3;
-          axios.post('/orden/descargar', {
-            'id': id
+          axios.get('/orden/descargar/' + id, {
+            responseType: 'blob'
           }).then(function (response) {
+            var url = window.URL.createObjectURL(new Blob([response.data]));
             var link = document.createElement('a');
-            link.href = window.URL.createObjectURL(new Blob([response.data]));
-            link.download = 'OrdenDeCompra.pdf';
-            document.body.append(link);
+            link.href = url;
+            link.setAttribute('download', 'OrdenDeCompra.pdf');
+            document.body.appendChild(link);
             link.click();
-            link.remove();
             me.$store.commit('msg_success', 'Registro descargado exitosamente.');
           })["catch"](function (error) {
             console.log(error);
@@ -3859,24 +3792,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3904,9 +3819,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       pageOptions: [15, 50, 100, 150, 200, 150],
       sortBy: '',
       sortDesc: false,
-      sortDirection: 'asc',
       filter: null,
-      filterOn: [],
       modal_perfil: {
         titulo: '',
         accion: 0
@@ -4411,6 +4324,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4449,6 +4381,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, {
         key: 'valor_ultimo',
         label: 'Último valor',
+        sortable: true,
+        "class": 'text-left'
+      }, {
+        key: 'valorizacion',
+        label: 'Valorización stock',
         sortable: true,
         "class": 'text-left'
       }, {
@@ -4525,9 +4462,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       pageOptions: [15, 50, 100, 150, 200, 150],
       sortBy: '',
       sortDesc: false,
-      sortDirection: 'asc',
       filter: null,
-      filterOn: [],
       modal_productos_inventario: {
         titulo: '',
         accion: 0
@@ -4607,6 +4542,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           value: f.key
         };
       });
+    },
+    total_valorizacion_stock: function total_valorizacion_stock() {
+      var total = 0;
+      this.items.forEach(function (i) {
+        return total += i.valorizacion;
+      });
+      return total;
+    },
+    total_productos_critico: function total_productos_critico() {
+      var total = 0;
+      this.items.forEach(function (i) {
+        return i.stock <= i.stock_critico ? total += 1 : total += 0;
+      });
+      return total;
     }
   },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])(['msg_success', 'msg_error']), {
@@ -5079,24 +5028,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -5144,9 +5075,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       pageOptions: [15, 50, 100, 150, 200, 150],
       sortBy: '',
       sortDesc: false,
-      sortDirection: 'asc',
       filter: null,
-      filterOn: [],
       modal_proveedor: {
         titulo: '',
         accion: 0
@@ -5590,24 +5519,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -5651,9 +5562,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       pageOptions: [15, 50, 100, 150, 200, 150],
       sortBy: '',
       sortDesc: false,
-      sortDirection: 'asc',
       filter: null,
-      filterOn: [],
       modal_usuario: {
         titulo: '',
         accion: 0
@@ -77005,50 +76914,39 @@ var render = function() {
                   [
                     _vm._m(3),
                     _vm._v(" "),
-                    _c(
-                      "ul",
-                      {
-                        class:
-                          _vm.usuario.perfil.menu_perfiles == 1 ||
-                          _vm.usuario.perfil.menu_usuarios == 1
-                            ? "collapse"
-                            : "",
-                        attrs: { "aria-expanded": "false" }
-                      },
-                      [
-                        _c(
-                          "li",
-                          {
-                            class:
-                              _vm.usuario.perfil.menu_perfiles == 0
-                                ? "d-none"
-                                : ""
-                          },
-                          [
-                            _c("router-link", { attrs: { to: "/perfiles" } }, [
-                              _vm._v("Perfiles")
-                            ])
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "li",
-                          {
-                            class:
-                              _vm.usuario.perfil.menu_usuarios == 0
-                                ? "d-none"
-                                : ""
-                          },
-                          [
-                            _c("router-link", { attrs: { to: "/usuarios" } }, [
-                              _vm._v("Usuarios")
-                            ])
-                          ],
-                          1
-                        )
-                      ]
-                    )
+                    _c("ul", { attrs: { "aria-expanded": "false" } }, [
+                      _c(
+                        "li",
+                        {
+                          class:
+                            _vm.usuario.perfil.menu_perfiles == 0
+                              ? "d-none"
+                              : ""
+                        },
+                        [
+                          _c("router-link", { attrs: { to: "/perfiles" } }, [
+                            _vm._v("Perfiles")
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "li",
+                        {
+                          class:
+                            _vm.usuario.perfil.menu_usuarios == 0
+                              ? "d-none"
+                              : ""
+                        },
+                        [
+                          _c("router-link", { attrs: { to: "/usuarios" } }, [
+                            _vm._v("Usuarios")
+                          ])
+                        ],
+                        1
+                      )
+                    ])
                   ]
                 ),
                 _vm._v(" "),
@@ -77061,29 +76959,17 @@ var render = function() {
                   [
                     _vm._m(4),
                     _vm._v(" "),
-                    _c(
-                      "ul",
-                      {
-                        class:
-                          _vm.usuario.perfil.menu_proveedores == 1
-                            ? "collapse"
-                            : "",
-                        attrs: { "aria-expanded": "false" }
-                      },
-                      [
-                        _c(
-                          "li",
-                          [
-                            _c(
-                              "router-link",
-                              { attrs: { to: "/proveedores" } },
-                              [_vm._v("Proveedores")]
-                            )
-                          ],
-                          1
-                        )
-                      ]
-                    )
+                    _c("ul", { attrs: { "aria-expanded": "false" } }, [
+                      _c(
+                        "li",
+                        [
+                          _c("router-link", { attrs: { to: "/proveedores" } }, [
+                            _vm._v("Proveedores")
+                          ])
+                        ],
+                        1
+                      )
+                    ])
                   ]
                 ),
                 _vm._v(" "),
@@ -77098,29 +76984,19 @@ var render = function() {
                   [
                     _vm._m(5),
                     _vm._v(" "),
-                    _c(
-                      "ul",
-                      {
-                        class:
-                          _vm.usuario.perfil.menu_ordenes_compra == 1
-                            ? "collapse"
-                            : "",
-                        attrs: { "aria-expanded": "false" }
-                      },
-                      [
-                        _c(
-                          "li",
-                          [
-                            _c(
-                              "router-link",
-                              { attrs: { to: "/ordenescompra" } },
-                              [_vm._v("Ordenes de compra")]
-                            )
-                          ],
-                          1
-                        )
-                      ]
-                    )
+                    _c("ul", { attrs: { "aria-expanded": "false" } }, [
+                      _c(
+                        "li",
+                        [
+                          _c(
+                            "router-link",
+                            { attrs: { to: "/ordenescompra" } },
+                            [_vm._v("Ordenes de compra")]
+                          )
+                        ],
+                        1
+                      )
+                    ])
                   ]
                 ),
                 _vm._v(" "),
@@ -77137,71 +77013,55 @@ var render = function() {
                   [
                     _vm._m(6),
                     _vm._v(" "),
-                    _c(
-                      "ul",
-                      {
-                        class:
-                          _vm.usuario.perfil.menu_categorias_productos == 1 ||
-                          _vm.usuario.perfil.perfil == 1 ||
-                          _vm.usuario.perfil.menu_inventario == 1
-                            ? "collapse"
-                            : "",
-                        attrs: { "aria-expanded": "false" }
-                      },
-                      [
-                        _c(
-                          "li",
-                          {
-                            class:
-                              _vm.usuario.perfil.menu_categorias_productos == 0
-                                ? "d-none"
-                                : ""
-                          },
-                          [
-                            _c(
-                              "router-link",
-                              { attrs: { to: "/categoriasproducto" } },
-                              [_vm._v("Categorías producto")]
-                            )
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "li",
-                          {
-                            class:
-                              _vm.usuario.perfil.menu_lugares == 0
-                                ? "d-none"
-                                : ""
-                          },
-                          [
-                            _c("router-link", { attrs: { to: "/lugares" } }, [
-                              _vm._v("Lugares")
-                            ])
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "li",
-                          {
-                            class:
-                              _vm.usuario.perfil.menu_inventario == 0
-                                ? "d-none"
-                                : ""
-                          },
-                          [
-                            _c(
-                              "router-link",
-                              { attrs: { to: "/inventario" } },
-                              [_vm._v("Productos")]
-                            )
-                          ],
-                          1
-                        )
-                      ]
-                    )
+                    _c("ul", { attrs: { "aria-expanded": "false" } }, [
+                      _c(
+                        "li",
+                        {
+                          class:
+                            _vm.usuario.perfil.menu_categorias_productos == 0
+                              ? "d-none"
+                              : ""
+                        },
+                        [
+                          _c(
+                            "router-link",
+                            { attrs: { to: "/categoriasproducto" } },
+                            [_vm._v("Categorías producto")]
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "li",
+                        {
+                          class:
+                            _vm.usuario.perfil.menu_lugares == 0 ? "d-none" : ""
+                        },
+                        [
+                          _c("router-link", { attrs: { to: "/lugares" } }, [
+                            _vm._v("Lugares")
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "li",
+                        {
+                          class:
+                            _vm.usuario.perfil.menu_inventario == 0
+                              ? "d-none"
+                              : ""
+                        },
+                        [
+                          _c("router-link", { attrs: { to: "/inventario" } }, [
+                            _vm._v("Productos")
+                          ])
+                        ],
+                        1
+                      )
+                    ])
                   ]
                 )
               ])
@@ -77624,6 +77484,70 @@ var render = function() {
                             {
                               staticClass: "mb-0",
                               attrs: {
+                                label: "Búsqueda",
+                                "label-cols-sm": "2",
+                                "label-align-sm": "left",
+                                "label-size": "sm",
+                                "label-for": "filterInput"
+                              }
+                            },
+                            [
+                              _c(
+                                "b-input-group",
+                                { attrs: { size: "sm" } },
+                                [
+                                  _c("b-form-input", {
+                                    attrs: {
+                                      type: "search",
+                                      id: "filterInput",
+                                      placeholder: "Escribe para buscar"
+                                    },
+                                    model: {
+                                      value: _vm.filter,
+                                      callback: function($$v) {
+                                        _vm.filter = $$v
+                                      },
+                                      expression: "filter"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-input-group-append",
+                                    [
+                                      _c(
+                                        "b-button",
+                                        {
+                                          attrs: { disabled: !_vm.filter },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.filter = ""
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Limpiar")]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { staticClass: "my-1", attrs: { lg: "6" } },
+                        [
+                          _c(
+                            "b-form-group",
+                            {
+                              staticClass: "mb-0",
+                              attrs: {
                                 label: "Ordenar",
                                 "label-cols-sm": "2",
                                 "label-align-sm": "left",
@@ -77715,167 +77639,6 @@ var render = function() {
                             {
                               staticClass: "mb-0",
                               attrs: {
-                                label: "Orden inicial",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm",
-                                "label-for": "initialSortSelect"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-form-select",
-                                {
-                                  attrs: {
-                                    id: "initialSortSelect",
-                                    size: "sm"
-                                  },
-                                  model: {
-                                    value: _vm.sortDirection,
-                                    callback: function($$v) {
-                                      _vm.sortDirection = $$v
-                                    },
-                                    expression: "sortDirection"
-                                  }
-                                },
-                                [
-                                  _c("option", { attrs: { value: "asc" } }, [
-                                    _vm._v("Ascendente")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "desc" } }, [
-                                    _vm._v("Descendente")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "last" } }, [
-                                    _vm._v("Último")
-                                  ])
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
-                                label: "Búsqueda",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm",
-                                "label-for": "filterInput"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-input-group",
-                                { attrs: { size: "sm" } },
-                                [
-                                  _c("b-form-input", {
-                                    attrs: {
-                                      type: "search",
-                                      id: "filterInput",
-                                      placeholder: "Escribe para buscar"
-                                    },
-                                    model: {
-                                      value: _vm.filter,
-                                      callback: function($$v) {
-                                        _vm.filter = $$v
-                                      },
-                                      expression: "filter"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "b-input-group-append",
-                                    [
-                                      _c(
-                                        "b-button",
-                                        {
-                                          attrs: { disabled: !_vm.filter },
-                                          on: {
-                                            click: function($event) {
-                                              _vm.filter = ""
-                                            }
-                                          }
-                                        },
-                                        [_vm._v("Limpiar")]
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
-                                label: "Filtrar en",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-form-checkbox-group",
-                                {
-                                  staticClass: "mt-1",
-                                  model: {
-                                    value: _vm.filterOn,
-                                    callback: function($$v) {
-                                      _vm.filterOn = $$v
-                                    },
-                                    expression: "filterOn"
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "b-form-checkbox",
-                                    { attrs: { value: "nombre" } },
-                                    [_vm._v("      Nombre")]
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
                                 label: "Por página",
                                 "label-cols-sm": "2",
                                 "label-align-sm": "left",
@@ -77945,10 +77708,8 @@ var render = function() {
                       "current-page": _vm.currentPage,
                       "per-page": _vm.perPage,
                       filter: _vm.filter,
-                      filterIncludedFields: _vm.filterOn,
                       "sort-by": _vm.sortBy,
-                      "sort-desc": _vm.sortDesc,
-                      "sort-direction": _vm.sortDirection
+                      "sort-desc": _vm.sortDesc
                     },
                     on: {
                       "update:sortBy": function($event) {
@@ -78064,7 +77825,9 @@ var render = function() {
           ref: "modal_categoria",
           attrs: {
             title: _vm.modal_categoria.titulo,
-            "no-close-on-backdrop": ""
+            "no-close-on-backdrop": "",
+            scrollable: "",
+            static: ""
           }
         },
         [
@@ -78236,6 +77999,70 @@ var render = function() {
                             {
                               staticClass: "mb-0",
                               attrs: {
+                                label: "Búsqueda",
+                                "label-cols-sm": "2",
+                                "label-align-sm": "left",
+                                "label-size": "sm",
+                                "label-for": "filterInput"
+                              }
+                            },
+                            [
+                              _c(
+                                "b-input-group",
+                                { attrs: { size: "sm" } },
+                                [
+                                  _c("b-form-input", {
+                                    attrs: {
+                                      type: "search",
+                                      id: "filterInput",
+                                      placeholder: "Escribe para buscar"
+                                    },
+                                    model: {
+                                      value: _vm.filter,
+                                      callback: function($$v) {
+                                        _vm.filter = $$v
+                                      },
+                                      expression: "filter"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-input-group-append",
+                                    [
+                                      _c(
+                                        "b-button",
+                                        {
+                                          attrs: { disabled: !_vm.filter },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.filter = ""
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Limpiar")]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { staticClass: "my-1", attrs: { lg: "6" } },
+                        [
+                          _c(
+                            "b-form-group",
+                            {
+                              staticClass: "mb-0",
+                              attrs: {
                                 label: "Ordenar",
                                 "label-cols-sm": "2",
                                 "label-align-sm": "left",
@@ -78327,167 +78154,6 @@ var render = function() {
                             {
                               staticClass: "mb-0",
                               attrs: {
-                                label: "Orden inicial",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm",
-                                "label-for": "initialSortSelect"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-form-select",
-                                {
-                                  attrs: {
-                                    id: "initialSortSelect",
-                                    size: "sm"
-                                  },
-                                  model: {
-                                    value: _vm.sortDirection,
-                                    callback: function($$v) {
-                                      _vm.sortDirection = $$v
-                                    },
-                                    expression: "sortDirection"
-                                  }
-                                },
-                                [
-                                  _c("option", { attrs: { value: "asc" } }, [
-                                    _vm._v("Ascendente")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "desc" } }, [
-                                    _vm._v("Descendente")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "last" } }, [
-                                    _vm._v("Último")
-                                  ])
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
-                                label: "Búsqueda",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm",
-                                "label-for": "filterInput"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-input-group",
-                                { attrs: { size: "sm" } },
-                                [
-                                  _c("b-form-input", {
-                                    attrs: {
-                                      type: "search",
-                                      id: "filterInput",
-                                      placeholder: "Escribe para buscar"
-                                    },
-                                    model: {
-                                      value: _vm.filter,
-                                      callback: function($$v) {
-                                        _vm.filter = $$v
-                                      },
-                                      expression: "filter"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "b-input-group-append",
-                                    [
-                                      _c(
-                                        "b-button",
-                                        {
-                                          attrs: { disabled: !_vm.filter },
-                                          on: {
-                                            click: function($event) {
-                                              _vm.filter = ""
-                                            }
-                                          }
-                                        },
-                                        [_vm._v("Limpiar")]
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
-                                label: "Filtrar en",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-form-checkbox-group",
-                                {
-                                  staticClass: "mt-1",
-                                  model: {
-                                    value: _vm.filterOn,
-                                    callback: function($$v) {
-                                      _vm.filterOn = $$v
-                                    },
-                                    expression: "filterOn"
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "b-form-checkbox",
-                                    { attrs: { value: "nombre" } },
-                                    [_vm._v("      Nombre")]
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
                                 label: "Por página",
                                 "label-cols-sm": "2",
                                 "label-align-sm": "left",
@@ -78557,10 +78223,8 @@ var render = function() {
                       "current-page": _vm.currentPage,
                       "per-page": _vm.perPage,
                       filter: _vm.filter,
-                      filterIncludedFields: _vm.filterOn,
                       "sort-by": _vm.sortBy,
-                      "sort-desc": _vm.sortDesc,
-                      "sort-direction": _vm.sortDirection
+                      "sort-desc": _vm.sortDesc
                     },
                     on: {
                       "update:sortBy": function($event) {
@@ -78674,7 +78338,12 @@ var render = function() {
         "b-modal",
         {
           ref: "modal_lugar",
-          attrs: { title: _vm.modal_lugar.titulo, "no-close-on-backdrop": "" }
+          attrs: {
+            title: _vm.modal_lugar.titulo,
+            "no-close-on-backdrop": "",
+            scrollable: "",
+            static: ""
+          }
         },
         [
           _c(
@@ -79005,6 +78674,70 @@ var render = function() {
                             {
                               staticClass: "mb-0",
                               attrs: {
+                                label: "Búsqueda",
+                                "label-cols-sm": "2",
+                                "label-align-sm": "left",
+                                "label-size": "sm",
+                                "label-for": "filterInput"
+                              }
+                            },
+                            [
+                              _c(
+                                "b-input-group",
+                                { attrs: { size: "sm" } },
+                                [
+                                  _c("b-form-input", {
+                                    attrs: {
+                                      type: "search",
+                                      id: "filterInput",
+                                      placeholder: "Escribe para buscar"
+                                    },
+                                    model: {
+                                      value: _vm.filter,
+                                      callback: function($$v) {
+                                        _vm.filter = $$v
+                                      },
+                                      expression: "filter"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-input-group-append",
+                                    [
+                                      _c(
+                                        "b-button",
+                                        {
+                                          attrs: { disabled: !_vm.filter },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.filter = ""
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Limpiar")]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { staticClass: "my-1", attrs: { lg: "6" } },
+                        [
+                          _c(
+                            "b-form-group",
+                            {
+                              staticClass: "mb-0",
+                              attrs: {
                                 label: "Ordenar",
                                 "label-cols-sm": "2",
                                 "label-align-sm": "left",
@@ -79096,167 +78829,6 @@ var render = function() {
                             {
                               staticClass: "mb-0",
                               attrs: {
-                                label: "Orden inicial",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm",
-                                "label-for": "initialSortSelect"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-form-select",
-                                {
-                                  attrs: {
-                                    id: "initialSortSelect",
-                                    size: "sm"
-                                  },
-                                  model: {
-                                    value: _vm.sortDirection,
-                                    callback: function($$v) {
-                                      _vm.sortDirection = $$v
-                                    },
-                                    expression: "sortDirection"
-                                  }
-                                },
-                                [
-                                  _c("option", { attrs: { value: "asc" } }, [
-                                    _vm._v("Ascendente")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "desc" } }, [
-                                    _vm._v("Descendente")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "last" } }, [
-                                    _vm._v("Último")
-                                  ])
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
-                                label: "Búsqueda",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm",
-                                "label-for": "filterInput"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-input-group",
-                                { attrs: { size: "sm" } },
-                                [
-                                  _c("b-form-input", {
-                                    attrs: {
-                                      type: "search",
-                                      id: "filterInput",
-                                      placeholder: "Escribe para buscar"
-                                    },
-                                    model: {
-                                      value: _vm.filter,
-                                      callback: function($$v) {
-                                        _vm.filter = $$v
-                                      },
-                                      expression: "filter"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "b-input-group-append",
-                                    [
-                                      _c(
-                                        "b-button",
-                                        {
-                                          attrs: { disabled: !_vm.filter },
-                                          on: {
-                                            click: function($event) {
-                                              _vm.filter = ""
-                                            }
-                                          }
-                                        },
-                                        [_vm._v("Limpiar")]
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
-                                label: "Filtrar en",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-form-checkbox-group",
-                                {
-                                  staticClass: "mt-1",
-                                  model: {
-                                    value: _vm.filterOn,
-                                    callback: function($$v) {
-                                      _vm.filterOn = $$v
-                                    },
-                                    expression: "filterOn"
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "b-form-checkbox",
-                                    { attrs: { value: "nombre" } },
-                                    [_vm._v("      Nombre")]
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
                                 label: "Por página",
                                 "label-cols-sm": "2",
                                 "label-align-sm": "left",
@@ -79326,10 +78898,8 @@ var render = function() {
                       "current-page": _vm.currentPage,
                       "per-page": _vm.perPage,
                       filter: _vm.filter,
-                      filterIncludedFields: _vm.filterOn,
                       "sort-by": _vm.sortBy,
-                      "sort-desc": _vm.sortDesc,
-                      "sort-direction": _vm.sortDirection
+                      "sort-desc": _vm.sortDesc
                     },
                     on: {
                       "update:sortBy": function($event) {
@@ -80693,30 +80263,24 @@ var render = function() {
             "template",
             { slot: "modal-footer" },
             [
-              _c(
-                "b-button",
-                {
-                  directives: [
+              _vm.usuario && _vm.usuario.email
+                ? _c(
+                    "b-button",
                     {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.usuario.email,
-                      expression: "usuario.email"
-                    }
-                  ],
-                  attrs: {
-                    disabled: _vm.$v.orden_compra.$invalid,
-                    size: "md",
-                    variant: "success"
-                  },
-                  on: {
-                    click: function($event) {
-                      return _vm.crear_orden_compra(1)
-                    }
-                  }
-                },
-                [_vm._v(" Guardar y enviar ")]
-              ),
+                      attrs: {
+                        disabled: _vm.$v.orden_compra.$invalid,
+                        size: "md",
+                        variant: "success"
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.crear_orden_compra(1)
+                        }
+                      }
+                    },
+                    [_vm._v(" Guardar y enviar ")]
+                  )
+                : _vm._e(),
               _vm._v(" "),
               _c(
                 "b-button",
@@ -80818,6 +80382,70 @@ var render = function() {
                             {
                               staticClass: "mb-0",
                               attrs: {
+                                label: "Búsqueda",
+                                "label-cols-sm": "2",
+                                "label-align-sm": "left",
+                                "label-size": "sm",
+                                "label-for": "filterInput"
+                              }
+                            },
+                            [
+                              _c(
+                                "b-input-group",
+                                { attrs: { size: "sm" } },
+                                [
+                                  _c("b-form-input", {
+                                    attrs: {
+                                      type: "search",
+                                      id: "filterInput",
+                                      placeholder: "Escribe para buscar"
+                                    },
+                                    model: {
+                                      value: _vm.filter,
+                                      callback: function($$v) {
+                                        _vm.filter = $$v
+                                      },
+                                      expression: "filter"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-input-group-append",
+                                    [
+                                      _c(
+                                        "b-button",
+                                        {
+                                          attrs: { disabled: !_vm.filter },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.filter = ""
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Limpiar")]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { staticClass: "my-1", attrs: { lg: "6" } },
+                        [
+                          _c(
+                            "b-form-group",
+                            {
+                              staticClass: "mb-0",
+                              attrs: {
                                 label: "Ordenar",
                                 "label-cols-sm": "2",
                                 "label-align-sm": "left",
@@ -80909,167 +80537,6 @@ var render = function() {
                             {
                               staticClass: "mb-0",
                               attrs: {
-                                label: "Orden inicial",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm",
-                                "label-for": "initialSortSelect"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-form-select",
-                                {
-                                  attrs: {
-                                    id: "initialSortSelect",
-                                    size: "sm"
-                                  },
-                                  model: {
-                                    value: _vm.sortDirection,
-                                    callback: function($$v) {
-                                      _vm.sortDirection = $$v
-                                    },
-                                    expression: "sortDirection"
-                                  }
-                                },
-                                [
-                                  _c("option", { attrs: { value: "asc" } }, [
-                                    _vm._v("Ascendente")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "desc" } }, [
-                                    _vm._v("Descendente")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "last" } }, [
-                                    _vm._v("Último")
-                                  ])
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
-                                label: "Búsqueda",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm",
-                                "label-for": "filterInput"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-input-group",
-                                { attrs: { size: "sm" } },
-                                [
-                                  _c("b-form-input", {
-                                    attrs: {
-                                      type: "search",
-                                      id: "filterInput",
-                                      placeholder: "Escribe para buscar"
-                                    },
-                                    model: {
-                                      value: _vm.filter,
-                                      callback: function($$v) {
-                                        _vm.filter = $$v
-                                      },
-                                      expression: "filter"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "b-input-group-append",
-                                    [
-                                      _c(
-                                        "b-button",
-                                        {
-                                          attrs: { disabled: !_vm.filter },
-                                          on: {
-                                            click: function($event) {
-                                              _vm.filter = ""
-                                            }
-                                          }
-                                        },
-                                        [_vm._v("Limpiar")]
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
-                                label: "Filtrar en",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-form-checkbox-group",
-                                {
-                                  staticClass: "mt-1",
-                                  model: {
-                                    value: _vm.filterOn,
-                                    callback: function($$v) {
-                                      _vm.filterOn = $$v
-                                    },
-                                    expression: "filterOn"
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "b-form-checkbox",
-                                    { attrs: { value: "nombre" } },
-                                    [_vm._v("      Nombre")]
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
                                 label: "Por página",
                                 "label-cols-sm": "2",
                                 "label-align-sm": "left",
@@ -81139,10 +80606,8 @@ var render = function() {
                       "current-page": _vm.currentPage,
                       "per-page": _vm.perPage,
                       filter: _vm.filter,
-                      filterIncludedFields: _vm.filterOn,
                       "sort-by": _vm.sortBy,
-                      "sort-desc": _vm.sortDesc,
-                      "sort-direction": _vm.sortDirection
+                      "sort-desc": _vm.sortDesc
                     },
                     on: {
                       "update:sortBy": function($event) {
@@ -81259,7 +80724,9 @@ var render = function() {
           attrs: {
             title: _vm.modal_perfil.titulo,
             size: "lg",
-            "no-close-on-backdrop": ""
+            "no-close-on-backdrop": "",
+            scrollable: "",
+            static: ""
           }
         },
         [
@@ -81599,11 +81066,167 @@ var render = function() {
             "b-col",
             [
               _c(
+                "b-card-group",
+                [
+                  _c(
+                    "b-card",
+                    { staticClass: "mt-0 mb-0" },
+                    [
+                      _c("b-col", { attrs: { cols: "12" } }, [
+                        _c(
+                          "div",
+                          { staticClass: "d-flex no-block align-items-center" },
+                          [
+                            _c("div", [
+                              _c("h4", [_c("i", { staticClass: "fa fa-usd" })]),
+                              _vm._v(" "),
+                              _c("p", { staticClass: "text-muted" }, [
+                                _c("b", [
+                                  _vm._v("Valorización aproximada stock")
+                                ])
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "ml-auto" }, [
+                              _c(
+                                "h4",
+                                { staticClass: "counter text-primary" },
+                                [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm._f("currency")(
+                                        _vm.total_valorizacion_stock
+                                      )
+                                    )
+                                  )
+                                ]
+                              )
+                            ])
+                          ]
+                        )
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-card",
+                    { staticClass: "mt-0 mb-0" },
+                    [
+                      _c("b-col", { attrs: { cols: "12" } }, [
+                        _c(
+                          "div",
+                          { staticClass: "d-flex no-block align-items-center" },
+                          [
+                            _c("div", [
+                              _c("h4", [
+                                _c("i", { staticClass: "fa fa-product-hunt" })
+                              ]),
+                              _vm._v(" "),
+                              _c("p", { staticClass: "text-muted" }, [
+                                _c("b", [_vm._v("Productos con stock crítico")])
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "ml-auto" }, [
+                              _c(
+                                "h4",
+                                { staticClass: "counter text-warning" },
+                                [_vm._v(_vm._s(_vm.total_productos_critico))]
+                              )
+                            ])
+                          ]
+                        )
+                      ])
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "b-row",
+        [
+          _c(
+            "b-col",
+            [
+              _c(
                 "b-card",
                 [
                   _c(
                     "b-row",
                     [
+                      _c(
+                        "b-col",
+                        { staticClass: "my-1", attrs: { lg: "6" } },
+                        [
+                          _c(
+                            "b-form-group",
+                            {
+                              staticClass: "mb-0",
+                              attrs: {
+                                label: "Búsqueda",
+                                "label-cols-sm": "2",
+                                "label-align-sm": "left",
+                                "label-size": "sm",
+                                "label-for": "filterInput"
+                              }
+                            },
+                            [
+                              _c(
+                                "b-input-group",
+                                { attrs: { size: "sm" } },
+                                [
+                                  _c("b-form-input", {
+                                    attrs: {
+                                      type: "search",
+                                      id: "filterInput",
+                                      placeholder: "Escribe para buscar"
+                                    },
+                                    model: {
+                                      value: _vm.filter,
+                                      callback: function($$v) {
+                                        _vm.filter = $$v
+                                      },
+                                      expression: "filter"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-input-group-append",
+                                    [
+                                      _c(
+                                        "b-button",
+                                        {
+                                          attrs: { disabled: !_vm.filter },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.filter = ""
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Limpiar")]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
                       _c(
                         "b-col",
                         { staticClass: "my-1", attrs: { lg: "6" } },
@@ -81704,167 +81327,6 @@ var render = function() {
                             {
                               staticClass: "mb-0",
                               attrs: {
-                                label: "Orden inicial",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm",
-                                "label-for": "initialSortSelect"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-form-select",
-                                {
-                                  attrs: {
-                                    id: "initialSortSelect",
-                                    size: "sm"
-                                  },
-                                  model: {
-                                    value: _vm.sortDirection,
-                                    callback: function($$v) {
-                                      _vm.sortDirection = $$v
-                                    },
-                                    expression: "sortDirection"
-                                  }
-                                },
-                                [
-                                  _c("option", { attrs: { value: "asc" } }, [
-                                    _vm._v("Ascendente")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "desc" } }, [
-                                    _vm._v("Descendente")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "last" } }, [
-                                    _vm._v("Último")
-                                  ])
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
-                                label: "Búsqueda",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm",
-                                "label-for": "filterInput"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-input-group",
-                                { attrs: { size: "sm" } },
-                                [
-                                  _c("b-form-input", {
-                                    attrs: {
-                                      type: "search",
-                                      id: "filterInput",
-                                      placeholder: "Escribe para buscar"
-                                    },
-                                    model: {
-                                      value: _vm.filter,
-                                      callback: function($$v) {
-                                        _vm.filter = $$v
-                                      },
-                                      expression: "filter"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "b-input-group-append",
-                                    [
-                                      _c(
-                                        "b-button",
-                                        {
-                                          attrs: { disabled: !_vm.filter },
-                                          on: {
-                                            click: function($event) {
-                                              _vm.filter = ""
-                                            }
-                                          }
-                                        },
-                                        [_vm._v("Limpiar")]
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
-                                label: "Filtrar en",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-form-checkbox-group",
-                                {
-                                  staticClass: "mt-1",
-                                  model: {
-                                    value: _vm.filterOn,
-                                    callback: function($$v) {
-                                      _vm.filterOn = $$v
-                                    },
-                                    expression: "filterOn"
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "b-form-checkbox",
-                                    { attrs: { value: "nombre" } },
-                                    [_vm._v("      Nombre")]
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
                                 label: "Por página",
                                 "label-cols-sm": "2",
                                 "label-align-sm": "left",
@@ -81935,10 +81397,8 @@ var render = function() {
                       "current-page": _vm.currentPage,
                       "per-page": _vm.perPage,
                       filter: _vm.filter,
-                      filterIncludedFields: _vm.filterOn,
                       "sort-by": _vm.sortBy,
-                      "sort-desc": _vm.sortDesc,
-                      "sort-direction": _vm.sortDirection
+                      "sort-desc": _vm.sortDesc
                     },
                     on: {
                       "update:sortBy": function($event) {
@@ -82021,6 +81481,20 @@ var render = function() {
                               "\n                        " +
                                 _vm._s(
                                   _vm._f("currency")(data.item.valor_ultimo)
+                                ) +
+                                "\n                    "
+                            )
+                          ]
+                        }
+                      },
+                      {
+                        key: "cell(valorizacion)",
+                        fn: function(data) {
+                          return [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(
+                                  _vm._f("currency")(data.item.valorizacion)
                                 ) +
                                 "\n                    "
                             )
@@ -82151,7 +81625,9 @@ var render = function() {
           ref: "modal_productos_inventario",
           attrs: {
             title: _vm.modal_productos_inventario.titulo,
-            "no-close-on-backdrop": ""
+            "no-close-on-backdrop": "",
+            scrollable: "",
+            static: ""
           }
         },
         [
@@ -82462,7 +81938,9 @@ var render = function() {
           attrs: {
             title: _vm.modal_productos_ingreso.titulo,
             size: "lg",
-            "no-close-on-backdrop": ""
+            "no-close-on-backdrop": "",
+            scrollable: "",
+            static: ""
           }
         },
         [
@@ -82666,7 +82144,9 @@ var render = function() {
           attrs: {
             title: _vm.modal_productos_salida.titulo,
             size: "lg",
-            "no-close-on-backdrop": ""
+            "no-close-on-backdrop": "",
+            scrollable: "",
+            static: ""
           }
         },
         [
@@ -83045,6 +82525,70 @@ var render = function() {
                             {
                               staticClass: "mb-0",
                               attrs: {
+                                label: "Búsqueda",
+                                "label-cols-sm": "2",
+                                "label-align-sm": "left",
+                                "label-size": "sm",
+                                "label-for": "filterInput"
+                              }
+                            },
+                            [
+                              _c(
+                                "b-input-group",
+                                { attrs: { size: "sm" } },
+                                [
+                                  _c("b-form-input", {
+                                    attrs: {
+                                      type: "search",
+                                      id: "filterInput",
+                                      placeholder: "Escribe para buscar"
+                                    },
+                                    model: {
+                                      value: _vm.filter,
+                                      callback: function($$v) {
+                                        _vm.filter = $$v
+                                      },
+                                      expression: "filter"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-input-group-append",
+                                    [
+                                      _c(
+                                        "b-button",
+                                        {
+                                          attrs: { disabled: !_vm.filter },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.filter = ""
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Limpiar")]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { staticClass: "my-1", attrs: { lg: "6" } },
+                        [
+                          _c(
+                            "b-form-group",
+                            {
+                              staticClass: "mb-0",
+                              attrs: {
                                 label: "Ordenar",
                                 "label-cols-sm": "2",
                                 "label-align-sm": "left",
@@ -83136,167 +82680,6 @@ var render = function() {
                             {
                               staticClass: "mb-0",
                               attrs: {
-                                label: "Orden inicial",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm",
-                                "label-for": "initialSortSelect"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-form-select",
-                                {
-                                  attrs: {
-                                    id: "initialSortSelect",
-                                    size: "sm"
-                                  },
-                                  model: {
-                                    value: _vm.sortDirection,
-                                    callback: function($$v) {
-                                      _vm.sortDirection = $$v
-                                    },
-                                    expression: "sortDirection"
-                                  }
-                                },
-                                [
-                                  _c("option", { attrs: { value: "asc" } }, [
-                                    _vm._v("Ascendente")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "desc" } }, [
-                                    _vm._v("Descendente")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "last" } }, [
-                                    _vm._v("Último")
-                                  ])
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
-                                label: "Búsqueda",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm",
-                                "label-for": "filterInput"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-input-group",
-                                { attrs: { size: "sm" } },
-                                [
-                                  _c("b-form-input", {
-                                    attrs: {
-                                      type: "search",
-                                      id: "filterInput",
-                                      placeholder: "Escribe para buscar"
-                                    },
-                                    model: {
-                                      value: _vm.filter,
-                                      callback: function($$v) {
-                                        _vm.filter = $$v
-                                      },
-                                      expression: "filter"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "b-input-group-append",
-                                    [
-                                      _c(
-                                        "b-button",
-                                        {
-                                          attrs: { disabled: !_vm.filter },
-                                          on: {
-                                            click: function($event) {
-                                              _vm.filter = ""
-                                            }
-                                          }
-                                        },
-                                        [_vm._v("Limpiar")]
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
-                                label: "Filtrar en",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-form-checkbox-group",
-                                {
-                                  staticClass: "mt-1",
-                                  model: {
-                                    value: _vm.filterOn,
-                                    callback: function($$v) {
-                                      _vm.filterOn = $$v
-                                    },
-                                    expression: "filterOn"
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "b-form-checkbox",
-                                    { attrs: { value: "nombre" } },
-                                    [_vm._v("      Nombre")]
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
                                 label: "Por página",
                                 "label-cols-sm": "2",
                                 "label-align-sm": "left",
@@ -83366,10 +82749,8 @@ var render = function() {
                       "current-page": _vm.currentPage,
                       "per-page": _vm.perPage,
                       filter: _vm.filter,
-                      filterIncludedFields: _vm.filterOn,
                       "sort-by": _vm.sortBy,
-                      "sort-desc": _vm.sortDesc,
-                      "sort-direction": _vm.sortDirection
+                      "sort-desc": _vm.sortDesc
                     },
                     on: {
                       "update:sortBy": function($event) {
@@ -83486,7 +82867,9 @@ var render = function() {
           attrs: {
             title: _vm.modal_proveedor.titulo,
             size: "xl",
-            "no-close-on-backdrop": ""
+            "no-close-on-backdrop": "",
+            scrollable: "",
+            static: ""
           }
         },
         [
@@ -84027,6 +83410,70 @@ var render = function() {
                             {
                               staticClass: "mb-0",
                               attrs: {
+                                label: "Búsqueda",
+                                "label-cols-sm": "2",
+                                "label-align-sm": "left",
+                                "label-size": "sm",
+                                "label-for": "filterInput"
+                              }
+                            },
+                            [
+                              _c(
+                                "b-input-group",
+                                { attrs: { size: "sm" } },
+                                [
+                                  _c("b-form-input", {
+                                    attrs: {
+                                      type: "search",
+                                      id: "filterInput",
+                                      placeholder: "Escribe para buscar"
+                                    },
+                                    model: {
+                                      value: _vm.filter,
+                                      callback: function($$v) {
+                                        _vm.filter = $$v
+                                      },
+                                      expression: "filter"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-input-group-append",
+                                    [
+                                      _c(
+                                        "b-button",
+                                        {
+                                          attrs: { disabled: !_vm.filter },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.filter = ""
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Limpiar")]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { staticClass: "my-1", attrs: { lg: "6" } },
+                        [
+                          _c(
+                            "b-form-group",
+                            {
+                              staticClass: "mb-0",
+                              attrs: {
                                 label: "Ordenar",
                                 "label-cols-sm": "2",
                                 "label-align-sm": "left",
@@ -84118,167 +83565,6 @@ var render = function() {
                             {
                               staticClass: "mb-0",
                               attrs: {
-                                label: "Orden inicial",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm",
-                                "label-for": "initialSortSelect"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-form-select",
-                                {
-                                  attrs: {
-                                    id: "initialSortSelect",
-                                    size: "sm"
-                                  },
-                                  model: {
-                                    value: _vm.sortDirection,
-                                    callback: function($$v) {
-                                      _vm.sortDirection = $$v
-                                    },
-                                    expression: "sortDirection"
-                                  }
-                                },
-                                [
-                                  _c("option", { attrs: { value: "asc" } }, [
-                                    _vm._v("Ascendente")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "desc" } }, [
-                                    _vm._v("Descendente")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "last" } }, [
-                                    _vm._v("Último")
-                                  ])
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
-                                label: "Búsqueda",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm",
-                                "label-for": "filterInput"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-input-group",
-                                { attrs: { size: "sm" } },
-                                [
-                                  _c("b-form-input", {
-                                    attrs: {
-                                      type: "search",
-                                      id: "filterInput",
-                                      placeholder: "Escribe para buscar"
-                                    },
-                                    model: {
-                                      value: _vm.filter,
-                                      callback: function($$v) {
-                                        _vm.filter = $$v
-                                      },
-                                      expression: "filter"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "b-input-group-append",
-                                    [
-                                      _c(
-                                        "b-button",
-                                        {
-                                          attrs: { disabled: !_vm.filter },
-                                          on: {
-                                            click: function($event) {
-                                              _vm.filter = ""
-                                            }
-                                          }
-                                        },
-                                        [_vm._v("Limpiar")]
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
-                                label: "Filtrar en",
-                                "label-cols-sm": "2",
-                                "label-align-sm": "left",
-                                "label-size": "sm"
-                              }
-                            },
-                            [
-                              _c(
-                                "b-form-checkbox-group",
-                                {
-                                  staticClass: "mt-1",
-                                  model: {
-                                    value: _vm.filterOn,
-                                    callback: function($$v) {
-                                      _vm.filterOn = $$v
-                                    },
-                                    expression: "filterOn"
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "b-form-checkbox",
-                                    { attrs: { value: "nombre" } },
-                                    [_vm._v("      Nombre")]
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "my-1", attrs: { lg: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-0",
-                              attrs: {
                                 label: "Por página",
                                 "label-cols-sm": "2",
                                 "label-align-sm": "left",
@@ -84348,10 +83634,8 @@ var render = function() {
                       "current-page": _vm.currentPage,
                       "per-page": _vm.perPage,
                       filter: _vm.filter,
-                      filterIncludedFields: _vm.filterOn,
                       "sort-by": _vm.sortBy,
-                      "sort-desc": _vm.sortDesc,
-                      "sort-direction": _vm.sortDirection
+                      "sort-desc": _vm.sortDesc
                     },
                     on: {
                       "update:sortBy": function($event) {
@@ -84503,7 +83787,9 @@ var render = function() {
           attrs: {
             title: _vm.modal_usuario.titulo,
             size: "lg",
-            "no-close-on-backdrop": ""
+            "no-close-on-backdrop": "",
+            scrollable: "",
+            static: ""
           }
         },
         [
@@ -84936,7 +84222,9 @@ var render = function() {
           attrs: {
             title: _vm.modal_clave.titulo,
             size: "md",
-            "no-close-on-backdrop": ""
+            "no-close-on-backdrop": "",
+            scrollable: "",
+            static: ""
           }
         },
         [

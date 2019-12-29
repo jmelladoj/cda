@@ -61,7 +61,7 @@ Route::get('/ordenes/{tipo}', 'OrdenCompraController@index')->name('Listar orden
 Route::post('/orden/crear', 'OrdenCompraController@crear')->name('Crear o actualizar orden');
 Route::post('/orden/borrar', 'OrdenCompraController@borrar')->name('Borrar orden');
 Route::post('/orden/enviar', 'OrdenCompraController@enviar')->name('Enviar orden');
-Route::post('/orden/descargar', 'OrdenCompraController@descargar')->name('Descargar orden');
+Route::get('/orden/descargar/{id}', 'OrdenCompraController@descargar')->name('Descargar orden');
 
 
 Route::get('/{any}', 'HomeController@index')->where('any', '.*')->name('home');

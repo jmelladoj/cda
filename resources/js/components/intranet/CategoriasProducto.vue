@@ -7,6 +7,17 @@
                 <b-card>
                     <b-row>
                         <b-col lg="6" class="my-1">
+                            <b-form-group label="Búsqueda" label-cols-sm="2" label-align-sm="left" label-size="sm" label-for="filterInput" class="mb-0" >
+                            <b-input-group size="sm">
+                                <b-form-input v-model="filter" type="search" id="filterInput" placeholder="Escribe para buscar"></b-form-input>
+                                <b-input-group-append>
+                                    <b-button :disabled="!filter" @click="filter = ''">Limpiar</b-button>
+                                </b-input-group-append>
+                            </b-input-group>
+                            </b-form-group>
+                        </b-col>
+
+                        <b-col lg="6" class="my-1">
                             <b-form-group label="Ordenar" label-cols-sm="2" label-align-sm="left" label-size="sm" label-for="sortBySelect" class="mb-0">
                                 <b-input-group size="sm">
                                     <b-form-select v-model="sortBy" id="sortBySelect" :options="sortOptions" class="w-75">
@@ -23,35 +34,6 @@
                         </b-col>
 
                         <b-col lg="6" class="my-1">
-                            <b-form-group label="Orden inicial" label-cols-sm="2" label-align-sm="left" label-size="sm" label-for="initialSortSelect" class="mb-0">
-                                <b-form-select v-model="sortDirection" id="initialSortSelect" size="sm">
-                                    <option value="asc">Ascendente</option>
-                                    <option value="desc">Descendente</option>
-                                    <option value="last">Último</option>
-                                </b-form-select>
-                            </b-form-group>
-                        </b-col>
-
-                        <b-col lg="6" class="my-1">
-                            <b-form-group label="Búsqueda" label-cols-sm="2" label-align-sm="left" label-size="sm" label-for="filterInput" class="mb-0" >
-                            <b-input-group size="sm">
-                                <b-form-input v-model="filter" type="search" id="filterInput" placeholder="Escribe para buscar"></b-form-input>
-                                <b-input-group-append>
-                                    <b-button :disabled="!filter" @click="filter = ''">Limpiar</b-button>
-                                </b-input-group-append>
-                            </b-input-group>
-                            </b-form-group>
-                        </b-col>
-
-                        <b-col lg="6" class="my-1">
-                            <b-form-group label="Filtrar en" label-cols-sm="2" label-align-sm="left" label-size="sm" class="mb-0">
-                                <b-form-checkbox-group v-model="filterOn" class="mt-1">
-                                    <b-form-checkbox value="nombre">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nombre</b-form-checkbox>
-                                </b-form-checkbox-group>
-                            </b-form-group>
-                        </b-col>
-
-                        <b-col lg="6" class="my-1">
                             <b-form-group label="Por página" label-cols-sm="2" label-align-sm="left" label-size="sm" label-for="perPageSelect" class="mb-0">
                                 <b-form-select v-model="perPage" id="perPageSelect" size="sm" :options="pageOptions"></b-form-select>
                             </b-form-group>
@@ -62,7 +44,7 @@
                         </b-col>
                     </b-row>
 
-                    <b-table class="my-3" show-empty small striped outlined stacked="md" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :filterIncludedFields="filterOn" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :sort-direction="sortDirection" @filtered="onFiltered" >
+                    <b-table class="my-3" show-empty small striped outlined stacked="md" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" >
                         <template v-slot:empty="scope">
                             <center><h5>No hay registros</h5></center>
                         </template>
@@ -94,7 +76,7 @@
             </b-col>
         </b-row>
 
-        <b-modal ref="modal_categoria" :title="modal_categoria.titulo" no-close-on-backdrop>
+        <b-modal ref="modal_categoria" :title="modal_categoria.titulo" no-close-on-backdrop scrollable static>
             <b-form>
                 <b-form-group label="Nombre de categoria">
                     <b-form-input
@@ -141,9 +123,7 @@
                 pageOptions: [15, 50, 100, 150, 200, 150],
                 sortBy: '',
                 sortDesc: false,
-                sortDirection: 'asc',
                 filter: null,
-                filterOn: [],
                 modal_categoria: {
                     titulo: '',
                     accion: 0
