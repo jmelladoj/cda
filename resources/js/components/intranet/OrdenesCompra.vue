@@ -132,7 +132,7 @@
                         </template>
 
                         <template v-slot:cell(acciones)="row">
-                            <b-button v-show="usuario.email" size="xs" variant="info" title="Enviar registro" @click="enviar_mail(row.item.id)">
+                            <b-button v-if="usuario && usuario.email" size="xs" variant="info" title="Enviar registro" @click="enviar_mail(row.item.id)">
                                 <i class="fa fa-paper-plane"></i>
                             </b-button>
 
@@ -153,7 +153,7 @@
             </b-col>
         </b-row>
 
-        <b-modal ref="modal_orden_compra" :title="modal_orden_compra.titulo" size="xl" no-close-on-backdrop scrollable>
+        <b-modal ref="modal_orden_compra" :title="modal_orden_compra.titulo" size="xl" no-close-on-backdrop scrollable static>
             <b-form>
                 <div class="card">
                     <div class="card-header bg-info text-right">
@@ -331,7 +331,7 @@
                                         <template v-slot:cell(descripcion)="data">
                                             <b-form-group class="mb-0">
                                                 <vue-bootstrap-typeahead
-                                                ref="typeahead_detalle"
+                                                :ref="'typeahead_detalle[' + data.index + ']'"
                                                 size="sm"
                                                 :data="productos"
                                                 v-model="$v.orden_compra.detalle_orden.$each[data.index].producto_nombre.$model"
@@ -608,7 +608,9 @@
 
         },
         computed: {
-            ...mapState('usuario', ['usuario']),
+            usuario(){
+                return this.$store.state.usuario.usuario
+            },
             sortOptions() {
                 return this.fields.filter(f => f.sortable).map(f => {
                     return { text: f.label, value: f.key }
@@ -649,7 +651,6 @@
                 this.orden_compra.proveedor_referencia = e.referencia
             },
             producto(e, index){
-                this.orden_compra.detalle_orden[index].producto_id = e.id
                 this.orden_compra.detalle_orden[index].producto_nombre = e.nombre
                 this.orden_compra.detalle_orden[index].valor_unitario = e.valor_actual
 
@@ -712,7 +713,6 @@
             },
             agregar_fila(){
                 var fila = new Object()
-                fila.producto_id = 0
                 fila.producto_nombre = ""
                 fila.cantidad = null
                 fila.medida = null
@@ -733,7 +733,6 @@
             abrir_modal_orden_compra(data = [], accion = 0) {
                 let me = this
 
-
                 me.numero_orden()
                 me.limpiar_datos_orden_compra()
                 me.modal_orden_compra.titulo = data.id == undefined ? "Agregar orden compra" : "Modificar orden compra"
@@ -752,16 +751,40 @@
                     me.orden_compra.proveedor_referencia = data.proveedor_referencia
                     me.orden_compra.asunto = data.asunto
                     me.orden_compra.fecha = data.fecha
-                    me.orden_compra.neto = data.neto
-                    me.orden_compra.iva = data.iva
-                    me.orden_compra.total = data.total
                     me.orden_compra.observacion = data.observacion
 
-                    me.$refs.typeahead_proveedor.inputValue = data.nombre
+                    me.$refs.typeahead_proveedor.inputValue = data.proveedor_nombre
 
                     this.$v.orden_compra.$touch(true)
-                }
 
+                    let productos_nombre = data.descripcion.split('@')
+                    let cantidades = data.cantidad.split('@')
+                    let medidas = data.unidad_medida.split('@')
+                    let valores_unitario = data.valor_unitario.split('@')
+
+                    for (var i = 0; i < productos_nombre.length; i++) {
+                        var fila = new Object()
+
+                        fila.producto_nombre = productos_nombre[i]
+                        fila.cantidad = cantidades[i]
+                        fila.medida = medidas[i]
+                        fila.valor_unitario = valores_unitario[i]
+
+                        me.orden_compra.detalle_orden.push(fila)
+                        me.calcular_total_cantidad(i)
+                    }
+
+                    setTimeout(function(){ me.cambiar_nombres(productos_nombre) },2000);
+                    
+                } else {
+                    this.agregar_fila()
+                }
+            },
+            cambiar_nombres(data = []){
+                for(var i = 0; i < data.length; i++){
+                    var nombre = 'typeahead_detalle[' + i + ']'
+                    this.$refs[nombre].inputValue = data[i]
+                }
             },
             cerrar_modal_orden_compra() {
                 this.modal_orden_compra.titulo = ""
@@ -785,7 +808,8 @@
                 this.orden_compra.observacion = ''
 
                 this.orden_compra.detalle_orden = []
-                this.agregar_fila()
+
+                this.$refs.typeahead_proveedor.inputValue = ""
 
                 this.$v.$reset();
             },
@@ -818,11 +842,12 @@
                     'observacion': me.orden_compra.observacion
                 }).then(function (response) {
                     me.$refs.typeahead_proveedor.inputValue = ""
-                    me.$refs.typeahead_detalle.inputValue = ""
+                    me.$refs['typeahead_detalle[0]'].inputValue = ""
                     me.obtener_registros()
                     me.numero_orden()
                     me.$store.commit('msg_success', accion == 0 ? 'Registro agregado exitosamente.' :  'Registro enviado y agregado exitosamente.')
                     me.limpiar_datos_orden_compra()
+                    me.agregar_fila()
 
                 }).catch(function (error) {
                     me.$store.commit('msg_error', accion == 0 ? 'Problemas al agregar el registro.' :  'Problemas al enviar y agregar el registro.')

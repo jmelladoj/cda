@@ -15,7 +15,7 @@ export default {
         }
     },
     getters: {
-        saludo(state) {
+        saludo(state, nombre) {
             if(state.estado_saludo == 0){
                 Vue.$toast.open({
                     message: '!Hola ' + state.usuario.nombre + '¡',

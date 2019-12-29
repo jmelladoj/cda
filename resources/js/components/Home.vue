@@ -23,7 +23,7 @@
 
                     <ul class="navbar-nav my-lg-0">
                         <li class="nav-item right-side-toggle" @click="cerrar_session"> <a class="nav-link  waves-effect waves-light" href="javascript:void(0)"><i class="ti-power-off"></i></a></li>
-                        <li class="nav-item" v-if="usuario"><b-button pill variant="primary" class="nav-link dropdown-toggle waves-effect waves-dark profile-pic line-height-0 margin-top-0-5" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> {{ usuario.nombre[0] }} </b-button></li>
+                        <li class="nav-item" v-if="usuario"><b-button pill variant="primary" class="nav-link dropdown-toggle waves-effect waves-dark profile-pic line-height-0 margin-top-0-5" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-text="usuario.nombre[0]"></b-button></li>
                     </ul>
                 </div>
             </nav>
@@ -38,26 +38,26 @@
                         <li class="nav-small-cap">--- MENÚ</li>
                         <li :class="usuario.perfil.menu_perfiles == 0 && usuario.perfil.menu_usuarios == 0 ? 'd-none' : ''">
                             <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">Usuarios</span></a>
-                            <ul aria-expanded="false" class="collapse">
+                            <ul aria-expanded="false" :class="usuario.perfil.menu_perfiles == 1 || usuario.perfil.menu_usuarios == 1 ? 'collapse' : ''">
                                 <li :class="usuario.perfil.menu_perfiles == 0 ? 'd-none' : ''"><router-link to="/perfiles">Perfiles</router-link></li>
                                 <li :class="usuario.perfil.menu_usuarios == 0 ? 'd-none' : ''"><router-link to="/usuarios">Usuarios</router-link></li>
                             </ul>
                         </li>
                         <li :class="usuario.perfil.menu_proveedores == 0 ? 'd-none' : ''">
                             <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-building"></i><span class="hide-menu">Empresas</span></a>
-                            <ul aria-expanded="false" class="collapse">
+                            <ul aria-expanded="false" :class="usuario.perfil.menu_proveedores == 1 ? 'collapse' : ''">
                                 <li><router-link to="/proveedores">Proveedores</router-link></li>
                             </ul>
                         </li>
                         <li :class="usuario.perfil.menu_ordenes_compra == 0 ? 'd-none' : ''">
                             <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-folder"></i><span class="hide-menu">Documentos</span></a>
-                            <ul aria-expanded="false" class="collapse">
+                            <ul aria-expanded="false" :class="usuario.perfil.menu_ordenes_compra == 1 ? 'collapse' : ''">
                                 <li><router-link to="/ordenescompra">Ordenes de compra</router-link></li>
                             </ul>
                         </li>
                         <li :class="usuario.perfil.menu_categorias_productos == 0 && usuario.perfil.menu_lugares == 0 && usuario.perfil.menu_inventario == 0 ? 'd-none' : ''">
                             <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-archive"></i><span class="hide-menu">Inventario</span></a>
-                            <ul aria-expanded="false" class="collapse">
+                            <ul aria-expanded="false" :class="usuario.perfil.menu_categorias_productos == 1 || usuario.perfil.perfil == 1 || usuario.perfil.menu_inventario == 1 ? 'collapse' : ''">
                                 <li :class="usuario.perfil.menu_categorias_productos == 0 ? 'd-none' : ''"><router-link to="/categoriasproducto">Categorías producto</router-link></li>
                                 <li :class="usuario.perfil.menu_lugares == 0 ? 'd-none' : ''"><router-link to="/lugares">Lugares</router-link></li>
                                 <li :class="usuario.perfil.menu_inventario == 0 ? 'd-none' : ''"><router-link to="/inventario">Productos</router-link></li>
@@ -89,7 +89,9 @@
         },
         computed: {
             ...mapGetters('usuario', ['saludo']),
-            ...mapState('usuario', ['usuario'])
+            usuario(){
+                return this.$store.state.usuario.usuario
+            }
         },
         methods: {
             ...mapActions('usuario', ['salir']),
@@ -98,11 +100,16 @@
                 let me = this
 
                 axios.get('/usuario/logeado').then(function (response) {
-                    me.actualizar(response.data.usuario)
-                    me.saludo
+                    if(response.data.usuario){
+                        me.actualizar(response.data.usuario)
+                        me.saludo
+                        me.cambiar_clases()
+                    } else {
+                        me.$router.push('/')
+                    }
                 })
             },
-            eliminar_menus(){
+            cambiar_clases(){
                 $('.d-none').remove()
             },
             cerrar_session(){
@@ -112,7 +119,6 @@
                 axios.post('/logout').then(function (response) {
                     if (response.status === 302 || 401) {
                         me.salir()
-
                         window.location.href = "/";
                     }
                     else {
@@ -125,11 +131,8 @@
 
             }
         },
-        created(){
-            this.usuario_logeado()
-        },
         mounted(){
-            this.eliminar_menus()
+            this.usuario_logeado()
         }
     }
 </script>

@@ -32318,3 +32318,7 @@ File: scss
   max-width: 90% !important;
 }
 
+.login-register {
+  background-image: url(/images/login-register.jpg?6625b3360b4723e48c38067ceddc7def);
+}
+

@@ -1942,16 +1942,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {};
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])('usuario', ['saludo']), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])('usuario', ['usuario'])),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])('usuario', ['saludo']), {
+    usuario: function usuario() {
+      return this.$store.state.usuario.usuario;
+    }
+  }),
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('usuario', ['salir']), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])('usuario', ['actualizar']), {
     usuario_logeado: function usuario_logeado() {
       var me = this;
       axios.get('/usuario/logeado').then(function (response) {
-        me.actualizar(response.data.usuario);
-        me.saludo;
+        if (response.data.usuario) {
+          me.actualizar(response.data.usuario);
+          me.saludo;
+          me.cambiar_clases();
+        } else {
+          me.$router.push('/');
+        }
       });
     },
-    eliminar_menus: function eliminar_menus() {
+    cambiar_clases: function cambiar_clases() {
       $('.d-none').remove();
     },
     cerrar_session: function cerrar_session() {
@@ -1968,11 +1977,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     }
   }),
-  created: function created() {
-    this.usuario_logeado();
-  },
   mounted: function mounted() {
-    this.eliminar_menus();
+    this.usuario_logeado();
   }
 });
 
@@ -1996,8 +2002,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-//
-//
 //
 //
 //
@@ -3381,7 +3385,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     }
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])('usuario', ['usuario']), {
+  computed: {
+    usuario: function usuario() {
+      return this.$store.state.usuario.usuario;
+    },
     sortOptions: function sortOptions() {
       return this.fields.filter(function (f) {
         return f.sortable;
@@ -3392,7 +3399,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         };
       });
     }
-  }),
+  },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])(['msg_success', 'msg_error']), {
     numero_orden: function numero_orden() {
       var max = 0;
@@ -3423,7 +3430,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.orden_compra.proveedor_referencia = e.referencia;
     },
     producto: function producto(e, index) {
-      this.orden_compra.detalle_orden[index].producto_id = e.id;
       this.orden_compra.detalle_orden[index].producto_nombre = e.nombre;
       this.orden_compra.detalle_orden[index].valor_unitario = e.valor_actual;
 
@@ -3475,7 +3481,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     agregar_fila: function agregar_fila() {
       var fila = new Object();
-      fila.producto_id = 0;
       fila.producto_nombre = "";
       fila.cantidad = null;
       fila.medida = null;
@@ -3513,12 +3518,37 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         me.orden_compra.proveedor_referencia = data.proveedor_referencia;
         me.orden_compra.asunto = data.asunto;
         me.orden_compra.fecha = data.fecha;
-        me.orden_compra.neto = data.neto;
-        me.orden_compra.iva = data.iva;
-        me.orden_compra.total = data.total;
         me.orden_compra.observacion = data.observacion;
-        me.$refs.typeahead_proveedor.inputValue = data.nombre;
+        me.$refs.typeahead_proveedor.inputValue = data.proveedor_nombre;
         this.$v.orden_compra.$touch(true);
+        var productos_nombre = data.descripcion.split('@');
+        var cantidades = data.cantidad.split('@');
+        var medidas = data.unidad_medida.split('@');
+        var valores_unitario = data.valor_unitario.split('@');
+
+        for (var i = 0; i < productos_nombre.length; i++) {
+          var fila = new Object();
+          fila.producto_nombre = productos_nombre[i];
+          fila.cantidad = cantidades[i];
+          fila.medida = medidas[i];
+          fila.valor_unitario = valores_unitario[i];
+          me.orden_compra.detalle_orden.push(fila);
+          me.calcular_total_cantidad(i);
+        }
+
+        setTimeout(function () {
+          me.cambiar_nombres(productos_nombre);
+        }, 2000);
+      } else {
+        this.agregar_fila();
+      }
+    },
+    cambiar_nombres: function cambiar_nombres() {
+      var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+      for (var i = 0; i < data.length; i++) {
+        var nombre = 'typeahead_detalle[' + i + ']';
+        this.$refs[nombre].inputValue = data[i];
       }
     },
     cerrar_modal_orden_compra: function cerrar_modal_orden_compra() {
@@ -3542,7 +3572,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.orden_compra.total = 0;
       this.orden_compra.observacion = '';
       this.orden_compra.detalle_orden = [];
-      this.agregar_fila();
+      this.$refs.typeahead_proveedor.inputValue = "";
       this.$v.$reset();
     },
     crear_orden_compra: function crear_orden_compra() {
@@ -3575,11 +3605,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         'iva': me.orden_compra.iva
       }, _defineProperty(_axios$post, "total", me.orden_compra.total), _defineProperty(_axios$post, 'observacion', me.orden_compra.observacion), _axios$post)).then(function (response) {
         me.$refs.typeahead_proveedor.inputValue = "";
-        me.$refs.typeahead_detalle.inputValue = "";
+        me.$refs['typeahead_detalle[0]'].inputValue = "";
         me.obtener_registros();
         me.numero_orden();
         me.$store.commit('msg_success', accion == 0 ? 'Registro agregado exitosamente.' : 'Registro enviado y agregado exitosamente.');
         me.limpiar_datos_orden_compra();
+        me.agregar_fila();
       })["catch"](function (error) {
         me.$store.commit('msg_error', accion == 0 ? 'Problemas al agregar el registro.' : 'Problemas al enviar y agregar el registro.');
         console.log(error);
@@ -76930,22 +76961,19 @@ var render = function() {
                     "li",
                     { staticClass: "nav-item" },
                     [
-                      _c(
-                        "b-button",
-                        {
-                          staticClass:
-                            "nav-link dropdown-toggle waves-effect waves-dark profile-pic line-height-0 margin-top-0-5",
-                          attrs: {
-                            pill: "",
-                            variant: "primary",
-                            href: "",
-                            "data-toggle": "dropdown",
-                            "aria-haspopup": "true",
-                            "aria-expanded": "false"
-                          }
+                      _c("b-button", {
+                        staticClass:
+                          "nav-link dropdown-toggle waves-effect waves-dark profile-pic line-height-0 margin-top-0-5",
+                        attrs: {
+                          pill: "",
+                          variant: "primary",
+                          href: "",
+                          "data-toggle": "dropdown",
+                          "aria-haspopup": "true",
+                          "aria-expanded": "false"
                         },
-                        [_vm._v(" " + _vm._s(_vm.usuario.nombre[0]) + " ")]
-                      )
+                        domProps: { textContent: _vm._s(_vm.usuario.nombre[0]) }
+                      })
                     ],
                     1
                   )
@@ -76980,7 +77008,11 @@ var render = function() {
                     _c(
                       "ul",
                       {
-                        staticClass: "collapse",
+                        class:
+                          _vm.usuario.perfil.menu_perfiles == 1 ||
+                          _vm.usuario.perfil.menu_usuarios == 1
+                            ? "collapse"
+                            : "",
                         attrs: { "aria-expanded": "false" }
                       },
                       [
@@ -77032,7 +77064,10 @@ var render = function() {
                     _c(
                       "ul",
                       {
-                        staticClass: "collapse",
+                        class:
+                          _vm.usuario.perfil.menu_proveedores == 1
+                            ? "collapse"
+                            : "",
                         attrs: { "aria-expanded": "false" }
                       },
                       [
@@ -77066,7 +77101,10 @@ var render = function() {
                     _c(
                       "ul",
                       {
-                        staticClass: "collapse",
+                        class:
+                          _vm.usuario.perfil.menu_ordenes_compra == 1
+                            ? "collapse"
+                            : "",
                         attrs: { "aria-expanded": "false" }
                       },
                       [
@@ -77102,7 +77140,12 @@ var render = function() {
                     _c(
                       "ul",
                       {
-                        staticClass: "collapse",
+                        class:
+                          _vm.usuario.perfil.menu_categorias_productos == 1 ||
+                          _vm.usuario.perfil.perfil == 1 ||
+                          _vm.usuario.perfil.menu_inventario == 1
+                            ? "collapse"
+                            : "",
                         attrs: { "aria-expanded": "false" }
                       },
                       [
@@ -77350,137 +77393,129 @@ var render = function() {
   return _c("section", { attrs: { id: "wrapper" } }, [
     _c(
       "div",
-      {
-        staticClass: "login-register",
-        staticStyle: {
-          "background-image":
-            "url(../assets/images/background/login-register.jpg)"
-        }
-      },
+      { staticClass: "login-register" },
       [
-        _c("div", { staticClass: "login-box card mt-5" }, [
-          _c("div", { staticClass: "card-body" }, [
-            _c(
-              "form",
-              {
-                staticClass: "form-horizontal form-material",
-                attrs: { id: "loginform", action: "index.html" }
-              },
-              [
-                _c(
-                  "h3",
-                  { staticClass: "box-title m-b-20" },
-                  [_c("center", [_vm._v("Ingresar")])],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "b-form-group",
-                  [
-                    _c("b-form-input", {
-                      attrs: {
-                        placeholder: "Usuario",
-                        state: _vm.$v.login.usuario.$dirty
-                          ? !_vm.$v.login.usuario.$error
-                          : null,
-                        "aria-describedby": "usuario-input"
+        _c("b-card", { staticClass: "login-box mt-5" }, [
+          _c(
+            "form",
+            {
+              staticClass: "form-horizontal form-material",
+              attrs: { id: "loginform" }
+            },
+            [
+              _c(
+                "h3",
+                { staticClass: "box-title mb-2 mt-2" },
+                [_c("center", [_vm._v("Ingresar")])],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-form-group",
+                [
+                  _c("b-form-input", {
+                    attrs: {
+                      placeholder: "Usuario",
+                      state: _vm.$v.login.usuario.$dirty
+                        ? !_vm.$v.login.usuario.$error
+                        : null,
+                      "aria-describedby": "usuario-input"
+                    },
+                    model: {
+                      value: _vm.$v.login.usuario.$model,
+                      callback: function($$v) {
+                        _vm.$set(_vm.$v.login.usuario, "$model", $$v)
                       },
-                      model: {
-                        value: _vm.$v.login.usuario.$model,
-                        callback: function($$v) {
-                          _vm.$set(_vm.$v.login.usuario, "$model", $$v)
-                        },
-                        expression: "$v.login.usuario.$model"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c(
-                      "b-form-invalid-feedback",
-                      { attrs: { id: "usuario-input" } },
-                      [
-                        _vm._v(
-                          "\n                            Ingresa tu usuario y un mínimo de 4 caracteres.\n                        "
-                        )
-                      ]
-                    )
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "b-form-group",
-                  [
-                    _c("b-form-input", {
-                      attrs: {
-                        type: "password",
-                        placeholder: "Contraseña",
-                        state: _vm.$v.login.password.$dirty
-                          ? !_vm.$v.login.password.$error
-                          : null,
-                        "aria-describedby": "password-input"
-                      },
-                      on: {
-                        keyup: function($event) {
-                          if (
-                            !$event.type.indexOf("key") &&
-                            _vm._k(
-                              $event.keyCode,
-                              "enter",
-                              13,
-                              $event.key,
-                              "Enter"
-                            )
-                          ) {
-                            return null
-                          }
-                          return _vm.ingresar($event)
+                      expression: "$v.login.usuario.$model"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "b-form-invalid-feedback",
+                    { attrs: { id: "usuario-input" } },
+                    [
+                      _vm._v(
+                        "\n                        Ingresa tu usuario y un mínimo de 4 caracteres.\n                    "
+                      )
+                    ]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-form-group",
+                [
+                  _c("b-form-input", {
+                    attrs: {
+                      type: "password",
+                      placeholder: "Contraseña",
+                      state: _vm.$v.login.password.$dirty
+                        ? !_vm.$v.login.password.$error
+                        : null,
+                      "aria-describedby": "password-input"
+                    },
+                    on: {
+                      keyup: function($event) {
+                        if (
+                          !$event.type.indexOf("key") &&
+                          _vm._k(
+                            $event.keyCode,
+                            "enter",
+                            13,
+                            $event.key,
+                            "Enter"
+                          )
+                        ) {
+                          return null
                         }
-                      },
-                      model: {
-                        value: _vm.$v.login.password.$model,
-                        callback: function($$v) {
-                          _vm.$set(_vm.$v.login.password, "$model", $$v)
-                        },
-                        expression: "$v.login.password.$model"
+                        return _vm.ingresar($event)
                       }
-                    }),
-                    _vm._v(" "),
-                    _c(
-                      "b-form-invalid-feedback",
-                      { attrs: { id: "password-input" } },
-                      [
-                        _vm._v(
-                          "\n                            Ingresa tu contraseña y un mínimo de 4 caracteres.\n                        "
-                        )
-                      ]
-                    )
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group text-center" }, [
-                  _c("div", { staticClass: "col-xs-12 p-b-20" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass:
-                          "btn btn-block btn-lg btn-info btn-rounded",
-                        attrs: {
-                          disabled: _vm.$v.login.$invalid,
-                          type: "button"
-                        },
-                        on: { click: _vm.ingresar }
+                    },
+                    model: {
+                      value: _vm.$v.login.password.$model,
+                      callback: function($$v) {
+                        _vm.$set(_vm.$v.login.password, "$model", $$v)
                       },
-                      [_vm._v("Ingresar")]
-                    )
-                  ])
+                      expression: "$v.login.password.$model"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "b-form-invalid-feedback",
+                    { attrs: { id: "password-input" } },
+                    [
+                      _vm._v(
+                        "\n                        Ingresa tu contraseña y un mínimo de 4 caracteres.\n                    "
+                      )
+                    ]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group text-center" }, [
+                _c("div", { staticClass: "col-xs-12 p-b-20" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-block btn-lg btn-info btn-rounded",
+                      attrs: {
+                        disabled: _vm.$v.login.$invalid,
+                        type: "button"
+                      },
+                      on: { click: _vm.ingresar }
+                    },
+                    [_vm._v("Ingresar")]
+                  )
                 ])
-              ],
-              1
-            )
-          ])
+              ])
+            ],
+            1
+          )
         ])
-      ]
+      ],
+      1
     )
   ])
 }
@@ -79338,30 +79373,28 @@ var render = function() {
                         key: "cell(acciones)",
                         fn: function(row) {
                           return [
-                            _c(
-                              "b-button",
-                              {
-                                directives: [
+                            _vm.usuario && _vm.usuario.email
+                              ? _c(
+                                  "b-button",
                                   {
-                                    name: "show",
-                                    rawName: "v-show",
-                                    value: _vm.usuario.email,
-                                    expression: "usuario.email"
-                                  }
-                                ],
-                                attrs: {
-                                  size: "xs",
-                                  variant: "info",
-                                  title: "Enviar registro"
-                                },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.enviar_mail(row.item.id)
-                                  }
-                                }
-                              },
-                              [_c("i", { staticClass: "fa fa-paper-plane" })]
-                            ),
+                                    attrs: {
+                                      size: "xs",
+                                      variant: "info",
+                                      title: "Enviar registro"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.enviar_mail(row.item.id)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass: "fa fa-paper-plane"
+                                    })
+                                  ]
+                                )
+                              : _vm._e(),
                             _vm._v(" "),
                             _c(
                               "b-button",
@@ -79439,7 +79472,8 @@ var render = function() {
             title: _vm.modal_orden_compra.titulo,
             size: "xl",
             "no-close-on-backdrop": "",
-            scrollable: ""
+            scrollable: "",
+            static: ""
           }
         },
         [
@@ -80154,7 +80188,10 @@ var render = function() {
                                           { staticClass: "mb-0" },
                                           [
                                             _c("vue-bootstrap-typeahead", {
-                                              ref: "typeahead_detalle",
+                                              ref:
+                                                "typeahead_detalle[" +
+                                                data.index +
+                                                "]",
                                               attrs: {
                                                 size: "sm",
                                                 data: _vm.productos,
@@ -104074,7 +104111,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   getters: {
-    saludo: function saludo(state) {
+    saludo: function saludo(state, nombre) {
       if (state.estado_saludo == 0) {
         Vue.$toast.open({
           message: '!Hola ' + state.usuario.nombre + '¡',

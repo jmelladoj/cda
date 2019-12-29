@@ -23,7 +23,6 @@ mix.scripts([
    'public/js/sidebarmenu.js',
    'public/js/custom.js',
    'public/assets/node_modules/raphael/raphael-min.js',
-   'public/assets/node_modules/jquery-sparkline/jquery.sparkline.min.js',
-   'public/js/dashboard1.js'
+   'public/assets/node_modules/jquery-sparkline/jquery.sparkline.min.js'
 ], 'public/js/pagina.js').version();
    
