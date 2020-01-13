@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\OrdenCompra as AppOrdenCompra;
 use App\OrdenCompra;
+use App\ProductoInventario;
 use App\Proveedor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -56,20 +57,6 @@ class OrdenCompraController extends Controller
             $valores_unitarios = "";
             $medidas = "";
 
-            foreach($request->detalle_orden AS $key => $item){
-                if($key > 0){
-                    $productos .= "@";
-                    $cantidades .= "@";
-                    $valores_unitarios .= "@";
-                    $medidas .= "@";
-                }
-
-                $productos .= $item['producto_nombre'];
-                $cantidades .= $item['cantidad'];
-                $valores_unitarios .= $item['valor_unitario'];
-                $medidas .= $item['medida'];
-            }
-
             $proveedor = Proveedor::updateOrCreate(
                 ['id' => $request->proveedor_id],
                 [
@@ -83,6 +70,27 @@ class OrdenCompraController extends Controller
                     'referencia' => $request->proveedor_referencia
                 ]
             );
+
+            foreach($request->detalle_orden AS $key => $item){
+                if($key > 0){
+                    $productos .= "@";
+                    $cantidades .= "@";
+                    $valores_unitarios .= "@";
+                    $medidas .= "@";
+                }
+
+                if($item['id'] > 0){
+                    $producto = ProductoInventario::find($item['id']);
+                    $producto->proveedor_id = $proveedor->id;
+                    $producto->save();
+                }
+
+
+                $productos .= $item['producto_nombre'];
+                $cantidades .= $item['cantidad'];
+                $valores_unitarios .= $item['valor_unitario'];
+                $medidas .= $item['medida'];
+            }
 
             $orden_compra = OrdenCompra::create(
                 [
@@ -100,6 +108,7 @@ class OrdenCompraController extends Controller
                     'user_id' => Auth::id()
                 ]
             );
+
 
             if($request->accion == 1){
                 Mail::to($proveedor->correo)->send(new AppOrdenCompra($proveedor, $orden_compra));

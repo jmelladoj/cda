@@ -15,6 +15,8 @@ class OrdenCompra extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $orden_compra;
+
     /**
      * Create a new message instance.
      *
@@ -36,7 +38,7 @@ class OrdenCompra extends Mailable
     public function build()
     {
         return $this->from(Auth::user()->email)
-                    ->subject('Orden de Compra')
+                    ->subject($this->orden_compra->asunto)
                     ->view('email.orden_compra')
                     ->attachData($this->pdf, 'OrdenDeCompra.pdf', [
                         'mime' => 'application/pdf',

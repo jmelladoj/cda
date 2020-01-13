@@ -22,6 +22,9 @@
                     </ul>
 
                     <ul class="navbar-nav my-lg-0">
+                        <li class="nav-item" v-show="notificaciones.length > 0">
+                            <router-link class="nav-link dropdown-toggle waves-effect waves-dark" to="/notificaciones"><i class="fa fa-bell-o"></i><div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div></router-link>
+                        </li>
                         <li class="nav-item right-side-toggle" @click="cerrar_session"> <a class="nav-link  waves-effect waves-light" href="javascript:void(0)"><i class="ti-power-off"></i></a></li>
                         <li class="nav-item" v-if="usuario"><b-button pill variant="primary" class="nav-link dropdown-toggle waves-effect waves-dark profile-pic line-height-0 margin-top-0-5" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-text="usuario.nombre[0]"></b-button></li>
                     </ul>
@@ -44,27 +47,15 @@
                             </ul>
                         </li>
                         <li :class="usuario.perfil.menu_proveedores == 0 ? 'd-none' : ''">
-                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-building"></i><span class="hide-menu">Empresas</span></a>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-archive"></i><span class="hide-menu">Abastecimiento</span></a>
                             <ul aria-expanded="false">
+                                <li :class="usuario.perfil.menu_categorias_productos == 0 ? 'd-none' : ''"><router-link to="/categoriasproducto">Categorías producto</router-link></li>
+                                <li :class="usuario.perfil.menu_lugares == 0 ? 'd-none' : ''"><router-link to="/lugares">Centro de costos</router-link></li>
+                                <li :class="usuario.perfil.menu_inventario == 0 ? 'd-none' : ''"><router-link to="/inventario">Productos</router-link></li>
                                 <li><router-link to="/proveedores">Proveedores</router-link></li>
-                            </ul>
-                        </li>
-                        <li :class="usuario.perfil.menu_ordenes_compra == 0 ? 'd-none' : ''">
-                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-folder"></i><span class="hide-menu">Documentos</span></a>
-                            <ul aria-expanded="false">
                                 <li><router-link to="/ordenescompra">Ordenes de compra</router-link></li>
                             </ul>
                         </li>
-                        <li :class="usuario.perfil.menu_categorias_productos == 0 && usuario.perfil.menu_lugares == 0 && usuario.perfil.menu_inventario == 0 ? 'd-none' : ''">
-                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-archive"></i><span class="hide-menu">Inventario</span></a>
-                            <ul aria-expanded="false">
-                                <li :class="usuario.perfil.menu_categorias_productos == 0 ? 'd-none' : ''"><router-link to="/categoriasproducto">Categorías producto</router-link></li>
-                                <li :class="usuario.perfil.menu_lugares == 0 ? 'd-none' : ''"><router-link to="/lugares">Lugares</router-link></li>
-                                <li :class="usuario.perfil.menu_inventario == 0 ? 'd-none' : ''"><router-link to="/inventario">Productos</router-link></li>
-                            </ul>
-                        </li>
-
-                        <!--<li> <a class="waves-effect waves-dark" href="documentation/documentation.html" aria-expanded="false"><i class="fa fa-circle-o text-danger"></i><span class="hide-menu">Documentation</span></a></li>-->
                     </ul>
                 </nav>
             </div>
@@ -84,7 +75,7 @@
     export default {
         data() {
             return {
-
+                notificaciones: []
             }
         },
         computed: {
@@ -94,6 +85,20 @@
         methods: {
             ...mapActions('usuario', ['salir']),
             ...mapMutations('usuario', ['actualizar']),
+            mostrar_notificaciones(){
+                let me = this
+
+                axios.get('/notificaciones/1').then(function (response) {
+                    me.notificaciones = response.data.alertas
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+            actualizar_notificaciones(){
+                let me = this
+	            setInterval(function(){ me.mostrar_notificaciones() }, 30000);
+            },
             usuario_logeado(){
                 let me = this
 
@@ -102,6 +107,10 @@
                         me.actualizar(response.data.usuario)
                         me.saludo
                         me.cambiar_clases()
+
+                        if(response.data.usuario.perfil_id == 1){
+                            me.actualizar_notificaciones()
+                        }
                     } else {
                         me.$router.push('/')
                     }
@@ -129,8 +138,14 @@
 
             }
         },
+        created() {
+            this.$on('mostrar_notificaciones', function(){
+                this.mostrar_notificaciones()
+            });
+        },
         mounted(){
             this.usuario_logeado()
+            this.mostrar_notificaciones()
         }
     }
 </script>

@@ -16,6 +16,7 @@ class CreateProductoInventariosTable extends Migration
         Schema::create('producto_inventarios', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('nombre');
+            $table->string('unidad');
             $table->float('stock');
             $table->float('stock_critico');
             $table->integer('valor_actual');

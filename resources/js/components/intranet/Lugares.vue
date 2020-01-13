@@ -1,6 +1,6 @@
 <template>
     <div>
-        <titulo-pagina titulo="Lugares spa"></titulo-pagina>
+        <titulo-pagina titulo="Centros de costos"></titulo-pagina>
 
         <b-row>
             <b-col>
@@ -44,13 +44,29 @@
                         </b-col>
                     </b-row>
 
-                    <b-table class="my-3" show-empty small striped outlined stacked="md" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" >
+                    <b-table class="my-3" show-empty small striped outlined stacked="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" >
                         <template v-slot:empty="scope">
                             <center><h5>No hay registros</h5></center>
                         </template>
 
                         <template v-slot:cell(index)="data">
                             {{ data.index + 1 }}
+                        </template>
+
+                        <template v-slot:cell(gasto_diario)="data">
+                            {{ data.item.gasto_diario | currency }}
+                        </template>
+
+                        <template v-slot:cell(gasto_semanal)="data">
+                            {{ data.item.gasto_semanal | currency }}
+                        </template>
+
+                        <template v-slot:cell(gasto_mensual)="data">
+                            {{ data.item.gasto_mensual | currency }}
+                        </template>
+
+                        <template v-slot:cell(gasto_anual)="data">
+                            {{ data.item.gasto_anual | currency }}
                         </template>
 
 
@@ -62,14 +78,6 @@
                             <b-button size="xs" variant="danger" title="Eliminar registro" @click="borrar(row.item.id)">
                                 <i class="fa fa-trash"></i>
                             </b-button>
-                        </template>
-
-                        <template v-slot:row-details="row">
-                            <b-card>
-                                <ul>
-                                    <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
-                                </ul>
-                            </b-card>
                         </template>
                     </b-table>
                 </b-card>
@@ -115,6 +123,10 @@
                 fields: [
                     { key: 'index', label: '#', sortable: true, class: 'text-center' },
                     { key: 'nombre', label: 'Nombre', sortable: true, class: 'text-left' },
+                    { key: 'gasto_diario', label: 'Gasto diario', sortable: true, class: 'text-left' },
+                    { key: 'gasto_semanal', label: 'Gasto semanal', sortable: true, class: 'text-left' },
+                    { key: 'gasto_mensual', label: 'Gasto mensual', sortable: true, class: 'text-left' },
+                    { key: 'gasto_anual', label: 'Gasto anual', sortable: true, class: 'text-left' },
                     { key: 'acciones', label: 'Acciones', class: 'text-center'}
                 ],
                 totalRows: 1,

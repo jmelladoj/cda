@@ -44,7 +44,7 @@
                         </b-col>
                     </b-row>
 
-                    <b-table class="my-3" show-empty small striped outlined stacked="md" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" >
+                    <b-table class="my-3" show-empty small striped outlined stacked="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered">
                         <template v-slot:empty="scope">
                             <center><h5>No hay registros</h5></center>
                         </template>
@@ -53,6 +53,9 @@
                             {{ data.index + 1 }}
                         </template>
 
+                        <template v-slot:cell(valorizacion_aproximada)="data">
+                            {{ obtener_valorazion(data.item.productos) | currency }}
+                        </template>
 
                         <template v-slot:cell(acciones)="row">
                             <b-button size="xs" variant="warning" title="Actualizar información" @click="abrir_modal_categoria(row.item)">
@@ -62,14 +65,6 @@
                             <b-button size="xs" variant="danger" title="Eliminar registro" @click="borrar(row.item.id)">
                                 <i class="fa fa-trash"></i>
                             </b-button>
-                        </template>
-
-                        <template v-slot:row-details="row">
-                            <b-card>
-                                <ul>
-                                    <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
-                                </ul>
-                            </b-card>
                         </template>
                     </b-table>
                 </b-card>
@@ -115,6 +110,7 @@
                 fields: [
                     { key: 'index', label: '#', sortable: true, class: 'text-center' },
                     { key: 'nombre', label: 'Nombre', sortable: true, class: 'text-left' },
+                    { key: 'valorizacion_aproximada', label: 'Valorización aproximada', sortable: true, class: 'text-left' },
                     { key: 'acciones', label: 'Acciones', class: 'text-center'}
                 ],
                 totalRows: 1,
@@ -154,6 +150,15 @@
             onFiltered(filteredItems) {
                 this.totalRows = filteredItems.length
                 this.currentPage = 1
+            },
+            obtener_valorazion(data  = []){
+                var total = 0
+
+                if(data.length > 0){
+                    data.forEach(item => total += item.valorizacion)
+                }
+
+                return total
             },
             listar_categorias(){
                 let me = this

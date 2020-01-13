@@ -11,6 +11,7 @@ import ProductosInventario from './components/intranet/ProductosInventario.vue'
 import OrdenesCompra from './components/intranet/OrdenesCompra.vue'
 import CategoriasProducto from './components/intranet/CategoriasProducto.vue'
 import Proveedor from './components/intranet/Proveedor.vue'
+import Notificaciones from './components/intranet/Notificaciones.vue'
 
 
 export default new VueRouter({
@@ -44,6 +45,10 @@ export default new VueRouter({
             path: '/proveedores',
             name: 'proveedores',
             component: Proveedor
+        },{
+            path: '/notificaciones',
+            name: 'notificaciones',
+            component: Notificaciones
         },
     ],
     mode: 'history'

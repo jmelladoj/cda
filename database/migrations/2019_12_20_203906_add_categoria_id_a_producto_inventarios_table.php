@@ -15,10 +15,8 @@ class AddCategoriaIdAProductoInventariosTable extends Migration
     {
         Schema::table('producto_inventarios', function (Blueprint $table) {
             //
-
-            $table->unsignedBigInteger('categoria_producto_id')->nullable()->default(null)->afeter('valor_ultimo');
+            $table->unsignedBigInteger('categoria_producto_id')->nullable()->default(null)->after('valor_ultimo');
             $table->foreign('categoria_producto_id')->references('id')->on('categoria_productos');
-
         });
     }
 

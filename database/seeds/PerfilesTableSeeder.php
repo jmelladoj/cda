@@ -19,7 +19,9 @@ class PerfilesTableSeeder extends Seeder
             'menu_usuarios' => 1,
             'menu_ordenes_compra' => 1,
             'menu_lugares' => 1,
-            'menu_inventario' => 1
+            'menu_inventario' => 1,
+            'menu_proveedores' => 1,
+            'menu_categorias_productos' => 1
         ]);
     }
 }

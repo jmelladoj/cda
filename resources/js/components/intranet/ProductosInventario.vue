@@ -6,31 +6,30 @@
             <b-col>
                 <b-card-group>
                     <b-card class="mt-0 mb-0">
-                            <b-col cols="12">
-                                <div class="d-flex no-block align-items-center">
-                                    <div>
-                                        <h4><i class="fa fa-usd"></i></h4>
-                                        <p class="text-muted"><b>Valorización aproximada stock</b></p>
-                                    </div>
-                                    <div class="ml-auto">
-                                        <h4 class="counter text-primary">{{ total_valorizacion_stock | currency}}</h4>
-                                    </div>
+                        <b-col cols="12">
+                            <div class="d-flex no-block align-items-center">
+                                <div>
+                                    <h4><i class="fa fa-usd"></i></h4>
+                                    <p class="text-muted"><b>Valorización aproximada stock</b></p>
                                 </div>
-                            </b-col>
+                                <div class="ml-auto">
+                                    <h4 class="counter text-primary">{{ total_valorizacion_stock | currency}}</h4>
+                                </div>
+                            </div>
+                        </b-col>
                     </b-card>
-                    <b-card class="mt-0 mb-0">
-
-                            <b-col cols="12">
-                                <div class="d-flex no-block align-items-center">
-                                    <div>
-                                        <h4><i class="fa fa-product-hunt"></i></h4>
-                                        <p class="text-muted"><b>Productos con stock crítico</b></p>
-                                    </div>
-                                    <div class="ml-auto">
-                                        <h4 class="counter text-warning">{{ total_productos_critico }}</h4>
-                                    </div>
+                    <b-card class="mt-0 mb-0" @click="filtrar_stock_critico">
+                        <b-col cols="12">
+                            <div class="d-flex no-block align-items-center">
+                                <div>
+                                    <h4><i class="fa fa-product-hunt"></i></h4>
+                                    <p class="text-muted"><b>Productos con stock crítico</b></p>
                                 </div>
-                            </b-col>
+                                <div class="ml-auto">
+                                    <h4 class="counter text-warning">{{ total_productos_critico }}</h4>
+                                </div>
+                            </div>
+                        </b-col>
                     </b-card>
                 </b-card-group>
             </b-col>
@@ -42,12 +41,12 @@
                     <b-row>
                         <b-col lg="6" class="my-1">
                             <b-form-group label="Búsqueda" label-cols-sm="2" label-align-sm="left" label-size="sm" label-for="filterInput" class="mb-0" >
-                            <b-input-group size="sm">
-                                <b-form-input v-model="filter" type="search" id="filterInput" placeholder="Escribe para buscar"></b-form-input>
-                                <b-input-group-append>
-                                    <b-button :disabled="!filter" @click="filter = ''">Limpiar</b-button>
-                                </b-input-group-append>
-                            </b-input-group>
+                                <b-input-group size="sm">
+                                    <b-form-input v-model="filter" type="search" id="filterInput" placeholder="Escribe para buscar"></b-form-input>
+                                    <b-input-group-append>
+                                        <b-button :disabled="!filter" @click="filter = ''">Limpiar</b-button>
+                                    </b-input-group-append>
+                                </b-input-group>
                             </b-form-group>
                         </b-col>
 
@@ -78,7 +77,7 @@
                         </b-col>
                     </b-row>
 
-                    <b-table class="my-3" show-empty small striped outlined stacked="md" :tbody-tr-class="clase_fila" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" >
+                    <b-table class="my-3" show-empty small striped outlined stacked="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" :tbody-tr-class="clase_fila">
                         <template v-slot:empty="scope">
                             <center><h5>No hay registros</h5></center>
                         </template>
@@ -102,6 +101,8 @@
                         </template>
 
                         <template v-slot:cell(acciones)="row">
+                            <orden-compra v-if="row.item.stock < row.item.stock_critico" :id_proveedor="row.item.proveedor_id"></orden-compra>
+
                             <b-button size="xs" variant="info" title="Ingresar stock" @click="abrir_modal_productos_ingreso(row.item)">
                                 I
                             </b-button>
@@ -133,20 +134,36 @@
 
         <b-modal ref="modal_productos_inventario" :title="modal_productos_inventario.titulo" no-close-on-backdrop scrollable static>
             <b-form>
-                <b-form-group label="Nombre de producto">
-                    <b-form-input
-                        v-model="$v.producto_inventario.nombre.$model"
-                        :state="$v.producto_inventario.nombre.$dirty ? !$v.producto_inventario.nombre.$error : null"
-                        aria-describedby="producto-nombre"
-                    ></b-form-input>
-
-                    <b-form-invalid-feedback id="producto-nombre">
-                        Campo de alfanúmerico, mínimo de 3 caracteres.
-                    </b-form-invalid-feedback>
-                </b-form-group>
-
                 <b-row>
-                    <b-col>
+                    <b-col xs="12" sm="12" md="6">
+                        <b-form-group label="Nombre de producto">
+                            <b-form-input
+                                v-model="$v.producto_inventario.nombre.$model"
+                                :state="$v.producto_inventario.nombre.$dirty ? !$v.producto_inventario.nombre.$error : null"
+                                aria-describedby="producto-nombre"
+                            ></b-form-input>
+
+                            <b-form-invalid-feedback id="producto-nombre">
+                                Campo de alfanúmerico, mínimo de 3 caracteres.
+                            </b-form-invalid-feedback>
+                        </b-form-group>
+                    </b-col>
+
+                    <b-col xs="12" sm="12" md="6">
+                        <b-form-group label="Unidad">
+                            <b-form-input
+                                v-model="$v.producto_inventario.unidad.$model"
+                                :state="$v.producto_inventario.unidad.$dirty ? !$v.producto_inventario.unidad.$error : null"
+                                aria-describedby="producto-unidad"
+                            ></b-form-input>
+
+                            <b-form-invalid-feedback id="producto-unidad">
+                                Campo de alfanúmerico, mínimo de 1 caracter.
+                            </b-form-invalid-feedback>
+                        </b-form-group>
+                    </b-col>
+
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Stock de producto">
                             <b-form-input
                                 v-model="$v.producto_inventario.stock.$model"
@@ -159,7 +176,7 @@
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
-                    <b-col>
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Stock crítico">
                             <b-form-input
                                 v-model="$v.producto_inventario.stock_critico.$model"
@@ -172,10 +189,8 @@
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
-                </b-row>
 
-                <b-row>
-                    <b-col>
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Valor actual de producto">
                             <b-form-input
                                 v-model="$v.producto_inventario.valor_actual.$model"
@@ -188,7 +203,7 @@
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
-                    <b-col>
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Último valor de producto">
                             <b-form-input
                                 v-model="$v.producto_inventario.valor_ultimo.$model"
@@ -214,7 +229,7 @@
         <b-modal ref="modal_productos_ingreso" :title="modal_productos_ingreso.titulo" size="lg" no-close-on-backdrop scrollable static>
             <b-form>
                 <b-row>
-                    <b-col>
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Cantidad de ingreso">
                             <b-form-input
                                 v-model="$v.ingreso_producto.cantidad_ingreso.$model"
@@ -227,7 +242,7 @@
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
-                    <b-col>
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Valor unitario de ingreso">
                             <b-form-input
                                 v-model="$v.ingreso_producto.valor_ingreso.$model"
@@ -240,11 +255,9 @@
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
-                </b-row>
-                <b-row>
-                    <b-col>
+                    <b-col xs="12" sm="12" md="12">
                         <b-form-group label="Detalle de ingresos">
-                            <b-table show-empty small striped hover outlined :items="items_ingreso" :fields="fields_ingreso">
+                            <b-table show-empty small striped outlined stacked="sm"  :items="items_ingreso" :fields="fields_ingreso">
                                 <template v-slot:empty="scope">
                                     <center><h6>No hay registros</h6></center>
                                 </template>
@@ -269,7 +282,7 @@
                 <b-row>
                     <b-col>
                         <b-form-group>
-                            <b-table show-empty small striped hover outlined :items="items_salida" :fields="fields_salida">
+                            <b-table show-empty small striped outlined stacked="sm" :items="items_salida" :fields="fields_salida">
                                 <template v-slot:empty="scope">
                                     <center><h6>No hay registros</h6></center>
                                 </template>
@@ -311,12 +324,9 @@
                             </b-table>
                         </b-form-group>
                     </b-col>
-                </b-row>
-
-                <b-row>
-                    <b-col>
+                    <b-col xs="12" sm="12" md="12">
                         <b-form-group label="Detalle de salidas">
-                            <b-table show-empty small striped hover outlined :items="detalle_salida" :fields="fields_detalle_salida">
+                            <b-table show-empty small striped outlined stacked="sm" :items="detalle_salida" :fields="fields_detalle_salida">
                                 <template v-slot:empty="scope">
                                     <center><h6>No hay registros</h6></center>
                                 </template>
@@ -365,6 +375,9 @@
                 fields: [
                     { key: 'index', label: '#', sortable: true, class: 'text-center' },
                     { key: 'nombre', label: 'Nombre', sortable: true, class: 'text-left' },
+                    { key: 'nombre_categoria', label: 'Categoría', sortable: true, class: 'text-left' },
+                    { key: 'nombre_proveedor', label: 'Proveedor', sortable: true, class: 'text-left' },
+                    { key: 'unidad', label: 'Unidad', sortable: true, class: 'text-left' },
                     { key: 'stock', label: 'Stock', sortable: true, class: 'text-left' },
                     { key: 'stock_critico', label: 'Stock crítico', sortable: true, class: 'text-left' },
                     { key: 'valor_actual', label: 'Valor actual', sortable: true, class: 'text-left' },
@@ -387,7 +400,7 @@
                     { key: 'index', label: '#', sortable: true, class: 'text-center' },
                     { key: 'lugar_nombre', label: 'Lugar', sortable: true, class: 'text-left' },
                     { key: 'retiro', label: 'Detalle', sortable: true, class: 'text-left' },
-                    { key: 'valor_retiro', label: 'Costo', sortable: true, class: 'text-left' },
+                    { key: 'costo_retiro', label: 'Costo', sortable: true, class: 'text-left' },
                     { key: 'created_at', label: 'Fecha', sortable: true, class: 'text-center' }
                 ],
                 totalRows: 1,
@@ -410,6 +423,7 @@
                 producto_inventario: {
                     id: 0,
                     nombre: '',
+                    unidad: '',
                     stock: null,
                     stock_critico: null,
                     valor_actual: null,
@@ -427,9 +441,12 @@
                     required,
                     minLength: minLength(3)
                 },
+                unidad: {
+                    required,
+                    minLength: minLength(1)
+                },
                 stock: {
                     required,
-                    numeric,
                     minValue: minValue(1)
                 },
                 stock_critico: {
@@ -482,19 +499,26 @@
             total_productos_critico(){
                 var total = 0
 
-                this.items.forEach(i => i.stock <= i.stock_critico ? total += 1 : total += 0)
+                this.items.forEach(i => i.stock < i.stock_critico ? total += 1 : total += 0)
 
                 return total
             }
         },
         methods: {
             ...mapMutations(['msg_success', 'msg_error']),
+            filtrar_stock_critico(){
+                $(".esconder").each(function(index) {
+                    $(this).hasClass('d-none') ? $(this).removeClass('d-none') : $(this).addClass('d-none')
+                });
+            },
             calcular_costo(indice){
                 this.items_salida[indice].costo_salida = this.producto_inventario.valor_actual * this.items_salida[indice].cantidad_retiro
             },
             clase_fila(item, type) {
                 if (!item) return
-                if (item.stock < item.stock_critico) return 'table-danger'
+                var clase = item.stock < item.stock_critico ? 'table-danger' : 'esconder'
+
+                return clase
             },
             onFiltered(filteredItems) {
                 this.totalRows = filteredItems.length
@@ -568,6 +592,7 @@
                 if(me.modal_productos_inventario.accion == 2){
                     me.producto_inventario.id = data.id
                     me.producto_inventario.nombre = data.nombre
+                    me.producto_inventario.unidad = data.unidad
                     me.producto_inventario.stock = data.stock
                     me.producto_inventario.stock_critico = data.stock_critico
                     me.producto_inventario.valor_actual = data.valor_actual
@@ -587,7 +612,7 @@
                 this.limpiar_datos_productos_ingreso()
 
                 this.listar_detalle_stock_productos(1, data.id)
-                this.modal_productos_ingreso.titulo = "Ingresar stock a : " + data.nombre
+                this.modal_productos_ingreso.titulo = "Ingreso de stock a : " + data.nombre
 
                 this.producto_inventario.id = data.id
                 this.ingreso_producto.valor_ingreso = data.valor_actual
@@ -599,7 +624,7 @@
                 this.producto_inventario.valor_actual = data.valor_actual
                 this.producto_inventario.stock = data.stock
 
-                this.modal_productos_salida.titulo = "Retirar stock de : " + data.nombre
+                this.modal_productos_salida.titulo = "Entrega stock de : " + data.nombre
                 this.$refs['modal_productos_salida'].show()
 
                 this.listar_detalle_salida_productos(data.id)
@@ -623,6 +648,7 @@
             limpiar_datos_producto_inventario() {
                 this.producto_inventario.id = 0
                 this.producto_inventario.nombre = ''
+                this.producto_inventario.unidad = ''
                 this.producto_inventario.stock = null
                 this.producto_inventario.stock_critico = null
                 this.producto_inventario.valor_actual = null
@@ -651,6 +677,7 @@
                 axios.post('/inventario/crear/actualizar',{
                         'id': me.producto_inventario.id,
                         'nombre': me.producto_inventario.nombre,
+                        'unidad': me.producto_inventario.unidad,
                         'stock': me.producto_inventario.stock,
                         'stock_critico': me.producto_inventario.stock_critico,
                         'valor_actual': me.producto_inventario.valor_actual,

@@ -44,7 +44,7 @@
                         </b-col>
                     </b-row>
 
-                    <b-table class="my-3" show-empty small striped outlined stacked="md" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" >
+                    <b-table class="my-3" show-empty small striped outlined stacked="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" >
                         <template v-slot:empty="scope">
                             <center><h5>No hay registros</h5></center>
                         </template>
@@ -87,7 +87,7 @@
         <b-modal ref="modal_usuario" :title="modal_usuario.titulo" size="lg" no-close-on-backdrop scrollable static>
             <b-form>
                 <b-row>
-                    <b-col>
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Nombre de usuario">
                             <b-form-input
                                 v-model="$v.usuario.nombre.$model"
@@ -100,7 +100,7 @@
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
-                    <b-col>
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Usuario">
                             <b-form-input
                                 v-model="$v.usuario.usuario.$model"
@@ -114,10 +114,8 @@
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
-                </b-row>
 
-                <b-row>
-                    <b-col>
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Email (En caso de enviar correos)">
                             <b-form-input
                                 v-model="$v.usuario.email.$model"
@@ -130,7 +128,7 @@
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
-                    <b-col v-show="modal_usuario.accion == 1">
+                    <b-col xs="12" sm="12" md="6" v-show="modal_usuario.accion == 1">
                         <b-form-group label="Contraseña">
                             <b-form-input
                                 type="password"
@@ -144,10 +142,8 @@
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
-                </b-row>
 
-                <b-row>
-                    <b-col>
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Menú de inicio">
                             <b-form-select
                                 v-model="$v.usuario.ruta_inicio.$model"
@@ -180,7 +176,7 @@
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
-                    <b-col>
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Perfil de usuario">
                             <b-form-select
                                 v-model="$v.usuario.perfil_id.$model"
@@ -208,7 +204,7 @@
         <b-modal ref="modal_clave" :title="modal_clave.titulo" size="md" no-close-on-backdrop scrollable static>
             <b-form>
                 <b-row>
-                    <b-col>
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Nueva contraseña">
                             <b-form-input
                                 type="password"

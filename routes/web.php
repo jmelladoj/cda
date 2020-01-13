@@ -63,5 +63,9 @@ Route::post('/orden/borrar', 'OrdenCompraController@borrar')->name('Borrar orden
 Route::post('/orden/enviar', 'OrdenCompraController@enviar')->name('Enviar orden');
 Route::get('/orden/descargar/{id}', 'OrdenCompraController@descargar')->name('Descargar orden');
 
+//Rutas de noficaciones
+Route::get('/notificaciones/{tipo}', 'NotificacionController@index')->name('Listar notificaciones');
+Route::post('/notificacion/leer', 'NotificacionController@leer')->name('Leer notificacion');
+
 
 Route::get('/{any}', 'HomeController@index')->where('any', '.*')->name('home');

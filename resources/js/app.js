@@ -64,6 +64,7 @@ Vue.component('home', require('./components/Home.vue').default);
 
 //Componentes generales
 Vue.component('titulo-pagina', require('./components/general/Titulo.vue').default);
+Vue.component('orden-compra', require('./components/general/OrdenCompra.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

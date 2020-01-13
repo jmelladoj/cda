@@ -1,4 +1,7 @@
 // In this scss you can overwrite all our scss, we suggested you to add your scss into this, so whenever the update comes it will not affect your code.
+
+@import 'node_modules/bootstrap/scss/bootstrap';
+
 .toast {
     font-size: 1rem;
 }
@@ -29,4 +32,9 @@
 
 .login-register {
     background-image:url(../../public/assets/images/background/login-register.jpg);
+}
+
+.btn-xs {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 10px !important;
 }

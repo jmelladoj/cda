@@ -104,7 +104,7 @@
                         </b-col>
                     </b-row>
 
-                    <b-table class="my-3" show-empty small striped outlined stacked="md" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" >
+                    <b-table class="my-3" show-empty small striped outlined stacked="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" >
                         <template v-slot:empty="scope">
                             <center><h5>No hay registros</h5></center>
                         </template>
@@ -143,7 +143,7 @@
                     </div>
                     <div class="card-body">
                         <b-row>
-                            <b-col cols="6">
+                            <b-col xs="12" sm="12" md="6">
                                 <b-form-group label="Razón Social " label-cols-md="3" label-cols-lg="3" class="mb-1">
                                     <vue-bootstrap-typeahead
                                         ref="typeahead_proveedor"
@@ -161,7 +161,7 @@
                                     </b-form-invalid-feedback>
                                 </b-form-group>
                             </b-col>
-                            <b-col cols="6">
+                            <b-col xs="12" sm="12" md="6">
                                 <b-form-group label="Rut " label-cols-md="3" label-cols-lg="3" class="mb-1">
                                     <b-form-input
                                         v-rut:live
@@ -176,7 +176,7 @@
                                     </b-form-invalid-feedback>
                                 </b-form-group>
                             </b-col>
-                            <b-col cols="6">
+                            <b-col xs="12" sm="12" md="6">
                                 <b-form-group label="Giro " label-cols-md="3" label-cols-lg="3" class="mb-1">
                                     <b-form-input
                                         v-model="$v.orden_compra.proveedor_giro.$model"
@@ -189,7 +189,7 @@
                                     </b-form-invalid-feedback>
                                 </b-form-group>
                             </b-col>
-                            <b-col cols="6">
+                            <b-col xs="12" sm="12" md="6">
                                 <b-form-group label="Teléfono " label-cols-md="3" label-cols-lg="3" class="mb-1">
                                     <b-form-input
                                         v-model="$v.orden_compra.proveedor_telefono.$model"
@@ -202,7 +202,7 @@
                                     </b-form-invalid-feedback>
                                 </b-form-group>
                             </b-col>
-                            <b-col cols="6">
+                            <b-col xs="12" sm="12" md="6">
                                 <b-form-group label="Dirección " label-cols-md="3" label-cols-lg="3" class="mb-1">
                                     <b-form-input
                                         v-model="$v.orden_compra.proveedor_direccion.$model"
@@ -215,7 +215,7 @@
                                     </b-form-invalid-feedback>
                                 </b-form-group>
                             </b-col>
-                            <b-col cols="6">
+                            <b-col xs="12" sm="12" md="6">
                                 <b-form-group label="Comuna " label-cols-md="3" label-cols-lg="3" class="mb-1">
                                     <b-form-input
                                         v-model="$v.orden_compra.proveedor_comuna.$model"
@@ -228,7 +228,7 @@
                                     </b-form-invalid-feedback>
                                 </b-form-group>
                             </b-col>
-                            <b-col cols="6">
+                            <b-col xs="12" sm="12" md="6">
                                 <b-form-group label="Correo " label-cols-md="3" label-cols-lg="3" class="mb-1">
                                     <b-form-input
                                         v-model="$v.orden_compra.proveedor_correo.$model"
@@ -241,8 +241,8 @@
                                     </b-form-invalid-feedback>
                                 </b-form-group>
                             </b-col>
-                            <b-col cols="6">
-                                <b-form-group label="Referencia " label-cols-md="3" label-cols-lg="3" class="mb-1">
+                            <b-col xs="12" sm="12" md="6">
+                                <b-form-group label="Contacto " label-cols-md="3" label-cols-lg="3" class="mb-1">
                                     <b-form-input
                                         v-model="$v.orden_compra.proveedor_referencia.$model"
                                         :state="$v.orden_compra.proveedor_referencia.$dirty ? !$v.orden_compra.proveedor_referencia.$error : null"
@@ -264,7 +264,7 @@
                     </div>
                     <div class="card-body">
                         <b-row>
-                            <b-col cols="4">
+                            <b-col xs="12" sm="12" md="4">
                                 <b-form-group label="Asunto " label-cols-md="3" label-cols-lg="3">
                                     <b-form-input
                                         v-model="$v.orden_compra.asunto.$model"
@@ -277,7 +277,7 @@
                                     </b-form-invalid-feedback>
                                 </b-form-group>
                             </b-col>
-                            <b-col cols="4">
+                            <b-col xs="12" sm="12" md="4">
                                 <b-form-group label="Fecha " label-cols-md="3" label-cols-lg="3">
                                     <b-form-input
                                         v-model="$v.orden_compra.fecha.$model"
@@ -287,7 +287,7 @@
                                     ></b-form-input>
                                 </b-form-group>
                             </b-col>
-                            <b-col cols="4">
+                            <b-col xs="12" sm="12" md="4">
                                 <b-form-group label=" N° Orden " label-cols-md="3" label-cols-lg="3">
                                     <b-form-input
                                         v-model="$v.orden_compra.numero.$model"
@@ -301,7 +301,7 @@
                         <b-row align-v="center">
                             <b-col>
                                 <b-form-group>
-                                    <b-table show-empty small striped hover outlined :items="orden_compra.detalle_orden" :fields="orden_compra_detalle">
+                                    <b-table show-empty small striped outlined stacked="sm" :items="orden_compra.detalle_orden" :fields="orden_compra_detalle">
                                         <template v-slot:empty="scope">
                                             <center><h6>No hay registros</h6></center>
                                         </template>
@@ -344,23 +344,19 @@
                                             </b-form-group>
                                         </template>
 
-                                        <template v-slot:cell(medida)="data">
+                                        <template v-slot:cell(valor_unitario)="data">
                                             <b-form-group class="mb-0">
                                                 <b-form-input
                                                     size="sm"
-                                                    v-model="$v.orden_compra.detalle_orden.$each[data.index].medida.$model"
-                                                    :state="$v.orden_compra.detalle_orden.$each[data.index].medida.$dirty ? !$v.orden_compra.detalle_orden.$each[data.index].medida.$error : null"
-                                                    :aria-describedby="'detalle-orden-medida' + data.index"
+                                                    v-model="$v.orden_compra.detalle_orden.$each[data.index].valor_unitario.$model"
+                                                    :state="$v.orden_compra.detalle_orden.$each[data.index].valor_unitario.$dirty ? !$v.orden_compra.detalle_orden.$each[data.index].valor_unitario.$error : null"
+                                                    :aria-describedby="'detalle-orden-valor_unitario' + data.index"
                                                 ></b-form-input>
 
-                                                <b-form-invalid-feedback :id="'detalle-orden-medida' + data.index">
-                                                    Campo de texto, mínimo de 1 caracter.
+                                                <b-form-invalid-feedback :id="'detalle-orden-valor_unitario' + data.index">
+                                                    Campo númerico, valor mínimo 1.
                                                 </b-form-invalid-feedback>
                                             </b-form-group>
-                                        </template>
-
-                                        <template v-slot:cell(valor_unitario)="data">
-                                            {{ data.item.valor_unitario | currency }}
                                         </template>
 
                                         <template v-slot:cell(total)="data">
@@ -448,7 +444,7 @@
 </template>
 
 <script>
-    import { required, minLength, email, numeric, requiredIf  } from 'vuelidate/lib/validators'
+    import { required, minLength, email, numeric, requiredIf, minValue  } from 'vuelidate/lib/validators'
     import { mapMutations, mapGetters, mapState } from 'vuex'
 
     export default {
@@ -470,8 +466,8 @@
                     { key: 'index', label: '#', sortable: true, class: 'text-center' },
                     { key: 'descripcion', label: 'Descripción', sortable: true, class: 'text-left' },
                     { key: 'cantidad', label: 'Cantidad', sortable: true, class: 'text-left' },
-                    { key: 'medida', label: 'Medida', sortable: true, class: 'text-left' },
                     { key: 'valor_unitario', label: 'Valor unitario', sortable: true, class: 'text-left' },
+                    { key: 'medida', label: 'Medida', sortable: true, class: 'text-left' },
                     { key: 'total', label: 'Total', sortable: true, class: 'text-left' },
                     { key: 'acciones', label: 'Acción', sortable: true, class: 'text-center' }
                 ],
@@ -571,6 +567,9 @@
                 },
                 detalle_orden: {
                     $each: {
+                        id: {
+
+                        },
                         producto_nombre: {
 
                         },
@@ -578,9 +577,10 @@
                             required,
                             numeric
                         },
-                        medida: {
+                        valor_unitario: {
                             required,
-                            minLength: minLength(1)
+                            minValue: minValue(1),
+                            numeric
                         }
                     }
                 }
@@ -629,8 +629,10 @@
                 this.orden_compra.proveedor_referencia = e.referencia
             },
             producto(e, index){
+                this.orden_compra.detalle_orden[index].id = e.id
                 this.orden_compra.detalle_orden[index].producto_nombre = e.nombre
                 this.orden_compra.detalle_orden[index].valor_unitario = e.valor_actual
+                this.orden_compra.detalle_orden[index].medida = e.unidad
 
                 if(this.orden_compra.detalle_orden[index].cantidad > 0){
                     this.calcular_total_cantidad(index)
@@ -691,6 +693,7 @@
             },
             agregar_fila(){
                 var fila = new Object()
+                fila.id = 0
                 fila.producto_nombre = ""
                 fila.cantidad = null
                 fila.medida = null
@@ -743,6 +746,11 @@
                     for (var i = 0; i < productos_nombre.length; i++) {
                         var fila = new Object()
 
+                        var producto = me.productos.find(function(p) {
+                            return p.nombre == productos_nombre[i] && p.unidad == medidas[i]
+                        })
+
+                        fila.id = producto ? producto.id : 0
                         fila.producto_nombre = productos_nombre[i]
                         fila.cantidad = cantidades[i]
                         fila.medida = medidas[i]

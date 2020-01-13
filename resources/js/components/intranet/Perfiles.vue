@@ -44,7 +44,7 @@
                         </b-col>
                     </b-row>
 
-                    <b-table class="my-3" show-empty small striped outlined stacked="md" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" >
+                    <b-table class="my-3" show-empty small striped outlined stacked="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" >
                         <template v-slot:empty="scope">
                             <center><h5>No hay registros</h5></center>
                         </template>
@@ -94,30 +94,22 @@
 
                 <b-form-group label="Funciones">
                     <b-row>
-                    <b-col>
-                        <b-form-group label="Usuarios">
-                            <b-form-checkbox v-model="perfil.menu_perfiles">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sección perfiles</b-form-checkbox>
-                            <b-form-checkbox v-model="perfil.menu_usuarios">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Sección usuarios</b-form-checkbox>
-                        </b-form-group>
-                    </b-col>
-                    <b-col>
-                        <b-form-group label="Empresas">
-                            <b-form-checkbox v-model="perfil.menu_proveedores">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sección proveedores</b-form-checkbox>
-                        </b-form-group>
-                    </b-col>
+                        <b-col xs="12" sm="12" md="6">
+                            <b-form-group label="Usuarios">
+                                <b-form-checkbox v-model="perfil.menu_perfiles">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sección perfiles</b-form-checkbox>
+                                <b-form-checkbox v-model="perfil.menu_usuarios">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Sección usuarios</b-form-checkbox>
+                            </b-form-group>
+                        </b-col>
+                        <b-col xs="12" sm="12" md="6">
+                            <b-form-group label="Abastecimiento">
+                                <b-form-checkbox v-model="perfil.menu_proveedores">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sección proveedores</b-form-checkbox>
+                                <b-form-checkbox v-model="perfil.menu_ordenes_compra">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Sección ordenes de compra</b-form-checkbox>
+                                <b-form-checkbox v-model="perfil.menu_lugares">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Sección lugares</b-form-checkbox>
+                                <b-form-checkbox v-model="perfil.menu_categorias_productos">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Sección categorías producto</b-form-checkbox>
+                                <b-form-checkbox v-model="perfil.menu_inventario">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Sección productos</b-form-checkbox>
+                            </b-form-group>
+                        </b-col>
 
-                    <b-col>
-                        <b-form-group label="Documentos">
-                            <b-form-checkbox v-model="perfil.menu_ordenes_compra">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Sección ordenes de compra</b-form-checkbox>
-                        </b-form-group>
-                    </b-col>
-                    <b-col>
-                        <b-form-group label="Inventario">
-                            <b-form-checkbox v-model="perfil.menu_lugares">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Sección lugares</b-form-checkbox>
-                            <b-form-checkbox v-model="perfil.menu_categorias_productos">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Sección categorías producto</b-form-checkbox>
-                            <b-form-checkbox v-model="perfil.menu_inventario">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Sección productos</b-form-checkbox>
-                        </b-form-group>
-                    </b-col>
                     </b-row>
                 </b-form-group>
             </b-form>

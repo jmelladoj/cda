@@ -44,7 +44,7 @@
                         </b-col>
                     </b-row>
 
-                    <b-table class="my-3" show-empty small striped outlined stacked="md" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" >
+                    <b-table class="my-3" show-empty small striped outlined stacked="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" >
                         <template v-slot:empty="scope">
                             <center><h5>No hay registros</h5></center>
                         </template>
@@ -53,8 +53,17 @@
                             {{ data.index + 1 }}
                         </template>
 
+                        <template v-slot:cell(gasto_mensual)="data">
+                            {{ data.item.gasto_mensual | currency }}
+                        </template>
+
+                        <template v-slot:cell(productos)="data">
+                            {{ obtener_nombre_productos(data.item.productos) }}
+                        </template>
 
                         <template v-slot:cell(acciones)="row">
+                            <orden-compra :id_proveedor="row.item.id"></orden-compra>
+
                             <b-button size="xs" variant="warning" title="Actualizar información" @click="abrir_modal_proveedor(row.item)">
                                 <i class="fa fa-pencil"></i>
                             </b-button>
@@ -62,14 +71,6 @@
                             <b-button size="xs" variant="danger" title="Eliminar registro" @click="borrar(row.item.id)">
                                 <i class="fa fa-trash"></i>
                             </b-button>
-                        </template>
-
-                        <template v-slot:row-details="row">
-                            <b-card>
-                                <ul>
-                                    <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
-                                </ul>
-                            </b-card>
                         </template>
                     </b-table>
                 </b-card>
@@ -79,7 +80,7 @@
         <b-modal ref="modal_proveedor" :title="modal_proveedor.titulo" size="xl" no-close-on-backdrop scrollable static>
             <b-form>
                 <b-row>
-                    <b-col cols="6">
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Razón Social " label-cols-md="3" label-cols-lg="3" class="mb-1">
                             <b-form-input
                                 v-model="$v.proveedor.nombre.$model"
@@ -92,7 +93,7 @@
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
-                    <b-col cols="6">
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Rut " label-cols-md="3" label-cols-lg="3" class="mb-1">
                             <b-form-input
                                 v-rut:live
@@ -107,7 +108,7 @@
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
-                    <b-col cols="6">
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Giro " label-cols-md="3" label-cols-lg="3" class="mb-1">
                             <b-form-input
                                 v-model="$v.proveedor.giro.$model"
@@ -120,7 +121,7 @@
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
-                    <b-col cols="6">
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Teléfono " label-cols-md="3" label-cols-lg="3" class="mb-1">
                             <b-form-input
                                 v-model="$v.proveedor.telefono.$model"
@@ -133,7 +134,7 @@
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
-                    <b-col cols="6">
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Dirección " label-cols-md="3" label-cols-lg="3" class="mb-1">
                             <b-form-input
                                 v-model="$v.proveedor.direccion.$model"
@@ -146,7 +147,7 @@
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
-                    <b-col cols="6">
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Comuna " label-cols-md="3" label-cols-lg="3" class="mb-1">
                             <b-form-input
                                 v-model="$v.proveedor.comuna.$model"
@@ -159,7 +160,7 @@
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
-                    <b-col cols="6">
+                    <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Correo " label-cols-md="3" label-cols-lg="3" class="mb-1">
                             <b-form-input
                                 v-model="$v.proveedor.correo.$model"
@@ -172,8 +173,8 @@
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
-                    <b-col cols="6">
-                        <b-form-group label="Referencia " label-cols-md="3" label-cols-lg="3" class="mb-1">
+                    <b-col xs="12" sm="12" md="6">
+                        <b-form-group label="Contacto " label-cols-md="3" label-cols-lg="3" class="mb-1">
                             <b-form-input
                                 v-model="$v.proveedor.referencia.$model"
                                 :state="$v.proveedor.referencia.$dirty ? !$v.proveedor.referencia.$error : null"
@@ -216,6 +217,8 @@
                     { key: 'giro', label: 'Giro', sortable: true, class: 'text-left' },
                     { key: 'telefono', label: 'Teléfono', sortable: true, class: 'text-left' },
                     { key: 'correo', label: 'Correo', sortable: true, class: 'text-left' },
+                    { key: 'gasto_mensual', label: 'Gasto mensual', sortable: true, class: 'text-left' },
+                    { key: 'productos', label: 'Productos', sortable: true, class: 'text-left' },
                     { key: 'acciones', label: 'Acciones', class: 'text-center'}
                 ],
                 totalRows: 1,
@@ -292,6 +295,17 @@
             onFiltered(filteredItems) {
                 this.totalRows = filteredItems.length
                 this.currentPage = 1
+            },
+            obtener_nombre_productos(data  = []){
+                var productos = ''
+
+                if(data.length > 0){
+                    data.forEach(item => productos += item.nombre + ' - ')
+                } else {
+                    productos = 'Sin productos'
+                }
+
+                return data.length > 0 ? productos.substr(0, productos.length - 2) : producto
             },
             listar_proveedores(){
                 let me = this

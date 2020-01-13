@@ -11,10 +11,10 @@ class ProveedorController extends Controller
     public function index($tipo){
         switch ($tipo) {
             case 1:
-                return ['proveedores' => Proveedor::orderBy('nombre', 'asc')->get()];
+                return ['proveedores' => Proveedor::with('productos')->orderBy('nombre', 'asc')->get()];
                 break;
             case 2:
-                return ['proveedores' => Proveedor::withTrashed()->orderBy('nombre', 'asc')->get()];
+                return ['proveedores' => Proveedor::with('productos')->withTrashed()->orderBy('nombre', 'asc')->get()];
                 break;
         }
     }
