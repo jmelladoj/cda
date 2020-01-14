@@ -15,52 +15,52 @@ class ProductosInventarioTableSeeder extends Seeder
         //
         ProductoInventario::create([
             'nombre' => 'Carnicero',
-            'unidad' => 'sin unidad',
+            'unidad' => NULL,
             'stock' => 20,
             'stock_critico' => 25,
             'valor_actual' => 4000,
             'valor_ultimo' => 3800,
-            'categoria_producto_id' => 1
+            'categoria_productos_id' => 1
         ]);
 
         ProductoInventario::create([
             'nombre' => 'Queso mantecoso',
-            'unidad' => 'sin unidad',
+            'unidad' => NULL,
             'stock' => 10,
             'stock_critico' => 8,
             'valor_actual' => 4200,
             'valor_ultimo' => 1400,
-            'categoria_producto_id' => 2
+            'categoria_productos_id' => 2
         ]);
 
         ProductoInventario::create([
             'nombre' => 'Cerveza totem',
-            'unidad' => 'sin unidad',
+            'unidad' => NULL,
             'stock' => 20,
             'stock_critico' => 25,
             'valor_actual' => 3000,
             'valor_ultimo' => 3200,
-            'categoria_producto_id' => 3
+            'categoria_productos_id' => 3
         ]);
 
         ProductoInventario::create([
             'nombre' => 'Abastero',
-            'unidad' => 'sin unidad',
+            'unidad' => NULL,
             'stock' => 50,
             'stock_critico' => 20,
             'valor_actual' => 3000,
             'valor_ultimo' => 2800,
-            'categoria_producto_id' => 1
+            'categoria_productos_id' => 1
         ]);
 
         ProductoInventario::create([
             'nombre' => 'Queso chanco',
-            'unidad' => 'sin unidad',
+            'unidad' => NULL,
             'stock' => 50,
             'stock_critico' => 52,
             'valor_actual' => 3000,
             'valor_ultimo' => 3200,
-            'categoria_producto_id' => 2
+            'categoria_productos_id' => 2
         ]);
     }
 }

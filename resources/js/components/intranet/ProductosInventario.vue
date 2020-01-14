@@ -78,7 +78,7 @@
                     </b-row>
 
                     <b-table class="my-3" show-empty small striped outlined stacked="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" :tbody-tr-class="clase_fila">
-                        <template v-slot:empty="scope">
+                        <template v-slot:empty>
                             <center><h5>No hay registros</h5></center>
                         </template>
 
@@ -148,17 +148,33 @@
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
-
                     <b-col xs="12" sm="12" md="6">
                         <b-form-group label="Unidad">
-                            <b-form-input
+                            <b-form-select
                                 v-model="$v.producto_inventario.unidad.$model"
                                 :state="$v.producto_inventario.unidad.$dirty ? !$v.producto_inventario.unidad.$error : null"
                                 aria-describedby="producto-unidad"
-                            ></b-form-input>
+                                :options="opciones_unidad">
+                            </b-form-select>
 
                             <b-form-invalid-feedback id="producto-unidad">
-                                Campo de alfanúmerico, mínimo de 1 caracter.
+                                Debes de seleccionar una opción.
+                            </b-form-invalid-feedback>
+                        </b-form-group>
+                    </b-col>
+
+                    <b-col xs="12" sm="12" md="6">
+                        <b-form-group label="Categoría de producto">
+                            <b-form-select
+                                v-model="$v.producto_inventario.categoria_id.$model"
+                                :state="$v.producto_inventario.categoria_id.$dirty ? !$v.producto_inventario.categoria_id.$error : null"
+                                aria-describedby="producto-inventario-categoria-id">
+                                <option :value="null">Selecciona una opción</option>
+                                <option v-for="categoria in categorias" :key="categoria.id" :value="categoria.id" v-text="categoria.nombre"></option>
+                            </b-form-select>
+
+                            <b-form-invalid-feedback id="producto-inventario-categoria-id">
+                                Debes de seleccionar una opción.
                             </b-form-invalid-feedback>
                         </b-form-group>
                     </b-col>
@@ -258,7 +274,7 @@
                     <b-col xs="12" sm="12" md="12">
                         <b-form-group label="Detalle de ingresos">
                             <b-table show-empty small striped outlined stacked="sm"  :items="items_ingreso" :fields="fields_ingreso">
-                                <template v-slot:empty="scope">
+                                <template v-slot:empty>
                                     <center><h6>No hay registros</h6></center>
                                 </template>
 
@@ -283,7 +299,7 @@
                     <b-col>
                         <b-form-group>
                             <b-table show-empty small striped outlined stacked="sm" :items="items_salida" :fields="fields_salida">
-                                <template v-slot:empty="scope">
+                                <template v-slot:empty>
                                     <center><h6>No hay registros</h6></center>
                                 </template>
 
@@ -327,7 +343,7 @@
                     <b-col xs="12" sm="12" md="12">
                         <b-form-group label="Detalle de salidas">
                             <b-table show-empty small striped outlined stacked="sm" :items="detalle_salida" :fields="fields_detalle_salida">
-                                <template v-slot:empty="scope">
+                                <template v-slot:empty>
                                     <center><h6>No hay registros</h6></center>
                                 </template>
 
@@ -371,6 +387,7 @@
                 items_ingreso: [],
                 items_salida: [],
                 detalle_salida: [],
+                categorias: [],
                 lugares: [],
                 fields: [
                     { key: 'index', label: '#', sortable: true, class: 'text-center' },
@@ -423,7 +440,8 @@
                 producto_inventario: {
                     id: 0,
                     nombre: '',
-                    unidad: '',
+                    unidad: null,
+                    categoria_id: null,
                     stock: null,
                     stock_critico: null,
                     valor_actual: null,
@@ -432,7 +450,14 @@
                 ingreso_producto: {
                     cantidad_ingreso: null,
                     valor_ingreso: null
-                }
+                },
+                opciones_unidad: [
+                    { value: null, text: 'Selecciona una opción ...' },
+                    { value: 'KG', text: 'KG' },
+                    { value: 'LT', text: 'LT' },
+                    { value: 'UNI', text: 'UNI' },
+                    { value: 'MT3', text: 'MT3' }
+                ]
             }
         },
         validations:{
@@ -442,12 +467,15 @@
                     minLength: minLength(3)
                 },
                 unidad: {
+                    required
+                },
+                categoria_id: {
                     required,
-                    minLength: minLength(1)
+                    minValue: minValue(1)
                 },
                 stock: {
                     required,
-                    minValue: minValue(1)
+                    minLength: minLength(1)
                 },
                 stock_critico: {
                     required,
@@ -527,6 +555,17 @@
             obtener_registros(){
                 this.listar_productos_inventario()
                 this.listar_lugares()
+                this.listar_categorias()
+            },
+            listar_categorias(){
+                let me = this
+
+                axios.get('/categorias/1').then(function (response) {
+                    me.categorias = response.data.categorias
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
             },
             listar_lugares(){
                 let me = this
@@ -593,6 +632,7 @@
                     me.producto_inventario.id = data.id
                     me.producto_inventario.nombre = data.nombre
                     me.producto_inventario.unidad = data.unidad
+                    me.producto_inventario.categoria_id = data.categoria_producto_id
                     me.producto_inventario.stock = data.stock
                     me.producto_inventario.stock_critico = data.stock_critico
                     me.producto_inventario.valor_actual = data.valor_actual
@@ -648,7 +688,8 @@
             limpiar_datos_producto_inventario() {
                 this.producto_inventario.id = 0
                 this.producto_inventario.nombre = ''
-                this.producto_inventario.unidad = ''
+                this.producto_inventario.unidad = null
+                this.producto_inventario.categoria_id = null
                 this.producto_inventario.stock = null
                 this.producto_inventario.stock_critico = null
                 this.producto_inventario.valor_actual = null
@@ -678,6 +719,7 @@
                         'id': me.producto_inventario.id,
                         'nombre': me.producto_inventario.nombre,
                         'unidad': me.producto_inventario.unidad,
+                        'categoria_id' : me.producto_inventario.categoria_id,
                         'stock': me.producto_inventario.stock,
                         'stock_critico': me.producto_inventario.stock_critico,
                         'valor_actual': me.producto_inventario.valor_actual,

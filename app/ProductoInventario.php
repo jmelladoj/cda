@@ -22,11 +22,11 @@ class ProductoInventario extends Model
     }
 
     public function getNombreCategoriaAttribute(){
-        return $this->categoria->nombre;
+        return $this->categoria_productos_id != null ? $this->categoria->nombre : 'Sin unidad';
     }
 
     public function categoria(){
-        return $this->belongsTo(CategoriaProducto::class, 'categoria_producto_id');
+        return $this->belongsTo(CategoriaProducto::class, 'categoria_productos_id');
     }
 
     public function proveedor(){

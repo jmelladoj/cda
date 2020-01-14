@@ -45,7 +45,7 @@
                     </b-row>
 
                     <b-table class="my-3" show-empty small striped outlined stacked="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" >
-                        <template v-slot:empty="scope">
+                        <template v-slot:empty>
                             <center><h5>No hay registros</h5></center>
                         </template>
 
@@ -62,14 +62,6 @@
                             <b-button size="xs" variant="danger" title="Eliminar registro" @click="borrar(row.item.id)">
                                 <i class="fa fa-trash"></i>
                             </b-button>
-                        </template>
-
-                        <template v-slot:row-details="row">
-                            <b-card>
-                                <ul>
-                                    <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
-                                </ul>
-                            </b-card>
                         </template>
                     </b-table>
                 </b-card>

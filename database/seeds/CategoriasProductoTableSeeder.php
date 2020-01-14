@@ -15,15 +15,39 @@ class CategoriasProductoTableSeeder extends Seeder
         //
 
         CategoriaProducto::create([
+            'nombre' => 'Abarrote'
+        ]);
+
+        CategoriaProducto::create([
+            'nombre' => 'Aseo'
+        ]);
+
+        CategoriaProducto::create([
+            'nombre' => 'Bebestible'
+        ]);
+
+        CategoriaProducto::create([
             'nombre' => 'Carnes'
         ]);
 
         CategoriaProducto::create([
-            'nombre' => 'Quesos'
+            'nombre' => 'Congelados'
         ]);
 
         CategoriaProducto::create([
-            'nombre' => 'Cervezas'
+            'nombre' => 'Lacteos'
+        ]);
+
+        CategoriaProducto::create([
+            'nombre' => 'Otros'
+        ]);
+
+        CategoriaProducto::create([
+            'nombre' => 'Papeleria'
+        ]);
+
+        CategoriaProducto::create([
+            'nombre' => 'Pes. y mariscos'
         ]);
     }
 }

@@ -40,6 +40,7 @@ class ProductoInventarioController extends Controller
             [
                 'nombre' => $request->nombre,
                 'unidad' => $request->unidad,
+                'categoria_productos_id' => $request->categoria_id, 
                 'stock' => $request->stock,
                 'stock_critico' => $request->stock_critico,
                 'valor_actual' => $request->valor_actual,
