@@ -40,7 +40,7 @@ class ProductoInventarioController extends Controller
             [
                 'nombre' => $request->nombre,
                 'unidad' => $request->unidad,
-                'categoria_productos_id' => $request->categoria_id, 
+                'categoria_productos_id' => $request->categoria_id,
                 'stock' => $request->stock,
                 'stock_critico' => $request->stock_critico,
                 'valor_actual' => $request->valor_actual,
@@ -86,6 +86,7 @@ class ProductoInventarioController extends Controller
                         'valor_retiro' => $request['valor_retiro'],
                         'cantidad_retiro' => $retiro['cantidad_retiro'],
                         'costo_retiro' => $retiro['costo_salida'],
+                        'unidad_retiro' => $producto->unidad,
                         'producto_id' => $request['producto_id'],
                         'user_id' => Auth::id(),
                         'lugar_id' => $retiro['lugar_id']

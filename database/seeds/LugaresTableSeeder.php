@@ -13,16 +13,13 @@ class LugaresTableSeeder extends Seeder
     public function run()
     {
         //
-        Lugar::create([
-            'nombre' => 'Restaurant'
-        ]);
-
-        Lugar::create([
-            'nombre' => 'Eventos'
-        ]);
-
-        Lugar::create([
-            'nombre' => 'Barra'
-        ]);
+        Lugar::create(['nombre' => 'Cuarto frío' ]);
+        Lugar::create(['nombre' => 'Cuarto caliente' ]);
+        Lugar::create(['nombre' => 'Personal' ]);
+        Lugar::create(['nombre' => 'Pasteleria' ]);
+        Lugar::create(['nombre' => 'Mantención' ]);
+        Lugar::create(['nombre' => 'Spa y cafetería' ]);
+        Lugar::create(['nombre' => 'Centro de eventos' ]);
+        Lugar::create(['nombre' => 'Salon y barra' ]);
     }
 }

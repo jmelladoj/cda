@@ -56,6 +56,9 @@
                                 <li><router-link to="/ordenescompra">Ordenes de compra</router-link></li>
                             </ul>
                         </li>
+                        <li>
+                            <a class=" waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-list"></i><span class="hide-menu">Facturas</span></a>
+                        </li>
                     </ul>
                 </nav>
             </div>

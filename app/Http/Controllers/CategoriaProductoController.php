@@ -11,10 +11,10 @@ class CategoriaProductoController extends Controller
     public function index($tipo){
         switch ($tipo) {
             case 1:
-                return ['categorias' => CategoriaProducto::with('productos')->orderBy('nombre', 'asc')->get()];
+                return ['categorias' => CategoriaProducto::orderBy('nombre', 'asc')->get()];
                 break;
             case 2:
-                return ['categorias' => CategoriaProducto::with('productos')->withTrashed()->orderBy('nombre', 'asc')->get()];
+                return ['categorias' => CategoriaProducto::withTrashed()->orderBy('nombre', 'asc')->get()];
                 break;
         }
     }

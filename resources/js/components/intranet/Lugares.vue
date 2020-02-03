@@ -45,7 +45,7 @@
                     </b-row>
 
                     <b-table class="my-3" show-empty small striped outlined stacked="sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" @filtered="onFiltered" >
-                        <template v-slot:empty="scope">
+                        <template v-slot:empty>
                             <center><h5>No hay registros</h5></center>
                         </template>
 

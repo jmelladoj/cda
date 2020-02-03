@@ -54,7 +54,7 @@
                         </template>
 
                         <template v-slot:cell(valorizacion_aproximada)="data">
-                            {{ obtener_valorazion(data.item.productos) | currency }}
+                            {{ data.item.valorizacion_aproximada | currency }}
                         </template>
 
                         <template v-slot:cell(acciones)="row">
@@ -150,15 +150,6 @@
             onFiltered(filteredItems) {
                 this.totalRows = filteredItems.length
                 this.currentPage = 1
-            },
-            obtener_valorazion(data  = []){
-                var total = 0
-
-                if(data.length > 0){
-                    data.forEach(item => total += item.valorizacion)
-                }
-
-                return total
             },
             listar_categorias(){
                 let me = this

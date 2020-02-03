@@ -129,11 +129,28 @@
 
                 <div class="card">
                     <div class="card-header bg-info text-right">
-                        <h6 class="m-b-0 text-white">Detalle orden de Compra</h6>
+                        <b-row>
+                            <b-col>
+                                <h6 class="m-b-0 text-white">Detalle orden de Compra 1</h6>
+                            </b-col>
+                            <b-col cols="1">
+                                <b-button size="xs" variant="success" title="Agregar detalle de orden de compra">
+                                    <i class="fa fa-plus"></i>
+                                </b-button>
+                            </b-col>
+                        </b-row>
                     </div>
                     <div class="card-body">
                         <b-row>
-                            <b-col xs="12" sm="12" md="4">
+                            <b-col xs="12" sm="12" md="3">
+                                <b-form-group label="Centro de costo " label-cols-md="3" label-cols-lg="3">
+                                    <b-form-select
+                                        aria-describedby="producto-unidad"
+                                        :options="opciones_centro_costos">
+                                    </b-form-select>
+                                </b-form-group>
+                            </b-col>
+                            <b-col xs="12" sm="12" md="3">
                                 <b-form-group label="Asunto " label-cols-md="3" label-cols-lg="3">
                                     <b-form-input
                                         v-model="$v.orden_compra.asunto.$model"
@@ -146,7 +163,7 @@
                                     </b-form-invalid-feedback>
                                 </b-form-group>
                             </b-col>
-                            <b-col xs="12" sm="12" md="4">
+                            <b-col xs="12" sm="12" md="3">
                                 <b-form-group label="Fecha " label-cols-md="3" label-cols-lg="3">
                                     <b-form-input
                                         v-model="$v.orden_compra.fecha.$model"
@@ -156,7 +173,7 @@
                                     ></b-form-input>
                                 </b-form-group>
                             </b-col>
-                            <b-col xs="12" sm="12" md="4">
+                            <b-col xs="12" sm="12" md="3">
                                 <b-form-group label=" N° Orden " label-cols-md="3" label-cols-lg="3">
                                     <b-form-input
                                         v-model="$v.orden_compra.numero.$model"
@@ -171,7 +188,7 @@
                             <b-col>
                                 <b-form-group>
                                     <b-table show-empty small striped outlined stacked="sm" :items="orden_compra.detalle_orden" :fields="orden_compra_detalle">
-                                        <template v-slot:empty="scope">
+                                        <template v-slot:empty>
                                             <center><h6>No hay registros</h6></center>
                                         </template>
 
@@ -321,6 +338,7 @@
                 items: [],
                 proveedores: [],
                 productos: [],
+                opciones_centro_costos: [],
                 fields: [
                     { key: 'id', label: '#', sortable: true, class: 'text-center' },
                     { key: 'proveedor_nombre', label: 'Proveedor', sortable: true, class: 'text-left' },
@@ -559,6 +577,26 @@
                     console.log(error);
                 });
             },
+            listar_centro_costos(){
+                let me = this
+
+                axios.get('/lugares/1').then(function (response) {
+                    me.lugares = response.data.lugares
+
+                    me.opciones_centro_costos = []
+
+                    response.data.lugares.forEach( function(lugar, index) {
+                        var item = new Object()
+                        item.value = lugar.id
+                        item.text = lugar.nombre
+                        me.opciones_centro_costos.push(item)
+                    })
+
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
             agregar_fila(){
                 var fila = new Object()
                 fila.id = 0
@@ -578,6 +616,7 @@
                 this.listar_orden_compras()
                 this.listar_productos_inventario()
                 this.fecha_actual()
+                this.listar_centro_costos()
             },
             abrir_modal_orden_compra(data = [], accion = 0) {
                 let me = this

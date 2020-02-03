@@ -101,11 +101,11 @@
                         </template>
 
                         <template v-slot:cell(acciones)="row">
-                            <orden-compra v-if="row.item.stock < row.item.stock_critico" :id_proveedor="row.item.proveedor_id"></orden-compra>
+                            <orden-compra :id_proveedor="row.item.proveedor_id"></orden-compra>
 
-                            <b-button size="xs" variant="info" title="Ingresar stock" @click="abrir_modal_productos_ingreso(row.item)">
+                            <!--<b-button size="xs" variant="info" title="Ingresar stock" @click="abrir_modal_productos_ingreso(row.item)">
                                 I
-                            </b-button>
+                            </b-button>-->
 
                             <b-button size="xs" variant="info" title="Salida de stock" @click="abrir_modal_productos_salida(row.item)">
                                 S
@@ -352,7 +352,7 @@
                                 </template>
 
                                 <template v-slot:cell(retiro)="data">
-                                   <label>Se han retirado {{ data.item.cantidad_retiro }}  unidades en stock</label>
+                                   <label>Se han retirado {{ data.item.cantidad_retiro + ' ' + data.item.unidad_retiro }} del stock</label>
                                 </template>
 
                                 <template v-slot:cell(valor_retiro)="data">
@@ -525,11 +525,7 @@
                 return total
             },
             total_productos_critico(){
-                var total = 0
-
-                this.items.forEach(i => i.stock < i.stock_critico ? total += 1 : total += 0)
-
-                return total
+                return this.items.reduce((total, i) => total += parseInt(i.necesita_stock) == 1 ? 1 : 0, 0)
             }
         },
         methods: {
@@ -539,14 +535,16 @@
                     $(this).hasClass('d-none') ? $(this).removeClass('d-none') : $(this).addClass('d-none')
                 });
             },
+            cambiar_titulo_modal_salida(){
+                this.modal_productos_salida.titulo = 'Entrega stock de : ' + this.producto_inventario.nombre + ' - ' + this.producto_inventario.unidad + ' | Máximo retiro: ' + this.producto_inventario.stock + ' ' + this.producto_inventario.unidad
+            },
             calcular_costo(indice){
                 this.items_salida[indice].costo_salida = this.producto_inventario.valor_actual * this.items_salida[indice].cantidad_retiro
             },
             clase_fila(item, type) {
                 if (!item) return
-                var clase = item.stock < item.stock_critico ? 'table-danger' : 'esconder'
 
-                return clase
+                return item.necesita_stock == 1 ? 'table-danger' : 'esconder'
             },
             onFiltered(filteredItems) {
                 this.totalRows = filteredItems.length
@@ -660,11 +658,16 @@
                 this.$refs['modal_productos_ingreso'].show()
             },
             abrir_modal_productos_salida(data = []){
+                this.limpiar_datos_productos_salida()
+
                 this.producto_inventario.id = data.id
                 this.producto_inventario.valor_actual = data.valor_actual
                 this.producto_inventario.stock = data.stock
+                this.producto_inventario.nombre = data.nombre
+                this.producto_inventario.unidad = data.unidad
 
-                this.modal_productos_salida.titulo = "Entrega stock de : " + data.nombre
+                this.cambiar_titulo_modal_salida()
+
                 this.$refs['modal_productos_salida'].show()
 
                 this.listar_detalle_salida_productos(data.id)
@@ -704,6 +707,17 @@
                 this.items_ingreso = []
 
                 this.modal_productos_ingreso.titulo = ''
+
+                this.$v.$reset()
+            },
+            limpiar_datos_productos_salida() {
+                this.producto_inventario.id = 0
+                this.producto_inventario.valor_actual = null
+                this.producto_inventario.stock = null
+                this.producto_inventario.nombre = ''
+                this.producto_inventario.unidad = null
+
+                this.modal_productos_salida.titulo = ''
 
                 this.$v.$reset()
             },
@@ -814,10 +828,12 @@
                     'valor_retiro': me.producto_inventario.valor_actual,
                     'detalle_retiro': retiro
                 }).then(function (response) {
+                    me.listar_lugares()
                     me.listar_productos_inventario()
+                    me.producto_inventario.stock = resultado
+                    me.cambiar_titulo_modal_salida()
                     me.listar_detalle_salida_productos(me.producto_inventario.id)
                     me.$store.commit('msg_success','Stock retirado exitosamente.')
-
                 }).catch(function (error) {
                     console.log(error)
                 })

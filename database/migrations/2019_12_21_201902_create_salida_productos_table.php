@@ -20,6 +20,7 @@ class CreateSalidaProductosTable extends Migration
             $table->integer('valor_retiro');
             $table->integer('cantidad_retiro');
             $table->integer('costo_retiro');
+            $table->string('unidad_retiro');
 
             $table->unsignedBigInteger('producto_id');
             $table->foreign('producto_id')->references('id')->on('producto_inventarios');

@@ -11,7 +11,7 @@ class ProductoInventario extends Model
     use SoftDeletes;
 
     protected $guarded = ['id'];
-    protected $appends = ['valorizacion', 'nombre_categoria', 'nombre_proveedor'];
+    protected $appends = ['valorizacion', 'nombre_categoria', 'nombre_proveedor', 'necesita_stock'];
 
     public function getValorizacionAttribute(){
         return $this->stock * $this->valor_actual;
@@ -23,6 +23,10 @@ class ProductoInventario extends Model
 
     public function getNombreCategoriaAttribute(){
         return $this->categoria_productos_id != null ? $this->categoria->nombre : 'Sin unidad';
+    }
+
+    public function getNecesitaStockAttribute(){
+        return $this->stock < $this->stock_critico ? 1 : 0;
     }
 
     public function categoria(){

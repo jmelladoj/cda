@@ -96,7 +96,7 @@
                             <b-form-group label="Abastecimiento">
                                 <b-form-checkbox v-model="perfil.menu_proveedores">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sección proveedores</b-form-checkbox>
                                 <b-form-checkbox v-model="perfil.menu_ordenes_compra">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Sección ordenes de compra</b-form-checkbox>
-                                <b-form-checkbox v-model="perfil.menu_lugares">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Sección lugares</b-form-checkbox>
+                                <b-form-checkbox v-model="perfil.menu_lugares">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Sección centro de costos</b-form-checkbox>
                                 <b-form-checkbox v-model="perfil.menu_categorias_productos">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Sección categorías producto</b-form-checkbox>
                                 <b-form-checkbox v-model="perfil.menu_inventario">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Sección productos</b-form-checkbox>
                             </b-form-group>
