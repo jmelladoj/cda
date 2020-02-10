@@ -101,11 +101,14 @@
                         </template>
 
                         <template v-slot:cell(acciones)="row">
-                            <orden-compra :id_proveedor="row.item.proveedor_id"></orden-compra>
-
                             <!--<b-button size="xs" variant="info" title="Ingresar stock" @click="abrir_modal_productos_ingreso(row.item)">
                                 I
                             </b-button>-->
+
+
+                            <b-button size="xs" variant="success" title="Generar orden de compra" @click="abrir_modal_orden_compra(row.item.proveedor_id)">
+                                <i class="fa fa-plus"></i>
+                            </b-button>
 
                             <b-button size="xs" variant="info" title="Salida de stock" @click="abrir_modal_productos_salida(row.item)">
                                 S
@@ -530,6 +533,9 @@
         },
         methods: {
             ...mapMutations(['msg_success', 'msg_error']),
+            abrir_modal_orden_compra(id_proveedor){
+                Evento.$emit('cargar_modal_orden_compra', id_proveedor);
+            },
             filtrar_stock_critico(){
                 $(".esconder").each(function(index) {
                     $(this).hasClass('d-none') ? $(this).removeClass('d-none') : $(this).addClass('d-none')

@@ -57,7 +57,7 @@
                             </ul>
                         </li>
                         <li>
-                            <a class=" waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-list"></i><span class="hide-menu">Facturas</span></a>
+                            <router-link to="/facturas"><i class="fa fa-list"></i><span class="hide-menu">Facturas</span></router-link>
                         </li>
                     </ul>
                 </nav>
@@ -67,6 +67,7 @@
         <div class="page-wrapper">
             <b-container fluid>
                 <router-view></router-view>
+                <orden-compra></orden-compra>
             </b-container>
         </div>
     </div>

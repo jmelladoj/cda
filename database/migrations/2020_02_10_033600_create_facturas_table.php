@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdenComprasTable extends Migration
+class CreateFacturasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,15 @@ class CreateOrdenComprasTable extends Migration
      */
     public function up()
     {
-        Schema::create('orden_compras', function (Blueprint $table) {
+        Schema::create('facturas', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('numero_factura')->nullable()->default(null);
 
-            $table->text('asunto');
-            $table->text('descripcion');
-            $table->text('cantidad');
-            $table->text('unidad_medida')->nullable()->default(null);
-            $table->text('valor_unitario');
-            $table->text('estado')->nullable()->default(null);
-            $table->integer('valor_neto');
-            $table->integer('iva');
-            $table->integer('total');
+            $table->string('fecha')->nullable()->default(null);;
             $table->text('observacion')->nullable()->default(null);
-            $table->string('fecha');
+
+            $table->unsignedBigInteger('orden_compras_id')->nullable()->default(null);
+            $table->foreign('orden_compras_id')->references('id')->on('orden_compras');
 
             $table->unsignedBigInteger('proveedor_id');
             $table->foreign('proveedor_id')->references('id')->on('proveedores');
@@ -34,10 +29,9 @@ class CreateOrdenComprasTable extends Migration
             $table->unsignedBigInteger('lugares_id')->nullable()->default(null);
             $table->foreign('lugares_id')->references('id')->on('lugares');
 
-            $table->unsignedBigInteger('user_id');
-            //$table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('user_id')->nullable()->default(null);
+            $table->foreign('user_id')->references('id')->on('users');
 
-            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -49,6 +43,6 @@ class CreateOrdenComprasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orden_compras');
+        Schema::dropIfExists('facturas');
     }
 }

@@ -15,7 +15,7 @@ class ProductosInventarioTableSeeder extends Seeder
         //
         ProductoInventario::create([
             'nombre' => 'Carnicero',
-            'unidad' => NULL,
+            'unidad' => 'KG',
             'stock' => 20,
             'stock_critico' => 25,
             'valor_actual' => 4000,
@@ -25,7 +25,7 @@ class ProductosInventarioTableSeeder extends Seeder
 
         ProductoInventario::create([
             'nombre' => 'Queso mantecoso',
-            'unidad' => NULL,
+            'unidad' => 'KG',
             'stock' => 10,
             'stock_critico' => 8,
             'valor_actual' => 4200,
@@ -35,7 +35,7 @@ class ProductosInventarioTableSeeder extends Seeder
 
         ProductoInventario::create([
             'nombre' => 'Cerveza totem',
-            'unidad' => NULL,
+            'unidad' => 'UNI',
             'stock' => 20,
             'stock_critico' => 25,
             'valor_actual' => 3000,
@@ -45,7 +45,7 @@ class ProductosInventarioTableSeeder extends Seeder
 
         ProductoInventario::create([
             'nombre' => 'Abastero',
-            'unidad' => NULL,
+            'unidad' => 'KG',
             'stock' => 50,
             'stock_critico' => 20,
             'valor_actual' => 3000,
@@ -55,7 +55,7 @@ class ProductosInventarioTableSeeder extends Seeder
 
         ProductoInventario::create([
             'nombre' => 'Queso chanco',
-            'unidad' => NULL,
+            'unidad' => 'KG',
             'stock' => 50,
             'stock_critico' => 52,
             'valor_actual' => 3000,

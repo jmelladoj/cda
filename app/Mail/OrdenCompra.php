@@ -38,7 +38,7 @@ class OrdenCompra extends Mailable
     public function build()
     {
         return $this->from(Auth::user()->email)
-                    ->subject($this->orden_compra->asunto)
+                    ->subject('ORDEN DE COMPRA N°' . $this->orden_compra->id)
                     ->view('email.orden_compra')
                     ->attachData($this->pdf, 'OrdenDeCompra.pdf', [
                         'mime' => 'application/pdf',

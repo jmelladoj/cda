@@ -12,6 +12,7 @@ import OrdenesCompra from './components/intranet/OrdenesCompra.vue'
 import CategoriasProducto from './components/intranet/CategoriasProducto.vue'
 import Proveedor from './components/intranet/Proveedor.vue'
 import Notificaciones from './components/intranet/Notificaciones.vue'
+import Facturas from './components/intranet/Facturas.vue'
 
 
 export default new VueRouter({
@@ -49,6 +50,10 @@ export default new VueRouter({
             path: '/notificaciones',
             name: 'notificaciones',
             component: Notificaciones
+        },{
+            path: '/facturas',
+            name: 'facturas',
+            component: Facturas
         },
     ],
     mode: 'history'

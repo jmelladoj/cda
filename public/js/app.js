@@ -1931,6 +1931,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2460,51 +2461,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['id_proveedor'],
   data: function data() {
     return {
-      items: [],
+      num_orden_compra: null,
       proveedores: [],
       productos: [],
       opciones_centro_costos: [],
-      fields: [{
-        key: 'id',
-        label: '#',
-        sortable: true,
-        "class": 'text-center'
-      }, {
-        key: 'proveedor_nombre',
-        label: 'Proveedor',
-        sortable: true,
-        "class": 'text-left'
-      }, {
-        key: 'asunto',
-        label: 'Asunto',
-        sortable: true,
-        "class": 'text-left'
-      }, {
-        key: 'total',
-        label: 'Total',
-        sortable: true,
-        "class": 'text-left'
-      }, {
-        key: 'emisor',
-        label: 'Emisor',
-        sortable: true,
-        "class": 'text-left'
-      }, {
-        key: 'created_at',
-        label: 'Fecha',
-        sortable: true,
-        "class": 'text-left'
-      }, {
-        key: 'acciones',
-        label: 'Acciones',
-        "class": 'text-center'
-      }],
+      ordenes_compra: [],
       orden_compra_detalle: [{
         key: 'index',
         label: '#',
@@ -2541,168 +2511,157 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         sortable: true,
         "class": 'text-center'
       }],
-      totalRows: 1,
-      currentPage: 1,
-      perPage: 15,
-      pageOptions: [15, 50, 100, 150, 200, 150],
-      sortBy: '',
-      sortDesc: false,
-      filter: null,
+      spinner: {
+        estado: 0
+      },
       modal_orden_compra: {
         titulo: '',
         accion: 0
       },
-      orden_compra: {
-        proveedor_id: 0,
-        proveedor_nombre: '',
-        proveedor_rut: '',
-        proveedor_giro: '',
-        proveedor_telefono: '',
-        proveedor_direccion: '',
-        proveedor_comuna: '',
-        proveedor_correo: '',
-        proveedor_referencia: '',
-        fecha: '',
-        numero: '',
-        asunto: '',
-        neto: 0,
-        iva: 0,
-        total: 0,
-        observacion: '',
-        detalle_orden: []
-      },
-      gastos: {
-        diario: 0,
-        semanal: 0,
-        mensual: 0,
-        anual: 0
+      proveedor: {
+        id: null,
+        nombre: '',
+        rut: '',
+        giro: '',
+        telefono: '',
+        direccion: '',
+        comuna: '',
+        correo: '',
+        referencia: ''
       }
     };
   },
   validations: {
-    orden_compra: {
-      proveedor_nombre: {
+    proveedor: {
+      nombre: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
         minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3)
       },
-      proveedor_rut: {
+      rut: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
         minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3)
       },
-      proveedor_giro: {
+      giro: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
         minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3)
       },
-      proveedor_telefono: {
+      telefono: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
         numeric: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["numeric"]
       },
-      proveedor_direccion: {
+      direccion: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
         minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3)
       },
-      proveedor_comuna: {
+      comuna: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
         minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3)
       },
-      proveedor_correo: {
+      correo: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
         minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3),
         email: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["email"]
       },
-      proveedor_referencia: {},
-      fecha: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"]
-      },
-      numero: {},
-      asunto: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3)
-      },
-      neto: {},
-      total: {},
-      iva: {},
-      observacion: {},
-      detalle_orden: {
-        $each: {
-          id: {},
-          producto_nombre: {},
-          cantidad: {
-            required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-            numeric: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["numeric"]
-          },
-          valor_unitario: {
-            required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-            minValue: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minValue"])(1),
-            numeric: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["numeric"]
+      referencia: {}
+    },
+    ordenes_compra: {
+      $each: {
+        centro_costo_id: {
+          required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"]
+        },
+        asunto: {
+          required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+          minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3)
+        },
+        fecha: {
+          required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"]
+        },
+        detalle: {
+          $each: {
+            id: {},
+            producto_nombre: {},
+            cantidad: {
+              required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+              numeric: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["numeric"]
+            },
+            valor_unitario: {
+              required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+              minValue: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minValue"])(1),
+              numeric: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["numeric"]
+            }
           }
-        }
+        },
+        neto: {
+          required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+          numeric: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["numeric"]
+        },
+        total: {
+          required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+          numeric: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["numeric"]
+        },
+        iva: {
+          required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+          numeric: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["numeric"]
+        },
+        observacion: {}
       }
     }
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])('usuario', ['usuario']), {
-    sortOptions: function sortOptions() {
-      return this.fields.filter(function (f) {
-        return f.sortable;
-      }).map(function (f) {
-        return {
-          text: f.label,
-          value: f.key
-        };
-      });
-    }
-  }),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])('usuario', ['usuario'])),
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])(['msg_success', 'msg_error']), {
-    numero_orden: function numero_orden() {
-      var max = 0;
-      this.items.forEach(function (item) {
-        if (item.id > max) {
-          max = item.id;
-        }
-      });
-      this.orden_compra.numero = max + 1;
+    agregar_orden_compra: function agregar_orden_compra(index) {
+      var oc = new Object();
+      oc.centro_costo_id = null;
+      oc.asunto = '';
+      oc.fecha = this.fecha_actual();
+      oc.detalle = [];
+      oc.neto = 0;
+      oc.iva = 0;
+      oc.total = 0;
+      oc.observacion = 'Sin observaciones.';
+      this.ordenes_compra.push(oc);
+      this.agregar_fila(this.ordenes_compra.length - 1);
+    },
+    eliminar_orden_compra: function eliminar_orden_compra(index) {
+      this.ordenes_compra.splice(index, 1);
     },
     fecha_actual: function fecha_actual() {
       var f = new Date();
-      this.orden_compra.fecha = f.getFullYear() + "-" + (f.getMonth() + 1) + "-" + f.getDate();
+      return f.getFullYear() + "-" + (f.getMonth() + 1) + "-" + f.getDate();
     },
-    onFiltered: function onFiltered(filteredItems) {
-      this.totalRows = filteredItems.length;
-      this.currentPage = 1;
+    proveedor_seleccionado: function proveedor_seleccionado(e) {
+      this.proveedor.id = e.id;
+      this.proveedor.nombre = e.nombre;
+      this.proveedor.rut = e.rut;
+      this.proveedor.giro = e.giro;
+      this.proveedor.telefono = e.telefono;
+      this.proveedor.direccion = e.direccion;
+      this.proveedor.comuna = e.comuna;
+      this.proveedor.correo = e.correo;
+      this.proveedor.referencia = e.referencia;
     },
-    proveedor: function proveedor(e) {
-      this.orden_compra.proveedor_id = e.id;
-      this.orden_compra.proveedor_nombre = e.nombre;
-      this.orden_compra.proveedor_rut = e.rut;
-      this.orden_compra.proveedor_giro = e.giro;
-      this.orden_compra.proveedor_telefono = e.telefono;
-      this.orden_compra.proveedor_direccion = e.direccion;
-      this.orden_compra.proveedor_comuna = e.comuna;
-      this.orden_compra.proveedor_correo = e.correo;
-      this.orden_compra.proveedor_referencia = e.referencia;
-    },
-    producto: function producto(e, index) {
-      this.orden_compra.detalle_orden[index].id = e.id;
-      this.orden_compra.detalle_orden[index].producto_nombre = e.nombre;
-      this.orden_compra.detalle_orden[index].valor_unitario = e.valor_actual;
-      this.orden_compra.detalle_orden[index].medida = e.unidad;
+    producto: function producto(e, index_orden, index_fila) {
+      this.ordenes_compra[index_orden].detalle[index_fila].id = e.id;
+      this.ordenes_compra[index_orden].detalle[index_fila].producto_nombre = e.nombre;
+      this.ordenes_compra[index_orden].detalle[index_fila].valor_unitario = e.valor_actual;
+      this.ordenes_compra[index_orden].detalle[index_fila].medida = e.unidad;
 
-      if (this.orden_compra.detalle_orden[index].cantidad > 0) {
-        this.calcular_total_cantidad(index);
+      if (this.ordenes_compra[index_orden].detalle[index_fila].cantidad > 0) {
+        this.calcular_total_cantidad(index_orden, index_fila);
       }
     },
-    calcular_total_cantidad: function calcular_total_cantidad(index) {
-      this.orden_compra.detalle_orden[index].total = this.orden_compra.detalle_orden[index].valor_unitario * this.orden_compra.detalle_orden[index].cantidad;
-      this.calcular_total();
+    calcular_total_cantidad: function calcular_total_cantidad(index_orden, index_fila) {
+      this.ordenes_compra[index_orden].detalle[index_fila].total = this.ordenes_compra[index_orden].detalle[index_fila].valor_unitario * this.ordenes_compra[index_orden].detalle[index_fila].cantidad;
+      this.calcular_total(index_orden);
     },
-    calcular_total: function calcular_total() {
+    calcular_total: function calcular_total(index_orden) {
       var total = 0;
-      this.orden_compra.detalle_orden.forEach(function (item) {
+      this.ordenes_compra[index_orden].detalle.forEach(function (item) {
         total += parseInt(item.total);
       });
-      this.orden_compra.neto = total;
-      this.orden_compra.iva = parseInt(total * 0.19);
-      this.orden_compra.total = parseInt(this.orden_compra.neto + this.orden_compra.iva);
+      this.ordenes_compra[index_orden].neto = total;
+      this.ordenes_compra[index_orden].iva = parseInt(total * 0.19);
+      this.ordenes_compra[index_orden].total = parseInt(this.ordenes_compra[index_orden].neto + this.ordenes_compra[index_orden].iva);
     },
     listar_proveedores: function listar_proveedores() {
       var me = this;
@@ -2714,13 +2673,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     listar_orden_compras: function listar_orden_compras() {
       var me = this;
-      axios.get('/ordenes/1').then(function (response) {
-        me.items = response.data.ordenes;
-        me.gastos.diario = response.data.gasto_diario;
-        me.gastos.semanal = response.data.gasto_semanal;
-        me.gastos.mensual = response.data.gasto_mensual;
-        me.gastos.anual = response.data.gasto_anual;
-        me.totalRows = me.items.length;
+      axios.get('/ordenes/3').then(function (response) {
+        me.num_orden_compra = response.data.num_orden;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -2738,6 +2692,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       axios.get('/lugares/1').then(function (response) {
         me.lugares = response.data.lugares;
         me.opciones_centro_costos = [];
+        var item = new Object();
+        item.value = null;
+        item.text = 'Selecciona una opción...';
+        me.opciones_centro_costos.push(item);
         response.data.lugares.forEach(function (lugar, index) {
           var item = new Object();
           item.value = lugar.id;
@@ -2748,7 +2706,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(error);
       });
     },
-    agregar_fila: function agregar_fila() {
+    agregar_fila: function agregar_fila(index) {
       var fila = new Object();
       fila.id = 0;
       fila.producto_nombre = "";
@@ -2756,10 +2714,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       fila.medida = null;
       fila.valor_unitario = 0;
       fila.total = 0;
-      this.orden_compra.detalle_orden.push(fila);
+      this.ordenes_compra[index].detalle.push(fila);
     },
-    eliminar_fila: function eliminar_fila(index) {
-      this.orden_compra.detalle_orden.splice(index, 1);
+    eliminar_fila: function eliminar_fila(index_oc, index_fila) {
+      this.ordenes_compra[index_oc].detalle.splice(index_fila, 1);
     },
     obtener_registros: function obtener_registros() {
       this.listar_proveedores();
@@ -2772,29 +2730,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
       var accion = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
       var me = this;
-      me.numero_orden();
       me.limpiar_datos_orden_compra();
+      me.agregar_orden_compra();
       me.modal_orden_compra.titulo = "Agregar orden compra";
       this.$refs['modal_orden_compra'].show();
 
-      if (me.id_proveedor != undefined) {
-        var proveedor = me.proveedores.find(function (p) {
-          return p.id == me.id_proveedor;
+      if (me.proveedor.id != null || me.proveedor.id > 0) {
+        var pro = me.proveedores.find(function (p) {
+          return p.id == parseInt(me.proveedor.id);
         });
-        me.orden_compra.proveedor_id = proveedor.id;
-        me.orden_compra.proveedor_nombre = proveedor.nombre;
-        me.orden_compra.proveedor_rut = proveedor.rut;
-        me.orden_compra.proveedor_giro = proveedor.giro;
-        me.orden_compra.proveedor_telefono = proveedor.telefono;
-        me.orden_compra.proveedor_direccion = proveedor.direccion;
-        me.orden_compra.proveedor_comuna = proveedor.comuna;
-        me.orden_compra.proveedor_correo = proveedor.correo;
-        me.orden_compra.proveedor_referencia = proveedor.referencia;
-        me.$refs.typeahead_proveedor.inputValue = proveedor.nombre;
-        this.$v.orden_compra.$touch(true);
-      }
 
-      this.agregar_fila();
+        if (pro) {
+          me.proveedor.id = pro.id;
+          me.proveedor.nombre = pro.nombre;
+          me.proveedor.rut = pro.rut;
+          me.proveedor.giro = pro.giro;
+          me.proveedor.telefono = pro.telefono;
+          me.proveedor.direccion = pro.direccion;
+          me.proveedor.comuna = pro.comuna;
+          me.proveedor.correo = pro.correo;
+          me.proveedor.referencia = pro.referencia;
+          me.$refs.typeahead_proveedor.inputValue = me.proveedor.nombre;
+          this.$v.proveedor.$touch(true);
+        }
+      }
     },
     cambiar_nombres: function cambiar_nombres() {
       var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
@@ -2807,98 +2766,68 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     cerrar_modal_orden_compra: function cerrar_modal_orden_compra() {
       this.modal_orden_compra.titulo = "";
       this.modal_orden_compra.accion = 0;
+      this.proveedor.id = null;
       this.$refs['modal_orden_compra'].hide();
     },
     limpiar_datos_orden_compra: function limpiar_datos_orden_compra() {
-      this.orden_compra.proveedor_id = 0;
-      this.orden_compra.proveedor_nombre = '';
-      this.orden_compra.proveedor_rut = '';
-      this.orden_compra.proveedor_giro = '';
-      this.orden_compra.proveedor_telefono = '';
-      this.orden_compra.proveedor_direccion = '';
-      this.orden_compra.proveedor_comuna = '';
-      this.orden_compra.proveedor_correo = '';
-      this.orden_compra.proveedor_referencia = '';
-      this.orden_compra.asunto = '';
-      this.orden_compra.neto = 0;
-      this.orden_compra.iva = 0;
-      this.orden_compra.total = 0;
-      this.orden_compra.observacion = '';
-      this.orden_compra.detalle_orden = [];
+      this.ordenes_compra = [];
+      this.proveedor.nombre = '';
+      this.proveedor.rut = '';
+      this.proveedor.giro = '';
+      this.proveedor.telefono = '';
+      this.proveedor.direccion = '';
+      this.proveedor.comuna = '';
+      this.proveedor.correo = '';
+      this.proveedor.referencia = '';
+      this.spinner.estado = 0;
       this.$refs.typeahead_proveedor.inputValue = "";
-      this.$v.$reset();
+      this.$v.proveedor.$reset();
+      this.$v.ordenes_compra.$reset();
     },
     crear_orden_compra: function crear_orden_compra() {
-      var _axios$post;
-
       var accion = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-
-      if (this.$v.orden_compra.$invalid) {
-        this.$v.orden_compra.$touch();
-        return;
-      }
-
+      //if(this.$v.ordenes_compra.$invalid && $v.proveedor.$invalid){
+      //    this.$v.ordenes_compra.$touch()
+      //    this.$v.proveedor.touch()
+      //    return
+      //}
       var me = this;
-      axios.post('/orden/crear', (_axios$post = {
+      me.spinner.estado = 1;
+      axios.post('/orden/crear', {
         'accion': accion,
-        'proveedor_id': me.orden_compra.proveedor_id,
-        'asunto': me.orden_compra.asunto,
-        'fecha': me.orden_compra.fecha,
-        'proveedor_nombre': me.orden_compra.proveedor_nombre,
-        'proveedor_rut': me.orden_compra.proveedor_rut,
-        'proveedor_giro': me.orden_compra.proveedor_giro,
-        'proveedor_telefono': me.orden_compra.proveedor_telefono,
-        'proveedor_direccion': me.orden_compra.proveedor_direccion,
-        'proveedor_comuna': me.orden_compra.proveedor_comuna,
-        'proveedor_correo': me.orden_compra.proveedor_correo,
-        'proveedor_referencia': me.orden_compra.proveedor_referencia,
-        'detalle_orden': me.orden_compra.detalle_orden,
-        'total': me.orden_compra.detalle_orden.total,
-        'neto': me.orden_compra.neto,
-        'iva': me.orden_compra.iva
-      }, _defineProperty(_axios$post, "total", me.orden_compra.total), _defineProperty(_axios$post, 'observacion', me.orden_compra.observacion), _axios$post)).then(function (response) {
+        'id': me.proveedor.id,
+        'nombre': me.proveedor.nombre,
+        'rut': me.proveedor.rut,
+        'giro': me.proveedor.giro,
+        'telefono': me.proveedor.telefono,
+        'direccion': me.proveedor.direccion,
+        'comuna': me.proveedor.comuna,
+        'correo': me.proveedor.correo,
+        'referencia': me.proveedor.referencia,
+        'ordenes_compra': me.ordenes_compra
+      }).then(function (response) {
         me.$refs.typeahead_proveedor.inputValue = "";
-        me.$refs['typeahead_detalle[0]'].inputValue = "";
         me.obtener_registros();
-        me.numero_orden();
         me.$store.commit('msg_success', accion == 0 ? 'Registro agregado exitosamente.' : 'Registro enviado y agregado exitosamente.');
         me.limpiar_datos_orden_compra();
-        me.agregar_fila();
-        me.cerrar_modal_orden_compra();
+        me.agregar_orden_compra();
       })["catch"](function (error) {
         me.$store.commit('msg_error', accion == 0 ? 'Problemas al agregar el registro.' : 'Problemas al enviar y agregar el registro.');
+        me.spinner.estado = 0;
         console.log(error);
-      });
-    },
-    enviar_mail: function enviar_mail(id) {
-      var _this = this;
-
-      swal.fire({
-        title: '¿Deseas enviar el registro al correo?',
-        text: "¡No podrás revertir esto!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, ¡enviar!'
-      }).then(function (result) {
-        if (result.value) {
-          var me = _this;
-          axios.post('/orden/enviar', {
-            'id': id
-          }).then(function (response) {
-            me.obtener_registros();
-            me.cerrar_modal_orden_compra();
-            me.$store.commit('msg_success', 'Registro enviado exitosamente.');
-          })["catch"](function (error) {
-            console.log(error);
-          });
-        }
       });
     }
   }),
   mounted: function mounted() {
-    this.obtener_registros();
+    var _this = this;
+
+    Evento.$on('cargar_modal_orden_compra', function (id_proveedor) {
+      _this.obtener_registros();
+
+      _this.proveedor.id = id_proveedor;
+
+      _this.abrir_modal_orden_compra();
+    });
   }
 });
 
@@ -3205,6 +3134,455 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   }),
   mounted: function mounted() {
     this.listar_categorias();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/intranet/Facturas.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/intranet/Facturas.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      items: [],
+      fields: [{
+        key: 'index',
+        label: '#',
+        sortable: true,
+        "class": 'text-center'
+      }, {
+        key: 'proveedor',
+        label: 'Proveedor',
+        sortable: true,
+        "class": 'text-left'
+      }, {
+        key: 'orden_compra',
+        label: 'Orden de compra',
+        sortable: true,
+        "class": 'text-left'
+      }, {
+        key: 'numero_factura',
+        label: 'Número factura',
+        sortable: true,
+        "class": 'text-left'
+      }, {
+        key: 'centro_costo',
+        label: 'Centro de costo',
+        sortable: true,
+        "class": 'text-left'
+      }, {
+        key: 'fecha',
+        label: 'Fecha',
+        sortable: true,
+        "class": 'text-left'
+      }, {
+        key: 'total',
+        label: 'Total (con IVA)',
+        sortable: true,
+        "class": 'text-left'
+      }, {
+        key: 'acciones',
+        label: 'Acciones',
+        "class": 'text-center'
+      }],
+      orden_compra_detalle: [{
+        key: 'index',
+        label: '#',
+        sortable: true,
+        "class": 'text-center'
+      }, {
+        key: 'producto_nombre',
+        label: 'Descripción',
+        sortable: true,
+        "class": 'text-left'
+      }, {
+        key: 'cantidad',
+        label: 'Cantidad',
+        sortable: true,
+        "class": 'text-left'
+      }, {
+        key: 'valor_unitario',
+        label: 'Valor unitario',
+        sortable: true,
+        "class": 'text-left'
+      }, {
+        key: 'medida',
+        label: 'Medida',
+        sortable: true,
+        "class": 'text-left'
+      }, {
+        key: 'total',
+        label: 'Total',
+        sortable: true,
+        "class": 'text-left'
+      }, {
+        key: 'acciones',
+        label: 'Acción',
+        sortable: true,
+        "class": 'text-center'
+      }],
+      totalRows: 1,
+      currentPage: 1,
+      perPage: 15,
+      pageOptions: [15, 50, 100, 150, 200, 150],
+      sortBy: '',
+      sortDesc: false,
+      filter: null,
+      modal_factura: {
+        titulo: '',
+        accion: 0
+      },
+      factura: {
+        id: 0,
+        fecha: '',
+        numero_factura: '',
+        detalle: [],
+        observacion: ''
+      },
+      orden_compra: {
+        id: 0
+      }
+    };
+  },
+  validations: {
+    factura: {
+      fecha: {
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"]
+      },
+      numero_factura: {
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+        numeric: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["numeric"],
+        minValue: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minValue"])(0)
+      },
+      observacion: {}
+    }
+  },
+  computed: {
+    sortOptions: function sortOptions() {
+      return this.fields.filter(function (f) {
+        return f.sortable;
+      }).map(function (f) {
+        return {
+          text: f.label,
+          value: f.key
+        };
+      });
+    }
+  },
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])(['msg_success', 'msg_error']), {
+    onFiltered: function onFiltered(filteredItems) {
+      this.totalRows = filteredItems.length;
+      this.currentPage = 1;
+    },
+    listar_facturas: function listar_facturas() {
+      var me = this;
+      axios.get('/facturas/1').then(function (response) {
+        me.items = response.data.facturas;
+        me.totalRows = me.items.length;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    abrir_modal_factura: function abrir_modal_factura() {
+      var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var me = this;
+      me.limpiar_datos_factura();
+      me.modal_factura.titulo = "Actualizar datos de factura";
+      me.factura.id = data.id;
+      me.factura.fecha = data.fecha;
+      me.factura.numero_factura = data.numero_factura;
+      me.factura.observacion = data.observacion;
+      me.orden_compra.id = data.orden_compra.id;
+      var productos = data.orden_compra.descripcion.split("@");
+      var cantidades = data.orden_compra.cantidad.split("@");
+      var valores_unitarios = data.orden_compra.unidad_medida.split("@");
+      var totales = data.orden_compra.valor_unitario.split("@");
+      var estados = data.orden_compra.estado_producto.split("@");
+
+      for (var i = 0; i < productos.length; i++) {
+        var fila = new Object();
+        fila.producto_nombre = productos[i];
+        fila.cantidad = cantidades[i];
+        fila.medida = valores_unitarios[i];
+        fila.valor_unitario = productos[i];
+        fila.total = totales[i];
+        fila.estado = estados[i];
+        me.factura.detalle.push(fila);
+      }
+
+      this.$v.factura.$touch(true);
+      this.$refs['modal_factura'].show();
+    },
+    cerrar_modal_factura: function cerrar_modal_factura() {
+      this.modal_factura.titulo = "";
+      this.$refs['modal_factura'].hide();
+    },
+    limpiar_datos_factura: function limpiar_datos_factura() {
+      this.factura.id = 0;
+      this.factura.fecha = '';
+      this.factura.numero_factura = '';
+      this.factura.detalle = [];
+      this.factura.observacion = '';
+      this.orden_compra.id = 0;
+      this.$v.$reset();
+    },
+    crear_actualizar_factura: function crear_actualizar_factura() {
+      if (this.$v.factura.$invalid) {
+        this.$v.factura.$touch();
+        return;
+      }
+
+      var me = this;
+      axios.post('/factura/crear/actualizar', {
+        'id': me.factura.id,
+        'fecha': me.factura.fecha,
+        'numero_factura': me.factura.numero_factura,
+        'observacion': me.factura.observacion
+      }).then(function (response) {
+        me.listar_facturas();
+        me.$store.commit('msg_success', 'Registro actualizado exitosamente.');
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    sumar_restar_inventario: function sumar_restar_inventario(accion, producto, cantidad, index) {
+      var _this = this;
+
+      swal.fire({
+        title: accion == 1 ? '¿Deseas sumar al inventario?' : '¿Deseas restar del inventario?',
+        text: "¡No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: accion == 1 ? 'Sí, ¡sumar!' : 'Sí, ¡restar!'
+      }).then(function (result) {
+        if (result.value) {
+          var me = _this;
+          axios.post('/orden/restar/sumar', {
+            'id': me.orden_compra.id,
+            'accion': accion,
+            'producto': producto,
+            'cantidad': cantidad
+          }).then(function (response) {
+            me.factura.detalle[index].estado = me.factura.detalle[index].estado == 1 ? 0 : 1;
+            me.listar_facturas();
+            me.$store.commit('msg_success', accion == 1 ? 'Producto sumado al inventario.' : 'Producto restado del stock');
+          })["catch"](function (error) {
+            console.log(error);
+          });
+        }
+      });
+    }
+  }),
+  mounted: function mounted() {
+    this.listar_facturas();
   }
 });
 
@@ -3865,304 +4243,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4179,6 +4259,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, {
         key: 'proveedor_nombre',
         label: 'Proveedor',
+        sortable: true,
+        "class": 'text-left'
+      }, {
+        key: 'lugar_nombre',
+        label: 'Centro de costo',
         sortable: true,
         "class": 'text-left'
       }, {
@@ -4280,67 +4365,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     };
   },
-  validations: {
-    orden_compra: {
-      proveedor_nombre: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3)
-      },
-      proveedor_rut: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3)
-      },
-      proveedor_giro: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3)
-      },
-      proveedor_telefono: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-        numeric: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["numeric"]
-      },
-      proveedor_direccion: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3)
-      },
-      proveedor_comuna: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3)
-      },
-      proveedor_correo: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3),
-        email: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["email"]
-      },
-      proveedor_referencia: {},
-      fecha: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"]
-      },
-      numero: {},
-      asunto: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3)
-      },
-      neto: {},
-      total: {},
-      iva: {},
-      observacion: {},
-      detalle_orden: {
-        $each: {
-          id: {},
-          producto_nombre: {},
-          cantidad: {
-            required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-            numeric: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["numeric"]
-          },
-          valor_unitario: {
-            required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-            minValue: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minValue"])(1),
-            numeric: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["numeric"]
-          }
-        }
-      }
-    }
-  },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])('usuario', ['usuario']), {
     sortOptions: function sortOptions() {
       return this.fields.filter(function (f) {
@@ -4354,18 +4378,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   }),
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])(['msg_success', 'msg_error']), {
-    numero_orden: function numero_orden() {
-      var max = 0;
-      this.items.forEach(function (item) {
-        if (item.id > max) {
-          max = item.id;
-        }
-      });
-      this.orden_compra.numero = max + 1;
-    },
-    fecha_actual: function fecha_actual() {
-      var f = new Date();
-      this.orden_compra.fecha = f.getFullYear() + "-" + (f.getMonth() + 1) + "-" + f.getDate();
+    abrir_modal_orden_compra: function abrir_modal_orden_compra(id_proveedor) {
+      Evento.$emit('cargar_modal_orden_compra', id_proveedor);
     },
     onFiltered: function onFiltered(filteredItems) {
       this.totalRows = filteredItems.length;
@@ -4391,19 +4405,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (this.orden_compra.detalle_orden[index].cantidad > 0) {
         this.calcular_total_cantidad(index);
       }
-    },
-    calcular_total_cantidad: function calcular_total_cantidad(index) {
-      this.orden_compra.detalle_orden[index].total = this.orden_compra.detalle_orden[index].valor_unitario * this.orden_compra.detalle_orden[index].cantidad;
-      this.calcular_total();
-    },
-    calcular_total: function calcular_total() {
-      var total = 0;
-      this.orden_compra.detalle_orden.forEach(function (item) {
-        total += parseInt(item.total);
-      });
-      this.orden_compra.neto = total;
-      this.orden_compra.iva = parseInt(total * 0.19);
-      this.orden_compra.total = parseInt(this.orden_compra.neto + this.orden_compra.iva);
     },
     listar_proveedores: function listar_proveedores() {
       var me = this;
@@ -4434,160 +4435,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(error);
       });
     },
-    agregar_fila: function agregar_fila() {
-      var fila = new Object();
-      fila.id = 0;
-      fila.producto_nombre = "";
-      fila.cantidad = null;
-      fila.medida = null;
-      fila.valor_unitario = 0;
-      fila.total = 0;
-      this.orden_compra.detalle_orden.push(fila);
-    },
-    eliminar_fila: function eliminar_fila(index) {
-      this.orden_compra.detalle_orden.splice(index, 1);
-    },
     obtener_registros: function obtener_registros() {
       this.listar_proveedores();
       this.listar_orden_compras();
       this.listar_productos_inventario();
-      this.fecha_actual();
-    },
-    abrir_modal_orden_compra: function abrir_modal_orden_compra() {
-      var _this = this;
-
-      var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-      var accion = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-      var me = this;
-      me.numero_orden();
-      me.limpiar_datos_orden_compra();
-      me.modal_orden_compra.titulo = data.id == undefined ? "Agregar orden compra" : "Modificar orden compra";
-      this.$refs['modal_orden_compra'].show();
-
-      if (accion == 1) {
-        var i;
-        var fila;
-        var producto;
-
-        (function () {
-          me.orden_compra.proveedor_id = data.proveedor_id;
-          me.orden_compra.proveedor_nombre = data.proveedor_nombre;
-          me.orden_compra.proveedor_rut = data.proveedor_rut;
-          me.orden_compra.proveedor_giro = data.proveedor_giro;
-          me.orden_compra.proveedor_telefono = data.proveedor_telefono;
-          me.orden_compra.proveedor_direccion = data.proveedor_direccion;
-          me.orden_compra.proveedor_comuna = data.proveedor_comuna;
-          me.orden_compra.proveedor_correo = data.proveedor_correo;
-          me.orden_compra.proveedor_referencia = data.proveedor_referencia;
-          me.orden_compra.asunto = data.asunto;
-          me.orden_compra.fecha = data.fecha;
-          me.orden_compra.observacion = data.observacion;
-          me.$refs.typeahead_proveedor.inputValue = data.proveedor_nombre;
-
-          _this.$v.orden_compra.$touch(true);
-
-          var productos_nombre = data.descripcion.split('@');
-          var cantidades = data.cantidad.split('@');
-          var medidas = data.unidad_medida.split('@');
-          var valores_unitario = data.valor_unitario.split('@');
-
-          for (i = 0; i < productos_nombre.length; i++) {
-            fila = new Object();
-            producto = me.productos.find(function (p) {
-              return p.nombre == productos_nombre[i] && p.unidad == medidas[i];
-            });
-            fila.id = producto ? producto.id : 0;
-            fila.producto_nombre = productos_nombre[i];
-            fila.cantidad = cantidades[i];
-            fila.medida = medidas[i];
-            fila.valor_unitario = valores_unitario[i];
-            me.orden_compra.detalle_orden.push(fila);
-            me.calcular_total_cantidad(i);
-          }
-
-          setTimeout(function () {
-            me.cambiar_nombres(productos_nombre);
-          }, 2000);
-        })();
-      } else {
-        this.agregar_fila();
-      }
-    },
-    cambiar_nombres: function cambiar_nombres() {
-      var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-
-      for (var i = 0; i < data.length; i++) {
-        var nombre = 'typeahead_detalle[' + i + ']';
-        this.$refs[nombre].inputValue = data[i];
-      }
-    },
-    cerrar_modal_orden_compra: function cerrar_modal_orden_compra() {
-      this.modal_orden_compra.titulo = "";
-      this.modal_orden_compra.accion = 0;
-      this.$refs['modal_orden_compra'].hide();
-    },
-    limpiar_datos_orden_compra: function limpiar_datos_orden_compra() {
-      this.orden_compra.proveedor_id = 0;
-      this.orden_compra.proveedor_nombre = '';
-      this.orden_compra.proveedor_rut = '';
-      this.orden_compra.proveedor_giro = '';
-      this.orden_compra.proveedor_telefono = '';
-      this.orden_compra.proveedor_direccion = '';
-      this.orden_compra.proveedor_comuna = '';
-      this.orden_compra.proveedor_correo = '';
-      this.orden_compra.proveedor_referencia = '';
-      this.orden_compra.asunto = '';
-      this.orden_compra.neto = 0;
-      this.orden_compra.iva = 0;
-      this.orden_compra.total = 0;
-      this.orden_compra.observacion = '';
-      this.orden_compra.detalle_orden = [];
-      this.$refs.typeahead_proveedor.inputValue = "";
-      this.$v.$reset();
-    },
-    crear_orden_compra: function crear_orden_compra() {
-      var _axios$post;
-
-      var accion = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-
-      if (this.$v.orden_compra.$invalid) {
-        this.$v.orden_compra.$touch();
-        return;
-      }
-
-      var me = this;
-      axios.post('/orden/crear', (_axios$post = {
-        'accion': accion,
-        'proveedor_id': me.orden_compra.proveedor_id,
-        'asunto': me.orden_compra.asunto,
-        'fecha': me.orden_compra.fecha,
-        'proveedor_nombre': me.orden_compra.proveedor_nombre,
-        'proveedor_rut': me.orden_compra.proveedor_rut,
-        'proveedor_giro': me.orden_compra.proveedor_giro,
-        'proveedor_telefono': me.orden_compra.proveedor_telefono,
-        'proveedor_direccion': me.orden_compra.proveedor_direccion,
-        'proveedor_comuna': me.orden_compra.proveedor_comuna,
-        'proveedor_correo': me.orden_compra.proveedor_correo,
-        'proveedor_referencia': me.orden_compra.proveedor_referencia,
-        'detalle_orden': me.orden_compra.detalle_orden,
-        'total': me.orden_compra.detalle_orden.total,
-        'neto': me.orden_compra.neto,
-        'iva': me.orden_compra.iva
-      }, _defineProperty(_axios$post, "total", me.orden_compra.total), _defineProperty(_axios$post, 'observacion', me.orden_compra.observacion), _axios$post)).then(function (response) {
-        me.$refs.typeahead_proveedor.inputValue = "";
-        me.$refs['typeahead_detalle[0]'].inputValue = "";
-        me.obtener_registros();
-        me.numero_orden();
-        me.$store.commit('msg_success', accion == 0 ? 'Registro agregado exitosamente.' : 'Registro enviado y agregado exitosamente.');
-        me.limpiar_datos_orden_compra();
-        me.agregar_fila();
-      })["catch"](function (error) {
-        me.$store.commit('msg_error', accion == 0 ? 'Problemas al agregar el registro.' : 'Problemas al enviar y agregar el registro.');
-        console.log(error);
-      });
     },
     borrar: function borrar(id) {
-      var _this2 = this;
+      var _this = this;
 
       swal.fire({
         title: '¿Deseas anular el registro?',
@@ -4599,7 +4453,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         confirmButtonText: 'Sí, ¡bórralo!'
       }).then(function (result) {
         if (result.value) {
-          var me = _this2;
+          var me = _this;
           axios.post('/orden/borrar', {
             'id': id
           }).then(function (response) {
@@ -4612,7 +4466,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     enviar_mail: function enviar_mail(id) {
-      var _this3 = this;
+      var _this2 = this;
 
       swal.fire({
         title: '¿Deseas enviar el registro al correo?',
@@ -4624,7 +4478,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         confirmButtonText: 'Sí, ¡enviar!'
       }).then(function (result) {
         if (result.value) {
-          var me = _this3;
+          var me = _this2;
           axios.post('/orden/enviar', {
             'id': id
           }).then(function (response) {
@@ -4637,7 +4491,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     descargar: function descargar(id) {
-      var _this4 = this;
+      var _this3 = this;
 
       swal.fire({
         title: '¿Deseas descargar el registro?',
@@ -4649,7 +4503,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         confirmButtonText: 'Sí, descargar!'
       }).then(function (result) {
         if (result.value) {
-          var me = _this4;
+          var me = _this3;
           axios.get('/orden/descargar/' + id, {
             responseType: 'blob'
           }).then(function (response) {
@@ -5390,6 +5244,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -5644,6 +5501,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])(['msg_success', 'msg_error']), {
+    abrir_modal_orden_compra: function abrir_modal_orden_compra(id_proveedor) {
+      Evento.$emit('cargar_modal_orden_compra', id_proveedor);
+    },
     filtrar_stock_critico: function filtrar_stock_critico() {
       $(".esconder").each(function (index) {
         $(this).hasClass('d-none') ? $(this).removeClass('d-none') : $(this).addClass('d-none');
@@ -6152,6 +6012,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -6276,6 +6138,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])(['msg_success', 'msg_error']), {
+    abrir_modal_orden_compra: function abrir_modal_orden_compra(id_proveedor) {
+      Evento.$emit('cargar_modal_orden_compra', id_proveedor);
+    },
     onFiltered: function onFiltered(filteredItems) {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
@@ -78211,7 +78076,18 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _vm._m(5)
+                _c(
+                  "li",
+                  [
+                    _c("router-link", { attrs: { to: "/facturas" } }, [
+                      _c("i", { staticClass: "fa fa-list" }),
+                      _c("span", { staticClass: "hide-menu" }, [
+                        _vm._v("Facturas")
+                      ])
+                    ])
+                  ],
+                  1
+                )
               ])
             ])
           : _vm._e()
@@ -78221,7 +78097,14 @@ var render = function() {
     _c(
       "div",
       { staticClass: "page-wrapper" },
-      [_c("b-container", { attrs: { fluid: "" } }, [_c("router-view")], 1)],
+      [
+        _c(
+          "b-container",
+          { attrs: { fluid: "" } },
+          [_c("router-view"), _vm._v(" "), _c("orden-compra")],
+          1
+        )
+      ],
       1
     )
   ])
@@ -78343,24 +78226,6 @@ var staticRenderFns = [
         _c("span", { staticClass: "hide-menu" }, [_vm._v("Abastecimiento")])
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", [
-      _c(
-        "a",
-        {
-          staticClass: " waves-effect waves-dark",
-          attrs: { href: "javascript:void(0)", "aria-expanded": "false" }
-        },
-        [
-          _c("i", { staticClass: "fa fa-list" }),
-          _c("span", { staticClass: "hide-menu" }, [_vm._v("Facturas")])
-        ]
-      )
-    ])
   }
 ]
 render._withStripped = true
@@ -78536,545 +78401,487 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "span",
+    "b-modal",
+    {
+      ref: "modal_orden_compra",
+      attrs: {
+        title: _vm.modal_orden_compra.titulo,
+        size: "xl",
+        "no-close-on-backdrop": "",
+        scrollable: "",
+        static: ""
+      }
+    },
     [
       _c(
-        "b-button",
-        {
-          attrs: {
-            size: "xs",
-            variant: "success",
-            title: "Generar orden de compra"
-          },
-          on: { click: _vm.abrir_modal_orden_compra }
-        },
-        [_c("i", { staticClass: "fa fa-plus" })]
-      ),
-      _vm._v(" "),
-      _c(
-        "b-modal",
-        {
-          ref: "modal_orden_compra",
-          attrs: {
-            title: _vm.modal_orden_compra.titulo,
-            size: "xl",
-            "no-close-on-backdrop": "",
-            scrollable: "",
-            static: ""
-          }
-        },
+        "b-form",
         [
-          _c("b-form", [
-            _c("div", { staticClass: "card" }, [
-              _c("div", { staticClass: "card-header bg-info text-right" }, [
-                _c("h6", { staticClass: "m-b-0 text-white" }, [
-                  _vm._v("Proveedor de Servicios")
-                ])
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "card-body" },
-                [
-                  _c(
-                    "b-row",
-                    [
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "Razón Social ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("vue-bootstrap-typeahead", {
-                                ref: "typeahead_proveedor",
-                                attrs: {
-                                  data: _vm.proveedores,
-                                  serializer: function(p) {
-                                    return p.nombre
-                                  },
-                                  placeholder: "Escribe para filtrar ...",
-                                  state: _vm.$v.orden_compra.proveedor_nombre
-                                    .$dirty
-                                    ? !_vm.$v.orden_compra.proveedor_nombre
-                                        .$error
-                                    : null,
-                                  "aria-describedby":
-                                    "orden-compra-proveedor-nombre"
-                                },
-                                on: {
-                                  hit: function($event) {
-                                    return _vm.proveedor($event)
-                                  }
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.orden_compra.proveedor_nombre.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.proveedor_nombre,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.orden_compra.proveedor_nombre.$model"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-invalid-feedback",
-                                {
-                                  attrs: { id: "orden-compra-proveedor-nombre" }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                    Campo de texto, mínimo de 3 caracteres.\n                                "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "Rut ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                directives: [
-                                  {
-                                    name: "rut",
-                                    rawName: "v-rut:live",
-                                    arg: "live"
-                                  }
-                                ],
-                                attrs: {
-                                  state: _vm.$v.orden_compra.proveedor_rut
-                                    .$dirty
-                                    ? !_vm.$v.orden_compra.proveedor_rut.$error
-                                    : null,
-                                  "aria-describedby":
-                                    "orden-compra-proveedor-rut",
-                                  readonly: _vm.modal_orden_compra.accion == 2
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.orden_compra.proveedor_rut.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.proveedor_rut,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.orden_compra.proveedor_rut.$model"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-invalid-feedback",
-                                { attrs: { id: "orden-compra-proveedor-rut" } },
-                                [
-                                  _vm._v(
-                                    "\n                                    Campo de alfanúmerico, mínimo de 3 caracteres.\n                                "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "Giro ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra.proveedor_giro
-                                    .$dirty
-                                    ? !_vm.$v.orden_compra.proveedor_giro.$error
-                                    : null,
-                                  "aria-describedby":
-                                    "orden-compra-proveedor-giro"
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.orden_compra.proveedor_giro.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.proveedor_giro,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.orden_compra.proveedor_giro.$model"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-invalid-feedback",
-                                {
-                                  attrs: { id: "orden-compra-proveedor-giro" }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                    Campo de texto, mínimo de 3 caracteres.\n                                "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "Teléfono ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra.proveedor_telefono
-                                    .$dirty
-                                    ? !_vm.$v.orden_compra.proveedor_telefono
-                                        .$error
-                                    : null,
-                                  "aria-describedby":
-                                    "orden-compra-proveedor-telefono"
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.orden_compra.proveedor_telefono
-                                      .$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.proveedor_telefono,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.orden_compra.proveedor_telefono.$model"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-invalid-feedback",
-                                {
-                                  attrs: {
-                                    id: "orden-compra-proveedor-telefono"
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                    Campo de númerico, mínimo de 3 caracteres.\n                                "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "Dirección ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra.proveedor_direccion
-                                    .$dirty
-                                    ? !_vm.$v.orden_compra.proveedor_direccion
-                                        .$error
-                                    : null,
-                                  "aria-describedby":
-                                    "orden-compra-proveedor-direccion"
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.orden_compra.proveedor_direccion
-                                      .$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.proveedor_direccion,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.orden_compra.proveedor_direccion.$model"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-invalid-feedback",
-                                {
-                                  attrs: {
-                                    id: "orden-compra-proveedor-direccion"
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                    Campo de alfanúmerico, mínimo de 3 caracteres.\n                                "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "Comuna ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra.proveedor_comuna
-                                    .$dirty
-                                    ? !_vm.$v.orden_compra.proveedor_comuna
-                                        .$error
-                                    : null,
-                                  "aria-describedby":
-                                    "orden-compra-proveedor-comuna"
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.orden_compra.proveedor_comuna.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.proveedor_comuna,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.orden_compra.proveedor_comuna.$model"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-invalid-feedback",
-                                {
-                                  attrs: { id: "orden-compra-proveedor-comuna" }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                    Campo de texto, mínimo de 3 caracteres.\n                                "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "Correo ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra.proveedor_correo
-                                    .$dirty
-                                    ? !_vm.$v.orden_compra.proveedor_correo
-                                        .$error
-                                    : null,
-                                  "aria-describedby":
-                                    "orden-compra-proveedor-correo"
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.orden_compra.proveedor_correo.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.proveedor_correo,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.orden_compra.proveedor_correo.$model"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-invalid-feedback",
-                                {
-                                  attrs: { id: "orden-compra-proveedor-correo" }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                    Campo de alfanúmerico, mínimo de 3 caracteres y formato de email.\n                                "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "Contacto ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra
-                                    .proveedor_referencia.$dirty
-                                    ? !_vm.$v.orden_compra.proveedor_referencia
-                                        .$error
-                                    : null,
-                                  "aria-describedby":
-                                    "orden-compra-proveedor-referencia"
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.orden_compra.proveedor_referencia
-                                      .$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.proveedor_referencia,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.orden_compra.proveedor_referencia.$model"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-invalid-feedback",
-                                {
-                                  attrs: {
-                                    id: "orden-compra-proveedor-referencia"
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                    Campo de texto, mínimo de 3 caracteres.\n                                "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header bg-info text-right" }, [
+              _c("h6", { staticClass: "m-b-0 text-white" }, [
+                _vm._v("Proveedor de Servicios")
+              ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "card" }, [
+            _c(
+              "div",
+              { staticClass: "card-body" },
+              [
+                _c(
+                  "b-row",
+                  [
+                    _c(
+                      "b-col",
+                      { attrs: { xs: "12", sm: "12", md: "6" } },
+                      [
+                        _c(
+                          "b-form-group",
+                          {
+                            staticClass: "mb-1",
+                            attrs: {
+                              label: "Razón Social ",
+                              "label-cols-md": "3",
+                              "label-cols-lg": "3"
+                            }
+                          },
+                          [
+                            _c("vue-bootstrap-typeahead", {
+                              ref: "typeahead_proveedor",
+                              attrs: {
+                                data: _vm.proveedores,
+                                serializer: function(p) {
+                                  return p.nombre
+                                },
+                                placeholder: "Escribe para filtrar ...",
+                                state: _vm.$v.proveedor.nombre.$dirty
+                                  ? !_vm.$v.proveedor.nombre.$error
+                                  : null,
+                                "aria-describedby":
+                                  "orden-compra-proveedor-nombre"
+                              },
+                              on: {
+                                hit: function($event) {
+                                  return _vm.proveedor_seleccionado($event)
+                                }
+                              },
+                              model: {
+                                value: _vm.$v.proveedor.nombre.$model,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.$v.proveedor.nombre,
+                                    "$model",
+                                    $$v
+                                  )
+                                },
+                                expression: "$v.proveedor.nombre.$model"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "b-form-invalid-feedback",
+                              {
+                                attrs: { id: "orden-compra-proveedor-nombre" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Campo de texto, mínimo de 3 caracteres.\n                            "
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-col",
+                      { attrs: { xs: "12", sm: "12", md: "6" } },
+                      [
+                        _c(
+                          "b-form-group",
+                          {
+                            staticClass: "mb-1",
+                            attrs: {
+                              label: "Rut ",
+                              "label-cols-md": "3",
+                              "label-cols-lg": "3"
+                            }
+                          },
+                          [
+                            _c("b-form-input", {
+                              directives: [
+                                {
+                                  name: "rut",
+                                  rawName: "v-rut:live",
+                                  arg: "live"
+                                }
+                              ],
+                              attrs: {
+                                state: _vm.$v.proveedor.rut.$dirty
+                                  ? !_vm.$v.proveedor.rut.$error
+                                  : null,
+                                "aria-describedby":
+                                  "orden-compra-proveedor-rut",
+                                readonly: _vm.modal_orden_compra.accion == 2
+                              },
+                              model: {
+                                value: _vm.$v.proveedor.rut.$model,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.$v.proveedor.rut, "$model", $$v)
+                                },
+                                expression: "$v.proveedor.rut.$model"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "b-form-invalid-feedback",
+                              { attrs: { id: "orden-compra-proveedor-rut" } },
+                              [
+                                _vm._v(
+                                  "\n                                Campo de alfanúmerico, mínimo de 3 caracteres.\n                            "
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-col",
+                      { attrs: { xs: "12", sm: "12", md: "6" } },
+                      [
+                        _c(
+                          "b-form-group",
+                          {
+                            staticClass: "mb-1",
+                            attrs: {
+                              label: "Giro ",
+                              "label-cols-md": "3",
+                              "label-cols-lg": "3"
+                            }
+                          },
+                          [
+                            _c("b-form-input", {
+                              attrs: {
+                                state: _vm.$v.proveedor.giro.$dirty
+                                  ? !_vm.$v.proveedor.giro.$error
+                                  : null,
+                                "aria-describedby":
+                                  "orden-compra-proveedor-giro"
+                              },
+                              model: {
+                                value: _vm.$v.proveedor.giro.$model,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.$v.proveedor.giro, "$model", $$v)
+                                },
+                                expression: "$v.proveedor.giro.$model"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "b-form-invalid-feedback",
+                              { attrs: { id: "orden-compra-proveedor-giro" } },
+                              [
+                                _vm._v(
+                                  "\n                                Campo de texto, mínimo de 3 caracteres.\n                            "
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-col",
+                      { attrs: { xs: "12", sm: "12", md: "6" } },
+                      [
+                        _c(
+                          "b-form-group",
+                          {
+                            staticClass: "mb-1",
+                            attrs: {
+                              label: "Teléfono ",
+                              "label-cols-md": "3",
+                              "label-cols-lg": "3"
+                            }
+                          },
+                          [
+                            _c("b-form-input", {
+                              attrs: {
+                                state: _vm.$v.proveedor.telefono.$dirty
+                                  ? !_vm.$v.proveedor.telefono.$error
+                                  : null,
+                                "aria-describedby":
+                                  "orden-compra-proveedor-telefono"
+                              },
+                              model: {
+                                value: _vm.$v.proveedor.telefono.$model,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.$v.proveedor.telefono,
+                                    "$model",
+                                    $$v
+                                  )
+                                },
+                                expression: "$v.proveedor.telefono.$model"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "b-form-invalid-feedback",
+                              {
+                                attrs: { id: "orden-compra-proveedor-telefono" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Campo de númerico, mínimo de 3 caracteres.\n                            "
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-col",
+                      { attrs: { xs: "12", sm: "12", md: "6" } },
+                      [
+                        _c(
+                          "b-form-group",
+                          {
+                            staticClass: "mb-1",
+                            attrs: {
+                              label: "Dirección ",
+                              "label-cols-md": "3",
+                              "label-cols-lg": "3"
+                            }
+                          },
+                          [
+                            _c("b-form-input", {
+                              attrs: {
+                                state: _vm.$v.proveedor.direccion.$dirty
+                                  ? !_vm.$v.proveedor.direccion.$error
+                                  : null,
+                                "aria-describedby":
+                                  "orden-compra-proveedor-direccion"
+                              },
+                              model: {
+                                value: _vm.$v.proveedor.direccion.$model,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.$v.proveedor.direccion,
+                                    "$model",
+                                    $$v
+                                  )
+                                },
+                                expression: "$v.proveedor.direccion.$model"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "b-form-invalid-feedback",
+                              {
+                                attrs: {
+                                  id: "orden-compra-proveedor-direccion"
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Campo de alfanúmerico, mínimo de 3 caracteres.\n                            "
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-col",
+                      { attrs: { xs: "12", sm: "12", md: "6" } },
+                      [
+                        _c(
+                          "b-form-group",
+                          {
+                            staticClass: "mb-1",
+                            attrs: {
+                              label: "Comuna ",
+                              "label-cols-md": "3",
+                              "label-cols-lg": "3"
+                            }
+                          },
+                          [
+                            _c("b-form-input", {
+                              attrs: {
+                                state: _vm.$v.proveedor.comuna.$dirty
+                                  ? !_vm.$v.proveedor.comuna.$error
+                                  : null,
+                                "aria-describedby":
+                                  "orden-compra-proveedor-comuna"
+                              },
+                              model: {
+                                value: _vm.$v.proveedor.comuna.$model,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.$v.proveedor.comuna,
+                                    "$model",
+                                    $$v
+                                  )
+                                },
+                                expression: "$v.proveedor.comuna.$model"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "b-form-invalid-feedback",
+                              {
+                                attrs: { id: "orden-compra-proveedor-comuna" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Campo de texto, mínimo de 3 caracteres.\n                            "
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-col",
+                      { attrs: { xs: "12", sm: "12", md: "6" } },
+                      [
+                        _c(
+                          "b-form-group",
+                          {
+                            staticClass: "mb-1",
+                            attrs: {
+                              label: "Correo ",
+                              "label-cols-md": "3",
+                              "label-cols-lg": "3"
+                            }
+                          },
+                          [
+                            _c("b-form-input", {
+                              attrs: {
+                                state: _vm.$v.proveedor.correo.$dirty
+                                  ? !_vm.$v.proveedor.correo.$error
+                                  : null,
+                                "aria-describedby":
+                                  "orden-compra-proveedor-correo"
+                              },
+                              model: {
+                                value: _vm.$v.proveedor.correo.$model,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.$v.proveedor.correo,
+                                    "$model",
+                                    $$v
+                                  )
+                                },
+                                expression: "$v.proveedor.correo.$model"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "b-form-invalid-feedback",
+                              {
+                                attrs: { id: "orden-compra-proveedor-correo" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Campo de alfanúmerico, mínimo de 3 caracteres y formato de email.\n                            "
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-col",
+                      { attrs: { xs: "12", sm: "12", md: "6" } },
+                      [
+                        _c(
+                          "b-form-group",
+                          {
+                            staticClass: "mb-1",
+                            attrs: {
+                              label: "Contacto ",
+                              "label-cols-md": "3",
+                              "label-cols-lg": "3"
+                            }
+                          },
+                          [
+                            _c("b-form-input", {
+                              attrs: {
+                                state: _vm.$v.proveedor.referencia.$dirty
+                                  ? !_vm.$v.proveedor.referencia.$error
+                                  : null,
+                                "aria-describedby":
+                                  "orden-compra-proveedor-referencia"
+                              },
+                              model: {
+                                value: _vm.$v.proveedor.referencia.$model,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.$v.proveedor.referencia,
+                                    "$model",
+                                    $$v
+                                  )
+                                },
+                                expression: "$v.proveedor.referencia.$model"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "b-form-invalid-feedback",
+                              {
+                                attrs: {
+                                  id: "orden-compra-proveedor-referencia"
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Campo de texto, mínimo de 3 caracteres.\n                            "
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ]),
+          _vm._v(" "),
+          _vm._l(_vm.ordenes_compra, function(o, index) {
+            return _c("div", { key: index, staticClass: "card" }, [
               _c(
                 "div",
                 { staticClass: "card-header bg-info text-right" },
@@ -79084,13 +78891,15 @@ var render = function() {
                     [
                       _c("b-col", [
                         _c("h6", { staticClass: "m-b-0 text-white" }, [
-                          _vm._v("Detalle orden de Compra 1")
+                          _vm._v(
+                            "Detalle orden de Compra " + _vm._s(index + 1) + " "
+                          )
                         ])
                       ]),
                       _vm._v(" "),
                       _c(
                         "b-col",
-                        { attrs: { cols: "1" } },
+                        { staticClass: "text-rigth", attrs: { cols: "1" } },
                         [
                           _c(
                             "b-button",
@@ -79098,10 +78907,47 @@ var render = function() {
                               attrs: {
                                 size: "xs",
                                 variant: "success",
-                                title: "Agregar detalle de orden de compra"
+                                title: "Agregar orden de compra"
+                              },
+                              on: {
+                                click: function($event) {
+                                  return _vm.agregar_orden_compra(index)
+                                }
                               }
                             },
                             [_c("i", { staticClass: "fa fa-plus" })]
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { staticClass: "text-left", attrs: { cols: "1" } },
+                        [
+                          _c(
+                            "b-button",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: index > 0,
+                                  expression: "index > 0"
+                                }
+                              ],
+                              attrs: {
+                                size: "xs",
+                                variant: "danger",
+                                title: "Eliminar orden de compra"
+                              },
+                              on: {
+                                click: function($event) {
+                                  return _vm.eliminar_orden_compra(index)
+                                }
+                              }
+                            },
+                            [_c("i", { staticClass: "fa fa-remove" })]
                           )
                         ],
                         1
@@ -79136,10 +78982,43 @@ var render = function() {
                             [
                               _c("b-form-select", {
                                 attrs: {
-                                  "aria-describedby": "producto-unidad",
+                                  state: _vm.$v.ordenes_compra.$each[index]
+                                    .centro_costo_id.$dirty
+                                    ? !_vm.$v.ordenes_compra.$each[index]
+                                        .centro_costo_id.$error
+                                    : null,
+                                  "aria-describedby":
+                                    "ordenes-compra-centro-costo",
                                   options: _vm.opciones_centro_costos
+                                },
+                                model: {
+                                  value:
+                                    _vm.$v.ordenes_compra.$each[index]
+                                      .centro_costo_id.$model,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.$v.ordenes_compra.$each[index]
+                                        .centro_costo_id,
+                                      "$model",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "$v.ordenes_compra.$each[index].centro_costo_id.$model"
                                 }
-                              })
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "b-form-invalid-feedback",
+                                {
+                                  attrs: { id: "ordenes-compra-centro-costo" }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                Campo de alfanúmerico, mínimo de 3 caracteres.\n                            "
+                                  )
+                                ]
+                              )
                             ],
                             1
                           )
@@ -79163,30 +79042,35 @@ var render = function() {
                             [
                               _c("b-form-input", {
                                 attrs: {
-                                  state: _vm.$v.orden_compra.asunto.$dirty
-                                    ? !_vm.$v.orden_compra.asunto.$error
+                                  state: _vm.$v.ordenes_compra.$each[index]
+                                    .asunto.$dirty
+                                    ? !_vm.$v.ordenes_compra.$each[index].asunto
+                                        .$error
                                     : null,
-                                  "aria-describedby": "orden-compra-asunto"
+                                  "aria-describedby": "ordenes-compra-asunto"
                                 },
                                 model: {
-                                  value: _vm.$v.orden_compra.asunto.$model,
+                                  value:
+                                    _vm.$v.ordenes_compra.$each[index].asunto
+                                      .$model,
                                   callback: function($$v) {
                                     _vm.$set(
-                                      _vm.$v.orden_compra.asunto,
+                                      _vm.$v.ordenes_compra.$each[index].asunto,
                                       "$model",
                                       $$v
                                     )
                                   },
-                                  expression: "$v.orden_compra.asunto.$model"
+                                  expression:
+                                    "$v.ordenes_compra.$each[index].asunto.$model"
                                 }
                               }),
                               _vm._v(" "),
                               _c(
                                 "b-form-invalid-feedback",
-                                { attrs: { id: "orden-compra-asunto" } },
+                                { attrs: { id: "ordenes-compra-asunto" } },
                                 [
                                   _vm._v(
-                                    "\n                                    Campo de alfanúmerico, mínimo de 3 caracteres.\n                                "
+                                    "\n                                Campo de alfanúmerico, mínimo de 3 caracteres.\n                            "
                                   )
                                 ]
                               )
@@ -79213,22 +79097,27 @@ var render = function() {
                             [
                               _c("b-form-input", {
                                 attrs: {
-                                  state: _vm.$v.orden_compra.fecha.$dirty
-                                    ? !_vm.$v.orden_compra.fecha.$error
+                                  state: _vm.$v.ordenes_compra.$each[index]
+                                    .fecha.$dirty
+                                    ? !_vm.$v.ordenes_compra.$each[index].fecha
+                                        .$error
                                     : null,
                                   "aria-describedby": "orden-compra-fecha",
                                   readonly: ""
                                 },
                                 model: {
-                                  value: _vm.$v.orden_compra.fecha.$model,
+                                  value:
+                                    _vm.$v.ordenes_compra.$each[index].fecha
+                                      .$model,
                                   callback: function($$v) {
                                     _vm.$set(
-                                      _vm.$v.orden_compra.fecha,
+                                      _vm.$v.ordenes_compra.$each[index].fecha,
                                       "$model",
                                       $$v
                                     )
                                   },
-                                  expression: "$v.orden_compra.fecha.$model"
+                                  expression:
+                                    "$v.ordenes_compra.$each[index].fecha.$model"
                                 }
                               })
                             ],
@@ -79254,22 +79143,10 @@ var render = function() {
                             [
                               _c("b-form-input", {
                                 attrs: {
-                                  state: _vm.$v.orden_compra.numero.$dirty
-                                    ? !_vm.$v.orden_compra.numero.$error
-                                    : null,
-                                  "aria-describedby": "orden-compra-numero",
+                                  value:
+                                    parseInt(_vm.num_orden_compra) +
+                                    parseInt(index + 1),
                                   readonly: ""
-                                },
-                                model: {
-                                  value: _vm.$v.orden_compra.numero.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.numero,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression: "$v.orden_compra.numero.$model"
                                 }
                               })
                             ],
@@ -79299,327 +79176,347 @@ var render = function() {
                                   striped: "",
                                   outlined: "",
                                   stacked: "sm",
-                                  items: _vm.orden_compra.detalle_orden,
+                                  items: _vm.ordenes_compra[index].detalle,
                                   fields: _vm.orden_compra_detalle
                                 },
-                                scopedSlots: _vm._u([
-                                  {
-                                    key: "empty",
-                                    fn: function() {
-                                      return [
-                                        _c("center", [
-                                          _c("h6", [_vm._v("No hay registros")])
-                                        ])
-                                      ]
+                                scopedSlots: _vm._u(
+                                  [
+                                    {
+                                      key: "empty",
+                                      fn: function() {
+                                        return [
+                                          _c("center", [
+                                            _c("h6", [
+                                              _vm._v("No hay registros")
+                                            ])
+                                          ])
+                                        ]
+                                      },
+                                      proxy: true
                                     },
-                                    proxy: true
-                                  },
-                                  {
-                                    key: "cell(index)",
-                                    fn: function(data) {
-                                      return [
-                                        _vm._v(
-                                          "\n                                        " +
-                                            _vm._s(data.index + 1) +
-                                            "\n                                    "
-                                        )
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    key: "cell(descripcion)",
-                                    fn: function(data) {
-                                      return [
-                                        _c(
-                                          "b-form-group",
-                                          { staticClass: "mb-0" },
-                                          [
-                                            _c("vue-bootstrap-typeahead", {
-                                              ref:
-                                                "typeahead_detalle[" +
-                                                data.index +
-                                                "]",
-                                              attrs: {
-                                                size: "sm",
-                                                data: _vm.productos,
-                                                serializer: function(p) {
-                                                  return p.nombre
-                                                },
-                                                placeholder:
-                                                  "Escribe para filtrar ...",
-                                                state: _vm.$v.orden_compra
-                                                  .detalle_orden.$each[
-                                                  data.index
-                                                ].producto_nombre.$dirty
-                                                  ? !_vm.$v.orden_compra
-                                                      .detalle_orden.$each[
-                                                      data.index
-                                                    ].producto_nombre.$error
-                                                  : null,
-                                                "aria-describedby":
-                                                  "detalle-orden-producto-nombre" +
-                                                  data.index
-                                              },
-                                              on: {
-                                                hit: function($event) {
-                                                  return _vm.producto(
-                                                    $event,
-                                                    data.index
-                                                  )
-                                                }
-                                              },
-                                              model: {
-                                                value:
-                                                  _vm.$v.orden_compra
-                                                    .detalle_orden.$each[
-                                                    data.index
-                                                  ].producto_nombre.$model,
-                                                callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.$v.orden_compra
-                                                      .detalle_orden.$each[
-                                                      data.index
-                                                    ].producto_nombre,
-                                                    "$model",
-                                                    $$v
-                                                  )
-                                                },
-                                                expression:
-                                                  "$v.orden_compra.detalle_orden.$each[data.index].producto_nombre.$model"
-                                              }
-                                            }),
-                                            _vm._v(" "),
-                                            _c(
-                                              "b-form-invalid-feedback",
-                                              {
+                                    {
+                                      key: "cell(index)",
+                                      fn: function(data) {
+                                        return [
+                                          _vm._v(
+                                            "\n                                    " +
+                                              _vm._s(data.index + 1) +
+                                              "\n                                "
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "cell(descripcion)",
+                                      fn: function(data) {
+                                        return [
+                                          _c(
+                                            "b-form-group",
+                                            { staticClass: "mb-0" },
+                                            [
+                                              _c("vue-bootstrap-typeahead", {
+                                                ref:
+                                                  "typeahead_detalle_" +
+                                                  index +
+                                                  "[" +
+                                                  data.index +
+                                                  "]",
+                                                refInFor: true,
                                                 attrs: {
-                                                  id:
+                                                  size: "sm",
+                                                  data: _vm.productos,
+                                                  serializer: function(p) {
+                                                    return p.nombre
+                                                  },
+                                                  placeholder:
+                                                    "Escribe para filtrar ...",
+                                                  state: _vm.$v.ordenes_compra
+                                                    .$each[index].detalle.$each[
+                                                    data.index
+                                                  ].producto_nombre.$dirty
+                                                    ? !_vm.$v.ordenes_compra
+                                                        .$each[index].detalle
+                                                        .$each[data.index]
+                                                        .producto_nombre.$error
+                                                    : null,
+                                                  "aria-describedby":
                                                     "detalle-orden-producto-nombre" +
+                                                    index +
+                                                    "-" +
                                                     data.index
-                                                }
-                                              },
-                                              [
-                                                _vm._v(
-                                                  "\n                                                Campo de texto, mínimo de 3 caracteres.\n                                            "
-                                                )
-                                              ]
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    key: "cell(cantidad)",
-                                    fn: function(data) {
-                                      return [
-                                        _c(
-                                          "b-form-group",
-                                          { staticClass: "mb-0" },
-                                          [
-                                            _c("b-form-input", {
-                                              attrs: {
-                                                size: "sm",
-                                                state: _vm.$v.orden_compra
-                                                  .detalle_orden.$each[
-                                                  data.index
-                                                ].cantidad.$dirty
-                                                  ? !_vm.$v.orden_compra
-                                                      .detalle_orden.$each[
-                                                      data.index
-                                                    ].cantidad.$error
-                                                  : null,
-                                                "aria-describedby":
-                                                  "detalle-orden-cantidad" +
-                                                  data.index
-                                              },
-                                              on: {
-                                                keyup: function($event) {
-                                                  return _vm.calcular_total_cantidad(
-                                                    data.index
-                                                  )
-                                                }
-                                              },
-                                              model: {
-                                                value:
-                                                  _vm.$v.orden_compra
-                                                    .detalle_orden.$each[
-                                                    data.index
-                                                  ].cantidad.$model,
-                                                callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.$v.orden_compra
-                                                      .detalle_orden.$each[
-                                                      data.index
-                                                    ].cantidad,
-                                                    "$model",
-                                                    $$v
-                                                  )
                                                 },
-                                                expression:
-                                                  "$v.orden_compra.detalle_orden.$each[data.index].cantidad.$model"
-                                              }
-                                            }),
-                                            _vm._v(" "),
-                                            _c(
-                                              "b-form-invalid-feedback",
-                                              {
+                                                on: {
+                                                  hit: function($event) {
+                                                    return _vm.producto(
+                                                      $event,
+                                                      index,
+                                                      data.index
+                                                    )
+                                                  }
+                                                },
+                                                model: {
+                                                  value:
+                                                    _vm.$v.ordenes_compra.$each[
+                                                      index
+                                                    ].detalle.$each[data.index]
+                                                      .producto_nombre.$model,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.$v.ordenes_compra
+                                                        .$each[index].detalle
+                                                        .$each[data.index]
+                                                        .producto_nombre,
+                                                      "$model",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "$v.ordenes_compra.$each[index].detalle.$each[data.index].producto_nombre.$model"
+                                                }
+                                              }),
+                                              _vm._v(" "),
+                                              _c(
+                                                "b-form-invalid-feedback",
+                                                {
+                                                  attrs: {
+                                                    id:
+                                                      "detalle-orden-producto-nombre" +
+                                                      index +
+                                                      "-" +
+                                                      data.index
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                            Campo de texto, mínimo de 3 caracteres.\n                                        "
+                                                  )
+                                                ]
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "cell(cantidad)",
+                                      fn: function(data) {
+                                        return [
+                                          _c(
+                                            "b-form-group",
+                                            { staticClass: "mb-0" },
+                                            [
+                                              _c("b-form-input", {
                                                 attrs: {
-                                                  id:
+                                                  size: "sm",
+                                                  state: _vm.$v.ordenes_compra
+                                                    .$each[index].detalle.$each[
+                                                    data.index
+                                                  ].cantidad.$dirty
+                                                    ? !_vm.$v.ordenes_compra
+                                                        .$each[index].detalle
+                                                        .$each[data.index]
+                                                        .cantidad.$error
+                                                    : null,
+                                                  "aria-describedby":
                                                     "detalle-orden-cantidad" +
                                                     data.index
-                                                }
-                                              },
-                                              [
-                                                _vm._v(
-                                                  "\n                                                Campo númerico, valor mínimo 0.\n                                            "
-                                                )
-                                              ]
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    key: "cell(valor_unitario)",
-                                    fn: function(data) {
-                                      return [
-                                        _c(
-                                          "b-form-group",
-                                          { staticClass: "mb-0" },
-                                          [
-                                            _c("b-form-input", {
-                                              attrs: {
-                                                size: "sm",
-                                                state: _vm.$v.orden_compra
-                                                  .detalle_orden.$each[
-                                                  data.index
-                                                ].valor_unitario.$dirty
-                                                  ? !_vm.$v.orden_compra
-                                                      .detalle_orden.$each[
-                                                      data.index
-                                                    ].valor_unitario.$error
-                                                  : null,
-                                                "aria-describedby":
-                                                  "detalle-orden-valor_unitario" +
-                                                  data.index
-                                              },
-                                              model: {
-                                                value:
-                                                  _vm.$v.orden_compra
-                                                    .detalle_orden.$each[
-                                                    data.index
-                                                  ].valor_unitario.$model,
-                                                callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.$v.orden_compra
-                                                      .detalle_orden.$each[
-                                                      data.index
-                                                    ].valor_unitario,
-                                                    "$model",
-                                                    $$v
-                                                  )
                                                 },
-                                                expression:
-                                                  "$v.orden_compra.detalle_orden.$each[data.index].valor_unitario.$model"
-                                              }
-                                            }),
-                                            _vm._v(" "),
-                                            _c(
-                                              "b-form-invalid-feedback",
-                                              {
+                                                on: {
+                                                  keyup: function($event) {
+                                                    return _vm.calcular_total_cantidad(
+                                                      index,
+                                                      data.index
+                                                    )
+                                                  }
+                                                },
+                                                model: {
+                                                  value:
+                                                    _vm.$v.ordenes_compra.$each[
+                                                      index
+                                                    ].detalle.$each[data.index]
+                                                      .cantidad.$model,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.$v.ordenes_compra
+                                                        .$each[index].detalle
+                                                        .$each[data.index]
+                                                        .cantidad,
+                                                      "$model",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "$v.ordenes_compra.$each[index].detalle.$each[data.index].cantidad.$model"
+                                                }
+                                              }),
+                                              _vm._v(" "),
+                                              _c(
+                                                "b-form-invalid-feedback",
+                                                {
+                                                  attrs: {
+                                                    id:
+                                                      "detalle-orden-cantidad" +
+                                                      data.index
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                            Campo númerico, valor mínimo 0.\n                                        "
+                                                  )
+                                                ]
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "cell(valor_unitario)",
+                                      fn: function(data) {
+                                        return [
+                                          _c(
+                                            "b-form-group",
+                                            { staticClass: "mb-0" },
+                                            [
+                                              _c("b-form-input", {
                                                 attrs: {
-                                                  id:
+                                                  size: "sm",
+                                                  state: _vm.$v.ordenes_compra
+                                                    .$each[index].detalle.$each[
+                                                    data.index
+                                                  ].valor_unitario.$dirty
+                                                    ? !_vm.$v.ordenes_compra
+                                                        .$each[index].detalle
+                                                        .$each[data.index]
+                                                        .valor_unitario.$error
+                                                    : null,
+                                                  "aria-describedby":
                                                     "detalle-orden-valor_unitario" +
                                                     data.index
+                                                },
+                                                model: {
+                                                  value:
+                                                    _vm.$v.ordenes_compra.$each[
+                                                      index
+                                                    ].detalle.$each[data.index]
+                                                      .valor_unitario.$model,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.$v.ordenes_compra
+                                                        .$each[index].detalle
+                                                        .$each[data.index]
+                                                        .valor_unitario,
+                                                      "$model",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "$v.ordenes_compra.$each[index].detalle.$each[data.index].valor_unitario.$model"
                                                 }
-                                              },
-                                              [
-                                                _vm._v(
-                                                  "\n                                                Campo númerico, valor mínimo 1.\n                                            "
-                                                )
-                                              ]
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    key: "cell(total)",
-                                    fn: function(data) {
-                                      return [
-                                        _vm._v(
-                                          "\n                                        " +
-                                            _vm._s(
-                                              _vm._f("currency")(
-                                                data.item.total
+                                              }),
+                                              _vm._v(" "),
+                                              _c(
+                                                "b-form-invalid-feedback",
+                                                {
+                                                  attrs: {
+                                                    id:
+                                                      "detalle-orden-valor_unitario" +
+                                                      data.index
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                            Campo númerico, valor mínimo 1.\n                                        "
+                                                  )
+                                                ]
                                               )
-                                            ) +
-                                            "\n                                    "
-                                        )
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    key: "cell(acciones)",
-                                    fn: function(row) {
-                                      return [
-                                        _c(
-                                          "b-button",
-                                          {
-                                            attrs: {
-                                              size: "xs",
-                                              variant: "success",
-                                              title: "Agregar fila"
-                                            },
-                                            on: { click: _vm.agregar_fila }
-                                          },
-                                          [
-                                            _c("i", {
-                                              staticClass: "fa fa-plus"
-                                            })
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "b-button",
-                                          {
-                                            directives: [
-                                              {
-                                                name: "show",
-                                                rawName: "v-show",
-                                                value: row.index > 0,
-                                                expression: "row.index > 0"
-                                              }
                                             ],
-                                            attrs: {
-                                              size: "xs",
-                                              variant: "danger",
-                                              title: "Eliminar fila"
-                                            },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.eliminar_fila(
-                                                  row.index
+                                            1
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "cell(total)",
+                                      fn: function(data) {
+                                        return [
+                                          _vm._v(
+                                            "\n                                    " +
+                                              _vm._s(
+                                                _vm._f("currency")(
+                                                  data.item.total
                                                 )
+                                              ) +
+                                              "\n                                "
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "cell(acciones)",
+                                      fn: function(row) {
+                                        return [
+                                          _c(
+                                            "b-button",
+                                            {
+                                              attrs: {
+                                                size: "xs",
+                                                variant: "success",
+                                                title: "Agregar fila"
+                                              },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.agregar_fila(index)
+                                                }
                                               }
-                                            }
-                                          },
-                                          [
-                                            _c("i", {
-                                              staticClass: "fa fa-trash"
-                                            })
-                                          ]
-                                        )
-                                      ]
+                                            },
+                                            [
+                                              _c("i", {
+                                                staticClass: "fa fa-plus"
+                                              })
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "b-button",
+                                            {
+                                              directives: [
+                                                {
+                                                  name: "show",
+                                                  rawName: "v-show",
+                                                  value: row.index > 0,
+                                                  expression: "row.index > 0"
+                                                }
+                                              ],
+                                              attrs: {
+                                                size: "xs",
+                                                variant: "danger",
+                                                title: "Eliminar fila"
+                                              },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.eliminar_fila(
+                                                    index,
+                                                    row.index
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _c("i", {
+                                                staticClass: "fa fa-trash"
+                                              })
+                                            ]
+                                          )
+                                        ]
+                                      }
                                     }
-                                  }
-                                ])
+                                  ],
+                                  null,
+                                  true
+                                )
                               })
                             ],
                             1
@@ -79651,22 +79548,27 @@ var render = function() {
                             [
                               _c("b-form-input", {
                                 attrs: {
-                                  state: _vm.$v.orden_compra.neto.$dirty
-                                    ? !_vm.$v.orden_compra.neto.$error
+                                  state: _vm.$v.ordenes_compra.$each[index].neto
+                                    .$dirty
+                                    ? !_vm.$v.ordenes_compra.$each[index].neto
+                                        .$error
                                     : null,
                                   "aria-describedby": "orden-compra-neto",
                                   readonly: ""
                                 },
                                 model: {
-                                  value: _vm.$v.orden_compra.neto.$model,
+                                  value:
+                                    _vm.$v.ordenes_compra.$each[index].neto
+                                      .$model,
                                   callback: function($$v) {
                                     _vm.$set(
-                                      _vm.$v.orden_compra.neto,
+                                      _vm.$v.ordenes_compra.$each[index].neto,
                                       "$model",
                                       $$v
                                     )
                                   },
-                                  expression: "$v.orden_compra.neto.$model"
+                                  expression:
+                                    "$v.ordenes_compra.$each[index].neto.$model"
                                 }
                               })
                             ],
@@ -79693,22 +79595,27 @@ var render = function() {
                             [
                               _c("b-form-input", {
                                 attrs: {
-                                  state: _vm.$v.orden_compra.iva.$dirty
-                                    ? !_vm.$v.orden_compra.iva.$error
+                                  state: _vm.$v.ordenes_compra.$each[index].iva
+                                    .$dirty
+                                    ? !_vm.$v.ordenes_compra.$each[index].iva
+                                        .$error
                                     : null,
                                   "aria-describedby": "orden-compra-iva",
                                   readonly: ""
                                 },
                                 model: {
-                                  value: _vm.$v.orden_compra.iva.$model,
+                                  value:
+                                    _vm.$v.ordenes_compra.$each[index].iva
+                                      .$model,
                                   callback: function($$v) {
                                     _vm.$set(
-                                      _vm.$v.orden_compra.iva,
+                                      _vm.$v.ordenes_compra.$each[index].iva,
                                       "$model",
                                       $$v
                                     )
                                   },
-                                  expression: "$v.orden_compra.iva.$model"
+                                  expression:
+                                    "$v.ordenes_compra.$each[index].iva.$model"
                                 }
                               })
                             ],
@@ -79735,22 +79642,27 @@ var render = function() {
                             [
                               _c("b-form-input", {
                                 attrs: {
-                                  state: _vm.$v.orden_compra.total.$dirty
-                                    ? !_vm.$v.orden_compra.total.$error
+                                  state: _vm.$v.ordenes_compra.$each[index]
+                                    .total.$dirty
+                                    ? !_vm.$v.ordenes_compra.$each[index].total
+                                        .$error
                                     : null,
                                   "aria-describedby": "orden-compra-total",
                                   readonly: ""
                                 },
                                 model: {
-                                  value: _vm.$v.orden_compra.total.$model,
+                                  value:
+                                    _vm.$v.ordenes_compra.$each[index].total
+                                      .$model,
                                   callback: function($$v) {
                                     _vm.$set(
-                                      _vm.$v.orden_compra.total,
+                                      _vm.$v.ordenes_compra.$each[index].total,
                                       "$model",
                                       $$v
                                     )
                                   },
-                                  expression: "$v.orden_compra.total.$model"
+                                  expression:
+                                    "$v.ordenes_compra.$each[index].total.$model"
                                 }
                               })
                             ],
@@ -79773,8 +79685,10 @@ var render = function() {
                             [
                               _c("b-form-textarea", {
                                 attrs: {
-                                  state: _vm.$v.orden_compra.observacion.$dirty
-                                    ? !_vm.$v.orden_compra.observacion.$error
+                                  state: _vm.$v.ordenes_compra.$each[index]
+                                    .observacion.$dirty
+                                    ? !_vm.$v.ordenes_compra.$each[index]
+                                        .observacion.$error
                                     : null,
                                   "aria-describedby":
                                     "orden-compra-observacion",
@@ -79783,16 +79697,19 @@ var render = function() {
                                   placeholder: "Sin onbservación."
                                 },
                                 model: {
-                                  value: _vm.$v.orden_compra.observacion.$model,
+                                  value:
+                                    _vm.$v.ordenes_compra.$each[index]
+                                      .observacion.$model,
                                   callback: function($$v) {
                                     _vm.$set(
-                                      _vm.$v.orden_compra.observacion,
+                                      _vm.$v.ordenes_compra.$each[index]
+                                        .observacion,
                                       "$model",
                                       $$v
                                     )
                                   },
                                   expression:
-                                    "$v.orden_compra.observacion.$model"
+                                    "$v.ordenes_compra.$each[index].observacion.$model"
                                 }
                               }),
                               _vm._v(" "),
@@ -79801,7 +79718,7 @@ var render = function() {
                                 { attrs: { id: "orden-compra-observacion" } },
                                 [
                                   _vm._v(
-                                    "\n                                    Campo de alfanúmerico, mínimo de 3 caracteres.\n                                "
+                                    "\n                                Campo de alfanúmerico, mínimo de 3 caracteres.\n                            "
                                   )
                                 ]
                               )
@@ -79818,64 +79735,102 @@ var render = function() {
                 1
               )
             ])
-          ]),
+          })
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c(
+        "template",
+        { slot: "modal-footer" },
+        [
+          _c("b-spinner", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.spinner.estado == 1,
+                expression: "spinner.estado == 1"
+              }
+            ],
+            attrs: { variant: "info", label: "Spinning" },
+            model: {
+              value: _vm.spinner.estado,
+              callback: function($$v) {
+                _vm.$set(_vm.spinner, "estado", $$v)
+              },
+              expression: "spinner.estado"
+            }
+          }),
           _vm._v(" "),
-          _c(
-            "template",
-            { slot: "modal-footer" },
-            [
-              _vm.usuario && _vm.usuario.email
-                ? _c(
-                    "b-button",
-                    {
-                      attrs: {
-                        disabled: _vm.$v.orden_compra.$invalid,
-                        size: "md",
-                        variant: "success"
-                      },
-                      on: {
-                        click: function($event) {
-                          return _vm.crear_orden_compra(1)
-                        }
-                      }
-                    },
-                    [_vm._v(" Guardar y enviar ")]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _c(
+          _vm.usuario && _vm.usuario.email
+            ? _c(
                 "b-button",
                 {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.spinner.estado == 0,
+                      expression: "spinner.estado == 0"
+                    }
+                  ],
                   attrs: {
-                    disabled: _vm.$v.orden_compra.$invalid,
+                    disabled:
+                      _vm.$v.ordenes_compra.$invalid ||
+                      _vm.$v.proveedor.$invalid,
                     size: "md",
                     variant: "success"
                   },
                   on: {
                     click: function($event) {
-                      return _vm.crear_orden_compra()
+                      return _vm.crear_orden_compra(1)
                     }
                   }
                 },
-                [_vm._v(" Guardar ")]
-              ),
-              _vm._v(" "),
-              _c(
-                "b-button",
-                {
-                  attrs: { size: "md", variant: "danger" },
-                  on: { click: _vm.cerrar_modal_orden_compra }
-                },
-                [_vm._v(" Cerrar ")]
+                [_vm._v(" Guardar y enviar ")]
               )
-            ],
-            1
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "b-button",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.spinner.estado == 0,
+                  expression: "spinner.estado == 0"
+                }
+              ],
+              attrs: {
+                disabled:
+                  _vm.$v.ordenes_compra.$invalid || _vm.$v.proveedor.$invalid,
+                size: "md",
+                variant: "success"
+              },
+              on: {
+                click: function($event) {
+                  return _vm.crear_orden_compra()
+                }
+              }
+            },
+            [_vm._v(" Guardar ")]
+          ),
+          _vm._v(" "),
+          _c(
+            "b-button",
+            {
+              attrs: { size: "md", variant: "danger" },
+              on: { click: _vm.cerrar_modal_orden_compra }
+            },
+            [_vm._v(" Cerrar ")]
           )
         ],
-        2
+        1
       )
     ],
-    1
+    2
   )
 }
 var staticRenderFns = []
@@ -80444,6 +80399,784 @@ var render = function() {
           )
         ],
         1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/intranet/Facturas.vue?vue&type=template&id=51568520&":
+/*!********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/intranet/Facturas.vue?vue&type=template&id=51568520& ***!
+  \********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("titulo-pagina", { attrs: { titulo: "Facturas" } }),
+      _vm._v(" "),
+      _c(
+        "b-row",
+        [
+          _c(
+            "b-col",
+            [
+              _c(
+                "b-card",
+                [
+                  _c(
+                    "b-row",
+                    [
+                      _c(
+                        "b-col",
+                        { staticClass: "my-1", attrs: { lg: "6" } },
+                        [
+                          _c(
+                            "b-form-group",
+                            {
+                              staticClass: "mb-0",
+                              attrs: {
+                                label: "Búsqueda",
+                                "label-cols-sm": "2",
+                                "label-align-sm": "left",
+                                "label-size": "sm",
+                                "label-for": "filterInput"
+                              }
+                            },
+                            [
+                              _c(
+                                "b-input-group",
+                                { attrs: { size: "sm" } },
+                                [
+                                  _c("b-form-input", {
+                                    attrs: {
+                                      type: "search",
+                                      id: "filterInput",
+                                      placeholder: "Escribe para buscar"
+                                    },
+                                    model: {
+                                      value: _vm.filter,
+                                      callback: function($$v) {
+                                        _vm.filter = $$v
+                                      },
+                                      expression: "filter"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-input-group-append",
+                                    [
+                                      _c(
+                                        "b-button",
+                                        {
+                                          attrs: { disabled: !_vm.filter },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.filter = ""
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Limpiar")]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { staticClass: "my-1", attrs: { lg: "6" } },
+                        [
+                          _c(
+                            "b-form-group",
+                            {
+                              staticClass: "mb-0",
+                              attrs: {
+                                label: "Ordenar",
+                                "label-cols-sm": "2",
+                                "label-align-sm": "left",
+                                "label-size": "sm",
+                                "label-for": "sortBySelect"
+                              }
+                            },
+                            [
+                              _c(
+                                "b-input-group",
+                                { attrs: { size: "sm" } },
+                                [
+                                  _c("b-form-select", {
+                                    staticClass: "w-75",
+                                    attrs: {
+                                      id: "sortBySelect",
+                                      options: _vm.sortOptions
+                                    },
+                                    scopedSlots: _vm._u([
+                                      {
+                                        key: "first",
+                                        fn: function() {
+                                          return [
+                                            _c(
+                                              "option",
+                                              { attrs: { value: "" } },
+                                              [_vm._v("Sin ordenar")]
+                                            )
+                                          ]
+                                        },
+                                        proxy: true
+                                      }
+                                    ]),
+                                    model: {
+                                      value: _vm.sortBy,
+                                      callback: function($$v) {
+                                        _vm.sortBy = $$v
+                                      },
+                                      expression: "sortBy"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-form-select",
+                                    {
+                                      staticClass: "w-25",
+                                      attrs: {
+                                        size: "sm",
+                                        disabled: !_vm.sortBy
+                                      },
+                                      model: {
+                                        value: _vm.sortDesc,
+                                        callback: function($$v) {
+                                          _vm.sortDesc = $$v
+                                        },
+                                        expression: "sortDesc"
+                                      }
+                                    },
+                                    [
+                                      _c(
+                                        "option",
+                                        { domProps: { value: false } },
+                                        [_vm._v("Asc")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "option",
+                                        { domProps: { value: true } },
+                                        [_vm._v("Desc")]
+                                      )
+                                    ]
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { staticClass: "my-1", attrs: { lg: "6" } },
+                        [
+                          _c(
+                            "b-form-group",
+                            {
+                              staticClass: "mb-0",
+                              attrs: {
+                                label: "Por página",
+                                "label-cols-sm": "2",
+                                "label-align-sm": "left",
+                                "label-size": "sm",
+                                "label-for": "perPageSelect"
+                              }
+                            },
+                            [
+                              _c("b-form-select", {
+                                attrs: {
+                                  id: "perPageSelect",
+                                  size: "sm",
+                                  options: _vm.pageOptions
+                                },
+                                model: {
+                                  value: _vm.perPage,
+                                  callback: function($$v) {
+                                    _vm.perPage = $$v
+                                  },
+                                  expression: "perPage"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { staticClass: "my-1", attrs: { lg: "6" } },
+                        [
+                          _c("b-pagination", {
+                            staticClass: "my-0",
+                            attrs: {
+                              "total-rows": _vm.totalRows,
+                              "per-page": _vm.perPage,
+                              align: "fill",
+                              size: "sm"
+                            },
+                            model: {
+                              value: _vm.currentPage,
+                              callback: function($$v) {
+                                _vm.currentPage = $$v
+                              },
+                              expression: "currentPage"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("b-table", {
+                    staticClass: "my-3",
+                    attrs: {
+                      "show-empty": "",
+                      small: "",
+                      striped: "",
+                      outlined: "",
+                      stacked: "sm",
+                      items: _vm.items,
+                      fields: _vm.fields,
+                      "current-page": _vm.currentPage,
+                      "per-page": _vm.perPage,
+                      filter: _vm.filter,
+                      "sort-by": _vm.sortBy,
+                      "sort-desc": _vm.sortDesc
+                    },
+                    on: {
+                      "update:sortBy": function($event) {
+                        _vm.sortBy = $event
+                      },
+                      "update:sort-by": function($event) {
+                        _vm.sortBy = $event
+                      },
+                      "update:sortDesc": function($event) {
+                        _vm.sortDesc = $event
+                      },
+                      "update:sort-desc": function($event) {
+                        _vm.sortDesc = $event
+                      },
+                      filtered: _vm.onFiltered
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "empty",
+                        fn: function() {
+                          return [
+                            _c("center", [
+                              _c("h5", [_vm._v("No hay registros")])
+                            ])
+                          ]
+                        },
+                        proxy: true
+                      },
+                      {
+                        key: "cell(index)",
+                        fn: function(data) {
+                          return [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(data.index + 1) +
+                                "\n                    "
+                            )
+                          ]
+                        }
+                      },
+                      {
+                        key: "cell(proveedor)",
+                        fn: function(data) {
+                          return [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(data.item.proveedor.nombre) +
+                                "\n                    "
+                            )
+                          ]
+                        }
+                      },
+                      {
+                        key: "cell(orden_compra)",
+                        fn: function(data) {
+                          return [
+                            _vm._v(
+                              "\n                        N° " +
+                                _vm._s(data.item.orden_compra.id) +
+                                "\n                    "
+                            )
+                          ]
+                        }
+                      },
+                      {
+                        key: "cell(total)",
+                        fn: function(data) {
+                          return [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(
+                                  _vm._f("currency")(
+                                    data.item.orden_compra.total
+                                  )
+                                ) +
+                                "\n                    "
+                            )
+                          ]
+                        }
+                      },
+                      {
+                        key: "cell(centro_costo)",
+                        fn: function(data) {
+                          return [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(data.item.lugar.nombre) +
+                                "\n                    "
+                            )
+                          ]
+                        }
+                      },
+                      {
+                        key: "cell(acciones)",
+                        fn: function(row) {
+                          return [
+                            _c(
+                              "b-button",
+                              {
+                                attrs: {
+                                  size: "xs",
+                                  variant: "success",
+                                  title: "Actualizar factura"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.abrir_modal_factura(row.item)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "fa fa-plus" })]
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "b-modal",
+        {
+          ref: "modal_factura",
+          attrs: {
+            title: _vm.modal_factura.titulo,
+            size: "xl",
+            "no-close-on-backdrop": "",
+            scrollable: "",
+            static: ""
+          }
+        },
+        [
+          _c("b-form", [
+            _c("div", { staticClass: "card" }, [
+              _c("div", { staticClass: "card-header bg-info text-right" }, [
+                _c("h6", { staticClass: "m-b-0 text-white" }, [
+                  _vm._v("Datos de factura")
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "card-body" },
+                [
+                  _c(
+                    "b-row",
+                    [
+                      _c(
+                        "b-col",
+                        { attrs: { xs: "12", sm: "12", md: "6" } },
+                        [
+                          _c(
+                            "b-form-group",
+                            {
+                              staticClass: "mb-1",
+                              attrs: {
+                                label: "Fecha de factura",
+                                "label-cols-md": "3",
+                                "label-cols-lg": "3"
+                              }
+                            },
+                            [
+                              _c("b-form-input", {
+                                attrs: {
+                                  state: _vm.$v.factura.fecha.$dirty
+                                    ? !_vm.$v.factura.fecha.$error
+                                    : null,
+                                  "aria-describedby": "factura-fecha",
+                                  type: "date"
+                                },
+                                model: {
+                                  value: _vm.$v.factura.fecha.$model,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.$v.factura.fecha,
+                                      "$model",
+                                      $$v
+                                    )
+                                  },
+                                  expression: "$v.factura.fecha.$model"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "b-form-invalid-feedback",
+                                { attrs: { id: "factura-fecha" } },
+                                [
+                                  _vm._v(
+                                    "\n                                    Ingresa una fecha válida.\n                                "
+                                  )
+                                ]
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { attrs: { xs: "12", sm: "12", md: "6" } },
+                        [
+                          _c(
+                            "b-form-group",
+                            {
+                              staticClass: "mb-1",
+                              attrs: {
+                                label: "Número de factura",
+                                "label-cols-md": "3",
+                                "label-cols-lg": "3"
+                              }
+                            },
+                            [
+                              _c("b-form-input", {
+                                attrs: {
+                                  state: _vm.$v.factura.numero_factura.$dirty
+                                    ? !_vm.$v.factura.numero_factura.$error
+                                    : null,
+                                  "aria-describedby": "factura-numero-factura"
+                                },
+                                model: {
+                                  value: _vm.$v.factura.numero_factura.$model,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.$v.factura.numero_factura,
+                                      "$model",
+                                      $$v
+                                    )
+                                  },
+                                  expression: "$v.factura.numero_factura.$model"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "b-form-invalid-feedback",
+                                { attrs: { id: "factura-numero-factura" } },
+                                [
+                                  _vm._v(
+                                    "\n                                    Campo de númerico, valor mínimo 1.\n                                "
+                                  )
+                                ]
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card" }, [
+              _c("div", { staticClass: "card-header bg-info text-right" }, [
+                _c("h6", { staticClass: "m-b-0 text-white" }, [
+                  _vm._v("Detalle")
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "card-body" },
+                [
+                  _c(
+                    "b-row",
+                    { attrs: { "align-v": "center" } },
+                    [
+                      _c(
+                        "b-col",
+                        [
+                          _c(
+                            "b-form-group",
+                            [
+                              _c("b-table", {
+                                attrs: {
+                                  "show-empty": "",
+                                  small: "",
+                                  striped: "",
+                                  outlined: "",
+                                  stacked: "sm",
+                                  items: _vm.factura.detalle,
+                                  fields: _vm.orden_compra_detalle
+                                },
+                                scopedSlots: _vm._u([
+                                  {
+                                    key: "empty",
+                                    fn: function() {
+                                      return [
+                                        _c("center", [
+                                          _c("h6", [_vm._v("No hay registros")])
+                                        ])
+                                      ]
+                                    },
+                                    proxy: true
+                                  },
+                                  {
+                                    key: "cell(index)",
+                                    fn: function(data) {
+                                      return [
+                                        _vm._v(
+                                          "\n                                    " +
+                                            _vm._s(data.index + 1) +
+                                            "\n                                "
+                                        )
+                                      ]
+                                    }
+                                  },
+                                  {
+                                    key: "cell(total)",
+                                    fn: function(data) {
+                                      return [
+                                        _vm._v(
+                                          "\n                                    " +
+                                            _vm._s(
+                                              _vm._f("currency")(
+                                                data.item.total
+                                              )
+                                            ) +
+                                            "\n                                "
+                                        )
+                                      ]
+                                    }
+                                  },
+                                  {
+                                    key: "cell(acciones)",
+                                    fn: function(row) {
+                                      return [
+                                        row.item.estado == 0
+                                          ? _c(
+                                              "b-button",
+                                              {
+                                                attrs: {
+                                                  size: "xs",
+                                                  variant: "success",
+                                                  title:
+                                                    "Sumar stock de producto al inventario"
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.sumar_restar_inventario(
+                                                      1,
+                                                      row.item.producto_nombre,
+                                                      row.item.cantidad,
+                                                      row.index
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("i", {
+                                                  staticClass: "fa fa-check"
+                                                })
+                                              ]
+                                            )
+                                          : _c(
+                                              "b-button",
+                                              {
+                                                attrs: {
+                                                  size: "xs",
+                                                  variant: "danger",
+                                                  title:
+                                                    "Elimnar stock de producto del inventario"
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.sumar_restar_inventario(
+                                                      2,
+                                                      row.item.producto_nombre,
+                                                      row.item.cantidad,
+                                                      row.index
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("i", {
+                                                  staticClass: "fa fa-trash"
+                                                })
+                                              ]
+                                            )
+                                      ]
+                                    }
+                                  }
+                                ])
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-row",
+                    [
+                      _c(
+                        "b-col",
+                        { attrs: { cols: "12" } },
+                        [
+                          _c(
+                            "b-form-group",
+                            {
+                              staticClass: "mb-1",
+                              attrs: { label: "Observación " }
+                            },
+                            [
+                              _c("b-form-textarea", {
+                                attrs: {
+                                  state: _vm.$v.factura.observacion.$dirty
+                                    ? !_vm.$v.factura.observacion.$error
+                                    : null,
+                                  "aria-describedby": "factura-observacion",
+                                  rows: "3",
+                                  "max-rows": "6",
+                                  placeholder: "Sin onbservación."
+                                },
+                                model: {
+                                  value: _vm.$v.factura.observacion.$model,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.$v.factura.observacion,
+                                      "$model",
+                                      $$v
+                                    )
+                                  },
+                                  expression: "$v.factura.observacion.$model"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "b-form-invalid-feedback",
+                                { attrs: { id: "factura-observacion" } },
+                                [
+                                  _vm._v(
+                                    "\n                                Campo de alfanúmerico, mínimo de 3 caracteres.\n                            "
+                                  )
+                                ]
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "template",
+            { slot: "modal-footer" },
+            [
+              _c(
+                "b-button",
+                {
+                  attrs: {
+                    disabled: _vm.$v.factura.$invalid,
+                    size: "md",
+                    variant: "success"
+                  },
+                  on: { click: _vm.crear_actualizar_factura }
+                },
+                [_vm._v(" Guardar ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                {
+                  attrs: { size: "md", variant: "danger" },
+                  on: { click: _vm.cerrar_modal_factura }
+                },
+                [_vm._v(" Cerrar ")]
+              )
+            ],
+            1
+          )
+        ],
+        2
       )
     ],
     1
@@ -81853,6 +82586,18 @@ var render = function() {
                         }
                       },
                       {
+                        key: "cell(lugar_nombre)",
+                        fn: function(row) {
+                          return [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(row.item.lugar.nombre) +
+                                "\n                    "
+                            )
+                          ]
+                        }
+                      },
+                      {
                         key: "cell(acciones)",
                         fn: function(row) {
                           return [
@@ -81948,1271 +82693,6 @@ var render = function() {
       ),
       _vm._v(" "),
       _c(
-        "b-modal",
-        {
-          ref: "modal_orden_compra",
-          attrs: {
-            title: _vm.modal_orden_compra.titulo,
-            size: "xl",
-            "no-close-on-backdrop": "",
-            scrollable: "",
-            static: ""
-          }
-        },
-        [
-          _c("b-form", [
-            _c("div", { staticClass: "card" }, [
-              _c("div", { staticClass: "card-header bg-info text-right" }, [
-                _c("h6", { staticClass: "m-b-0 text-white" }, [
-                  _vm._v("Proveedor de Servicios")
-                ])
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "card-body" },
-                [
-                  _c(
-                    "b-row",
-                    [
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "Razón Social ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("vue-bootstrap-typeahead", {
-                                ref: "typeahead_proveedor",
-                                attrs: {
-                                  data: _vm.proveedores,
-                                  serializer: function(p) {
-                                    return p.nombre
-                                  },
-                                  placeholder: "Escribe para filtrar ...",
-                                  state: _vm.$v.orden_compra.proveedor_nombre
-                                    .$dirty
-                                    ? !_vm.$v.orden_compra.proveedor_nombre
-                                        .$error
-                                    : null,
-                                  "aria-describedby":
-                                    "orden-compra-proveedor-nombre"
-                                },
-                                on: {
-                                  hit: function($event) {
-                                    return _vm.proveedor($event)
-                                  }
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.orden_compra.proveedor_nombre.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.proveedor_nombre,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.orden_compra.proveedor_nombre.$model"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-invalid-feedback",
-                                {
-                                  attrs: { id: "orden-compra-proveedor-nombre" }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                    Campo de texto, mínimo de 3 caracteres.\n                                "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "Rut ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                directives: [
-                                  {
-                                    name: "rut",
-                                    rawName: "v-rut:live",
-                                    arg: "live"
-                                  }
-                                ],
-                                attrs: {
-                                  state: _vm.$v.orden_compra.proveedor_rut
-                                    .$dirty
-                                    ? !_vm.$v.orden_compra.proveedor_rut.$error
-                                    : null,
-                                  "aria-describedby":
-                                    "orden-compra-proveedor-rut",
-                                  readonly: _vm.modal_orden_compra.accion == 2
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.orden_compra.proveedor_rut.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.proveedor_rut,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.orden_compra.proveedor_rut.$model"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-invalid-feedback",
-                                { attrs: { id: "orden-compra-proveedor-rut" } },
-                                [
-                                  _vm._v(
-                                    "\n                                    Campo de alfanúmerico, mínimo de 3 caracteres.\n                                "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "Giro ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra.proveedor_giro
-                                    .$dirty
-                                    ? !_vm.$v.orden_compra.proveedor_giro.$error
-                                    : null,
-                                  "aria-describedby":
-                                    "orden-compra-proveedor-giro"
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.orden_compra.proveedor_giro.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.proveedor_giro,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.orden_compra.proveedor_giro.$model"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-invalid-feedback",
-                                {
-                                  attrs: { id: "orden-compra-proveedor-giro" }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                    Campo de texto, mínimo de 3 caracteres.\n                                "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "Teléfono ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra.proveedor_telefono
-                                    .$dirty
-                                    ? !_vm.$v.orden_compra.proveedor_telefono
-                                        .$error
-                                    : null,
-                                  "aria-describedby":
-                                    "orden-compra-proveedor-telefono"
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.orden_compra.proveedor_telefono
-                                      .$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.proveedor_telefono,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.orden_compra.proveedor_telefono.$model"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-invalid-feedback",
-                                {
-                                  attrs: {
-                                    id: "orden-compra-proveedor-telefono"
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                    Campo de númerico, mínimo de 3 caracteres.\n                                "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "Dirección ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra.proveedor_direccion
-                                    .$dirty
-                                    ? !_vm.$v.orden_compra.proveedor_direccion
-                                        .$error
-                                    : null,
-                                  "aria-describedby":
-                                    "orden-compra-proveedor-direccion"
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.orden_compra.proveedor_direccion
-                                      .$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.proveedor_direccion,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.orden_compra.proveedor_direccion.$model"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-invalid-feedback",
-                                {
-                                  attrs: {
-                                    id: "orden-compra-proveedor-direccion"
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                    Campo de alfanúmerico, mínimo de 3 caracteres.\n                                "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "Comuna ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra.proveedor_comuna
-                                    .$dirty
-                                    ? !_vm.$v.orden_compra.proveedor_comuna
-                                        .$error
-                                    : null,
-                                  "aria-describedby":
-                                    "orden-compra-proveedor-comuna"
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.orden_compra.proveedor_comuna.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.proveedor_comuna,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.orden_compra.proveedor_comuna.$model"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-invalid-feedback",
-                                {
-                                  attrs: { id: "orden-compra-proveedor-comuna" }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                    Campo de texto, mínimo de 3 caracteres.\n                                "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "Correo ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra.proveedor_correo
-                                    .$dirty
-                                    ? !_vm.$v.orden_compra.proveedor_correo
-                                        .$error
-                                    : null,
-                                  "aria-describedby":
-                                    "orden-compra-proveedor-correo"
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.orden_compra.proveedor_correo.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.proveedor_correo,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.orden_compra.proveedor_correo.$model"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-invalid-feedback",
-                                {
-                                  attrs: { id: "orden-compra-proveedor-correo" }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                    Campo de alfanúmerico, mínimo de 3 caracteres y formato de email.\n                                "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "6" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "Contacto ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra
-                                    .proveedor_referencia.$dirty
-                                    ? !_vm.$v.orden_compra.proveedor_referencia
-                                        .$error
-                                    : null,
-                                  "aria-describedby":
-                                    "orden-compra-proveedor-referencia"
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.orden_compra.proveedor_referencia
-                                      .$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.proveedor_referencia,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.orden_compra.proveedor_referencia.$model"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-invalid-feedback",
-                                {
-                                  attrs: {
-                                    id: "orden-compra-proveedor-referencia"
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                    Campo de texto, mínimo de 3 caracteres.\n                                "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card" }, [
-              _c("div", { staticClass: "card-header bg-info text-right" }, [
-                _c("h6", { staticClass: "m-b-0 text-white" }, [
-                  _vm._v("Detalle orden de Compra")
-                ])
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "card-body" },
-                [
-                  _c(
-                    "b-row",
-                    [
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "4" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              attrs: {
-                                label: "Asunto ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra.asunto.$dirty
-                                    ? !_vm.$v.orden_compra.asunto.$error
-                                    : null,
-                                  "aria-describedby": "orden-compra-asunto"
-                                },
-                                model: {
-                                  value: _vm.$v.orden_compra.asunto.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.asunto,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression: "$v.orden_compra.asunto.$model"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-invalid-feedback",
-                                { attrs: { id: "orden-compra-asunto" } },
-                                [
-                                  _vm._v(
-                                    "\n                                    Campo de alfanúmerico, mínimo de 3 caracteres.\n                                "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "4" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              attrs: {
-                                label: "Fecha ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra.fecha.$dirty
-                                    ? !_vm.$v.orden_compra.fecha.$error
-                                    : null,
-                                  "aria-describedby": "orden-compra-fecha",
-                                  readonly: ""
-                                },
-                                model: {
-                                  value: _vm.$v.orden_compra.fecha.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.fecha,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression: "$v.orden_compra.fecha.$model"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "4" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              attrs: {
-                                label: " N° Orden ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra.numero.$dirty
-                                    ? !_vm.$v.orden_compra.numero.$error
-                                    : null,
-                                  "aria-describedby": "orden-compra-numero",
-                                  readonly: ""
-                                },
-                                model: {
-                                  value: _vm.$v.orden_compra.numero.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.numero,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression: "$v.orden_compra.numero.$model"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "b-row",
-                    { attrs: { "align-v": "center" } },
-                    [
-                      _c(
-                        "b-col",
-                        [
-                          _c(
-                            "b-form-group",
-                            [
-                              _c("b-table", {
-                                attrs: {
-                                  "show-empty": "",
-                                  small: "",
-                                  striped: "",
-                                  outlined: "",
-                                  stacked: "sm",
-                                  items: _vm.orden_compra.detalle_orden,
-                                  fields: _vm.orden_compra_detalle
-                                },
-                                scopedSlots: _vm._u([
-                                  {
-                                    key: "empty",
-                                    fn: function() {
-                                      return [
-                                        _c("center", [
-                                          _c("h6", [_vm._v("No hay registros")])
-                                        ])
-                                      ]
-                                    },
-                                    proxy: true
-                                  },
-                                  {
-                                    key: "cell(index)",
-                                    fn: function(data) {
-                                      return [
-                                        _vm._v(
-                                          "\n                                        " +
-                                            _vm._s(data.index + 1) +
-                                            "\n                                    "
-                                        )
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    key: "cell(descripcion)",
-                                    fn: function(data) {
-                                      return [
-                                        _c(
-                                          "b-form-group",
-                                          { staticClass: "mb-0" },
-                                          [
-                                            _c("vue-bootstrap-typeahead", {
-                                              ref:
-                                                "typeahead_detalle[" +
-                                                data.index +
-                                                "]",
-                                              attrs: {
-                                                size: "sm",
-                                                data: _vm.productos,
-                                                serializer: function(p) {
-                                                  return p.nombre
-                                                },
-                                                placeholder:
-                                                  "Escribe para filtrar ...",
-                                                state: _vm.$v.orden_compra
-                                                  .detalle_orden.$each[
-                                                  data.index
-                                                ].producto_nombre.$dirty
-                                                  ? !_vm.$v.orden_compra
-                                                      .detalle_orden.$each[
-                                                      data.index
-                                                    ].producto_nombre.$error
-                                                  : null,
-                                                "aria-describedby":
-                                                  "detalle-orden-producto-nombre" +
-                                                  data.index
-                                              },
-                                              on: {
-                                                hit: function($event) {
-                                                  return _vm.producto(
-                                                    $event,
-                                                    data.index
-                                                  )
-                                                }
-                                              },
-                                              model: {
-                                                value:
-                                                  _vm.$v.orden_compra
-                                                    .detalle_orden.$each[
-                                                    data.index
-                                                  ].producto_nombre.$model,
-                                                callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.$v.orden_compra
-                                                      .detalle_orden.$each[
-                                                      data.index
-                                                    ].producto_nombre,
-                                                    "$model",
-                                                    $$v
-                                                  )
-                                                },
-                                                expression:
-                                                  "$v.orden_compra.detalle_orden.$each[data.index].producto_nombre.$model"
-                                              }
-                                            }),
-                                            _vm._v(" "),
-                                            _c(
-                                              "b-form-invalid-feedback",
-                                              {
-                                                attrs: {
-                                                  id:
-                                                    "detalle-orden-producto-nombre" +
-                                                    data.index
-                                                }
-                                              },
-                                              [
-                                                _vm._v(
-                                                  "\n                                                Campo de texto, mínimo de 3 caracteres.\n                                            "
-                                                )
-                                              ]
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    key: "cell(cantidad)",
-                                    fn: function(data) {
-                                      return [
-                                        _c(
-                                          "b-form-group",
-                                          { staticClass: "mb-0" },
-                                          [
-                                            _c("b-form-input", {
-                                              attrs: {
-                                                size: "sm",
-                                                state: _vm.$v.orden_compra
-                                                  .detalle_orden.$each[
-                                                  data.index
-                                                ].cantidad.$dirty
-                                                  ? !_vm.$v.orden_compra
-                                                      .detalle_orden.$each[
-                                                      data.index
-                                                    ].cantidad.$error
-                                                  : null,
-                                                "aria-describedby":
-                                                  "detalle-orden-cantidad" +
-                                                  data.index
-                                              },
-                                              on: {
-                                                keyup: function($event) {
-                                                  return _vm.calcular_total_cantidad(
-                                                    data.index
-                                                  )
-                                                }
-                                              },
-                                              model: {
-                                                value:
-                                                  _vm.$v.orden_compra
-                                                    .detalle_orden.$each[
-                                                    data.index
-                                                  ].cantidad.$model,
-                                                callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.$v.orden_compra
-                                                      .detalle_orden.$each[
-                                                      data.index
-                                                    ].cantidad,
-                                                    "$model",
-                                                    $$v
-                                                  )
-                                                },
-                                                expression:
-                                                  "$v.orden_compra.detalle_orden.$each[data.index].cantidad.$model"
-                                              }
-                                            }),
-                                            _vm._v(" "),
-                                            _c(
-                                              "b-form-invalid-feedback",
-                                              {
-                                                attrs: {
-                                                  id:
-                                                    "detalle-orden-cantidad" +
-                                                    data.index
-                                                }
-                                              },
-                                              [
-                                                _vm._v(
-                                                  "\n                                                Campo númerico, valor mínimo 0.\n                                            "
-                                                )
-                                              ]
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    key: "cell(valor_unitario)",
-                                    fn: function(data) {
-                                      return [
-                                        _c(
-                                          "b-form-group",
-                                          { staticClass: "mb-0" },
-                                          [
-                                            _c("b-form-input", {
-                                              attrs: {
-                                                size: "sm",
-                                                state: _vm.$v.orden_compra
-                                                  .detalle_orden.$each[
-                                                  data.index
-                                                ].valor_unitario.$dirty
-                                                  ? !_vm.$v.orden_compra
-                                                      .detalle_orden.$each[
-                                                      data.index
-                                                    ].valor_unitario.$error
-                                                  : null,
-                                                "aria-describedby":
-                                                  "detalle-orden-valor_unitario" +
-                                                  data.index
-                                              },
-                                              model: {
-                                                value:
-                                                  _vm.$v.orden_compra
-                                                    .detalle_orden.$each[
-                                                    data.index
-                                                  ].valor_unitario.$model,
-                                                callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.$v.orden_compra
-                                                      .detalle_orden.$each[
-                                                      data.index
-                                                    ].valor_unitario,
-                                                    "$model",
-                                                    $$v
-                                                  )
-                                                },
-                                                expression:
-                                                  "$v.orden_compra.detalle_orden.$each[data.index].valor_unitario.$model"
-                                              }
-                                            }),
-                                            _vm._v(" "),
-                                            _c(
-                                              "b-form-invalid-feedback",
-                                              {
-                                                attrs: {
-                                                  id:
-                                                    "detalle-orden-valor_unitario" +
-                                                    data.index
-                                                }
-                                              },
-                                              [
-                                                _vm._v(
-                                                  "\n                                                Campo númerico, valor mínimo 1.\n                                            "
-                                                )
-                                              ]
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    key: "cell(total)",
-                                    fn: function(data) {
-                                      return [
-                                        _vm._v(
-                                          "\n                                        " +
-                                            _vm._s(
-                                              _vm._f("currency")(
-                                                data.item.total
-                                              )
-                                            ) +
-                                            "\n                                    "
-                                        )
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    key: "cell(acciones)",
-                                    fn: function(row) {
-                                      return [
-                                        _c(
-                                          "b-button",
-                                          {
-                                            attrs: {
-                                              size: "xs",
-                                              variant: "success",
-                                              title: "Agregar fila"
-                                            },
-                                            on: { click: _vm.agregar_fila }
-                                          },
-                                          [
-                                            _c("i", {
-                                              staticClass: "fa fa-plus"
-                                            })
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "b-button",
-                                          {
-                                            directives: [
-                                              {
-                                                name: "show",
-                                                rawName: "v-show",
-                                                value: row.index > 0,
-                                                expression: "row.index > 0"
-                                              }
-                                            ],
-                                            attrs: {
-                                              size: "xs",
-                                              variant: "danger",
-                                              title: "Eliminar fila"
-                                            },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.eliminar_fila(
-                                                  row.index
-                                                )
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _c("i", {
-                                              staticClass: "fa fa-trash"
-                                            })
-                                          ]
-                                        )
-                                      ]
-                                    }
-                                  }
-                                ])
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "b-row",
-                    [
-                      _c(
-                        "b-col",
-                        { attrs: { cols: "4" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "NETO ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra.neto.$dirty
-                                    ? !_vm.$v.orden_compra.neto.$error
-                                    : null,
-                                  "aria-describedby": "orden-compra-neto",
-                                  readonly: ""
-                                },
-                                model: {
-                                  value: _vm.$v.orden_compra.neto.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.neto,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression: "$v.orden_compra.neto.$model"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { cols: "4" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "IVA(19%) ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra.iva.$dirty
-                                    ? !_vm.$v.orden_compra.iva.$error
-                                    : null,
-                                  "aria-describedby": "orden-compra-iva",
-                                  readonly: ""
-                                },
-                                model: {
-                                  value: _vm.$v.orden_compra.iva.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.iva,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression: "$v.orden_compra.iva.$model"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { cols: "4" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "Total ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra.total.$dirty
-                                    ? !_vm.$v.orden_compra.total.$error
-                                    : null,
-                                  "aria-describedby": "orden-compra-total",
-                                  readonly: ""
-                                },
-                                model: {
-                                  value: _vm.$v.orden_compra.total.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.total,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression: "$v.orden_compra.total.$model"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { cols: "12" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: { label: "Observación " }
-                            },
-                            [
-                              _c("b-form-textarea", {
-                                attrs: {
-                                  state: _vm.$v.orden_compra.observacion.$dirty
-                                    ? !_vm.$v.orden_compra.observacion.$error
-                                    : null,
-                                  "aria-describedby":
-                                    "orden-compra-observacion",
-                                  rows: "3",
-                                  "max-rows": "6",
-                                  placeholder: "Sin onbservación."
-                                },
-                                model: {
-                                  value: _vm.$v.orden_compra.observacion.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.orden_compra.observacion,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.orden_compra.observacion.$model"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-invalid-feedback",
-                                { attrs: { id: "orden-compra-observacion" } },
-                                [
-                                  _vm._v(
-                                    "\n                                    Campo de alfanúmerico, mínimo de 3 caracteres.\n                                "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c(
-            "template",
-            { slot: "modal-footer" },
-            [
-              _vm.usuario && _vm.usuario.email
-                ? _c(
-                    "b-button",
-                    {
-                      attrs: {
-                        disabled: _vm.$v.orden_compra.$invalid,
-                        size: "md",
-                        variant: "success"
-                      },
-                      on: {
-                        click: function($event) {
-                          return _vm.crear_orden_compra(1)
-                        }
-                      }
-                    },
-                    [_vm._v(" Guardar y enviar ")]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _c(
-                "b-button",
-                {
-                  attrs: {
-                    disabled: _vm.$v.orden_compra.$invalid,
-                    size: "md",
-                    variant: "success"
-                  },
-                  on: {
-                    click: function($event) {
-                      return _vm.crear_orden_compra()
-                    }
-                  }
-                },
-                [_vm._v(" Guardar ")]
-              ),
-              _vm._v(" "),
-              _c(
-                "b-button",
-                {
-                  attrs: { size: "md", variant: "danger" },
-                  on: { click: _vm.cerrar_modal_orden_compra }
-                },
-                [_vm._v(" Cerrar ")]
-              )
-            ],
-            1
-          )
-        ],
-        2
-      ),
-      _vm._v(" "),
-      _c(
         "div",
         { staticClass: "fixed-bottom mb-5 mr-5" },
         [
@@ -83221,7 +82701,11 @@ var render = function() {
             {
               staticClass: "pull-right heigth-50",
               attrs: { pill: "", variant: "success", size: "lg" },
-              on: { click: _vm.abrir_modal_orden_compra }
+              on: {
+                click: function($event) {
+                  return _vm.abrir_modal_orden_compra(null)
+                }
+              }
             },
             [_c("i", { staticClass: "ti-plus" })]
           )
@@ -84366,9 +83850,24 @@ var render = function() {
                         key: "cell(acciones)",
                         fn: function(row) {
                           return [
-                            _c("orden-compra", {
-                              attrs: { id_proveedor: row.item.proveedor_id }
-                            }),
+                            _c(
+                              "b-button",
+                              {
+                                attrs: {
+                                  size: "xs",
+                                  variant: "success",
+                                  title: "Generar orden de compra"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.abrir_modal_orden_compra(
+                                      row.item.proveedor_id
+                                    )
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "fa fa-plus" })]
+                            ),
                             _vm._v(" "),
                             _c(
                               "b-button",
@@ -85787,9 +85286,24 @@ var render = function() {
                         key: "cell(acciones)",
                         fn: function(row) {
                           return [
-                            _c("orden-compra", {
-                              attrs: { id_proveedor: row.item.id }
-                            }),
+                            _c(
+                              "b-button",
+                              {
+                                attrs: {
+                                  size: "xs",
+                                  variant: "success",
+                                  title: "Generar orden de compra"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.abrir_modal_orden_compra(
+                                      row.item.id
+                                    )
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "fa fa-plus" })]
+                            ),
                             _vm._v(" "),
                             _c(
                               "b-button",
@@ -105419,7 +104933,8 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-window.swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js"); //Componentes
+window.swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+window.Evento = new Vue(); //Componentes
 
 
 
@@ -105666,15 +105181,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!*********************************************************!*\
   !*** ./resources/js/components/general/OrdenCompra.vue ***!
   \*********************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _OrdenCompra_vue_vue_type_template_id_91f26fb4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./OrdenCompra.vue?vue&type=template&id=91f26fb4& */ "./resources/js/components/general/OrdenCompra.vue?vue&type=template&id=91f26fb4&");
 /* harmony import */ var _OrdenCompra_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./OrdenCompra.vue?vue&type=script&lang=js& */ "./resources/js/components/general/OrdenCompra.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _OrdenCompra_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _OrdenCompra_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -105704,7 +105218,7 @@ component.options.__file = "resources/js/components/general/OrdenCompra.vue"
 /*!**********************************************************************************!*\
   !*** ./resources/js/components/general/OrdenCompra.vue?vue&type=script&lang=js& ***!
   \**********************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -105865,6 +105379,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CategoriasProducto_vue_vue_type_template_id_79f3c5d5___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CategoriasProducto_vue_vue_type_template_id_79f3c5d5___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/intranet/Facturas.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/intranet/Facturas.vue ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Facturas_vue_vue_type_template_id_51568520___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Facturas.vue?vue&type=template&id=51568520& */ "./resources/js/components/intranet/Facturas.vue?vue&type=template&id=51568520&");
+/* harmony import */ var _Facturas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Facturas.vue?vue&type=script&lang=js& */ "./resources/js/components/intranet/Facturas.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Facturas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Facturas_vue_vue_type_template_id_51568520___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Facturas_vue_vue_type_template_id_51568520___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/intranet/Facturas.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/intranet/Facturas.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/intranet/Facturas.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Facturas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Facturas.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/intranet/Facturas.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Facturas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/intranet/Facturas.vue?vue&type=template&id=51568520&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/intranet/Facturas.vue?vue&type=template&id=51568520& ***!
+  \**************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Facturas_vue_vue_type_template_id_51568520___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Facturas.vue?vue&type=template&id=51568520& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/intranet/Facturas.vue?vue&type=template&id=51568520&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Facturas_vue_vue_type_template_id_51568520___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Facturas_vue_vue_type_template_id_51568520___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -106371,9 +105954,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_intranet_CategoriasProducto_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/intranet/CategoriasProducto.vue */ "./resources/js/components/intranet/CategoriasProducto.vue");
 /* harmony import */ var _components_intranet_Proveedor_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/intranet/Proveedor.vue */ "./resources/js/components/intranet/Proveedor.vue");
 /* harmony import */ var _components_intranet_Notificaciones_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/intranet/Notificaciones.vue */ "./resources/js/components/intranet/Notificaciones.vue");
+/* harmony import */ var _components_intranet_Facturas_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/intranet/Facturas.vue */ "./resources/js/components/intranet/Facturas.vue");
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
 
 
 
@@ -106415,6 +106000,10 @@ Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
     path: '/notificaciones',
     name: 'notificaciones',
     component: _components_intranet_Notificaciones_vue__WEBPACK_IMPORTED_MODULE_8__["default"]
+  }, {
+    path: '/facturas',
+    name: 'facturas',
+    component: _components_intranet_Facturas_vue__WEBPACK_IMPORTED_MODULE_9__["default"]
   }],
   mode: 'history'
 }));

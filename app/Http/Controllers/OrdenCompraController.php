@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Factura;
 use App\Mail\OrdenCompra as AppOrdenCompra;
 use App\OrdenCompra;
 use App\ProductoInventario;
@@ -29,7 +30,7 @@ class OrdenCompraController extends Controller
                 return [
                             'ordenes' => OrdenCompra::join('proveedores', 'orden_compras.proveedor_id', '=', 'proveedores.id')
                                             ->select('orden_compras.*', 'proveedores.id as proveedor_id', 'proveedores.rut as proveedor_rut', 'proveedores.nombre as proveedor_nombre', 'proveedores.giro as proveedor_giro', 'proveedores.telefono as proveedor_telefono', 'proveedores.direccion as proveedor_direccion', 'proveedores.comuna as proveedor_comuna', 'proveedores.correo as proveedor_correo', 'proveedores.referencia as proveedor_referencia')
-                                            ->orderBy('orden_compras.created_at', 'desc')->get(),
+                                            ->orderBy('orden_compras.created_at', 'desc')->with('lugar')->get(),
                             'gasto_diario' => $gasto_diario,
                             'gasto_semanal' => $gasto_semanal,
                             'gasto_mensual' => $gasto_mensual,
@@ -40,80 +41,135 @@ class OrdenCompraController extends Controller
                 return [
                             'ordenes' => OrdenCompra::withTrashed()->join('proveedores', 'orden_compras.proveedor_id', '=', 'proveedores.id')
                                             ->select('orden_compras.*', 'proveedores.id as proveedor_id', 'proveedores.rut as proveedor_rut', 'proveedores.nombre as proveedor_nombre', 'proveedores.giro as proveedor_giro', 'proveedores.telefono as proveedor_telefono', 'proveedores.direccion as proveedor_direccion', 'proveedores.comuna as proveedor_comuna', 'proveedores.correo as proveedor_correo', 'proveedores.referencia as proveedor_referencia')
-                                            ->orderBy('orden_compras.created_at', 'desc')->get(),
+                                            ->orderBy('orden_compras.created_at', 'desc')->with('lugar')->get(),
                             'gasto_diario' => $gasto_diario,
                             'gasto_semanal' => $gasto_semanal,
                             'gasto_mensual' => $gasto_mensual,
                             'gasto_anual' => $gasto_anual
                         ];
                 break;
+            case 3:
+                return ['num_orden' => OrdenCompra::max('id')];
+                break;
         }
     }
 
     public function crear(Request $request){
          DB::transaction(function () use ($request) {
-            $productos = "";
-            $cantidades = "";
-            $valores_unitarios = "";
-            $medidas = "";
+
 
             $proveedor = Proveedor::updateOrCreate(
-                ['id' => $request->proveedor_id],
+                ['id' => $request->id],
                 [
-                    'nombre' => $request->proveedor_nombre,
-                    'rut' => $request->proveedor_rut,
-                    'giro' => $request->proveedor_giro,
-                    'telefono' => $request->proveedor_telefono,
-                    'direccion' => $request->proveedor_direccion,
-                    'comuna' => $request->proveedor_comuna,
-                    'correo' => $request->proveedor_correo,
-                    'referencia' => $request->proveedor_referencia
+                    'nombre' => $request->nombre,
+                    'rut' => $request->rut,
+                    'giro' => $request->giro,
+                    'telefono' => $request->telefono,
+                    'direccion' => $request->direccion,
+                    'comuna' => $request->comuna,
+                    'correo' => $request->correo,
+                    'referencia' => $request->referencia
                 ]
             );
 
-            foreach($request->detalle_orden AS $key => $item){
-                if($key > 0){
-                    $productos .= "@";
-                    $cantidades .= "@";
-                    $valores_unitarios .= "@";
-                    $medidas .= "@";
+            foreach($request->ordenes_compra AS $key => $item){
+                $productos = '';
+                $cantidades = '';
+                $valores_unitarios = '';
+                $medidas = '';
+                $estados = '';
+
+                foreach ($item['detalle'] as $key => $detalle) {
+                    if($key > 0){
+                        $productos .= "@";
+                        $cantidades .= "@";
+                        $valores_unitarios .= "@";
+                        $medidas .= "@";
+                        $estados .= "@";
+                    }
+
+                    if($detalle['id'] > 0){
+                        $producto = ProductoInventario::find($detalle['id']);
+                        $producto->proveedor_id = $proveedor->id;
+                        $producto->save();
+                    }
+
+
+                    $productos .= $detalle['producto_nombre'];
+                    $cantidades .= $detalle['cantidad'];
+                    $valores_unitarios .= $detalle['valor_unitario'];
+                    $medidas .= $detalle['medida'];
+                    $estados .= 0;
                 }
 
-                if($item['id'] > 0){
-                    $producto = ProductoInventario::find($item['id']);
-                    $producto->proveedor_id = $proveedor->id;
-                    $producto->save();
-                }
+                $orden_compra = OrdenCompra::create(
+                    [
+                        'asunto' => $item['asunto'],
+                        'descripcion' => $productos,
+                        'cantidad' => $cantidades,
+                        'unidad_medida' => $medidas,
+                        'valor_unitario' => $valores_unitarios,
+                        'estado_producto' => $estados,
+                        'fecha' => $item['fecha'],
+                        'valor_neto' => $item['neto'],
+                        'iva' => $item['iva'],
+                        'total' => $item['total'],
+                        'observacion' => $item['observacion'],
+                        'proveedor_id' => $proveedor->id,
+                        'lugares_id' => $item['centro_costo_id'],
+                        'user_id' => Auth::id()
+                    ]
+                );
 
-
-                $productos .= $item['producto_nombre'];
-                $cantidades .= $item['cantidad'];
-                $valores_unitarios .= $item['valor_unitario'];
-                $medidas .= $item['medida'];
-            }
-
-            $orden_compra = OrdenCompra::create(
-                [
-                    'asunto' => $request->asunto,
-                    'descripcion' => $productos,
-                    'cantidad' => $cantidades,
-                    'unidad_medida' => $medidas,
-                    'valor_unitario' => $valores_unitarios,
-                    'fecha' => $request->fecha,
-                    'valor_neto' => $request->neto,
-                    'iva' => $request->iva,
-                    'total' => $request->total,
-                    'observacion' => $request->observacion,
+                Factura::create([
+                    'numero_factura' => 'POR DEFINIR',
+                    'orden_compras_id' => $orden_compra->id,
+                    'fecha' => 'POR DEFINIR',
                     'proveedor_id' => $proveedor->id,
-                    'user_id' => Auth::id()
-                ]
-            );
+                    'lugares_id' => $item['centro_costo_id']
+                ]);
 
-
-            if($request->accion == 1){
-                Mail::to($proveedor->correo)->send(new AppOrdenCompra($proveedor, $orden_compra));
+                if($request->accion == 1){
+                    Mail::to($proveedor->correo)->send(new AppOrdenCompra($proveedor, $orden_compra));
+                }
             }
         });
+    }
+
+    public function restar_sumar(Request $request){
+        $orden_compra = OrdenCompra::find($request->id);
+
+        $producto = ProductoInventario::where('nombre', $request->producto)->first();
+
+        $productos = $orden_compra->descripcionOrden;
+        $cantidades = $orden_compra->cantidadOrden;
+        $estados = $orden_compra->estado;
+
+        $estados_producto = '';
+
+        for ($i=0; $i < count($productos); $i++) {
+            if($i > 0){
+                $estados_producto .=  '@';
+            }
+
+            if($productos[$i] == $request->producto && $cantidades[$i] == $request->cantidad){
+                $estados[$i] = $request->accion == 1 ? 1 : 0;
+            }
+
+            $estados_producto .= $estados[$i];
+
+        }
+
+        if($request->accion == 1){
+            $producto->stock +=  $request->cantidad;
+        } else {
+            $producto->stock -=  $request->cantidad;
+        }
+
+        $orden_compra->estado_producto = $estados_producto;
+        $orden_compra->save();
+        $producto->save();
+
     }
 
     public function borrar(Request $request){

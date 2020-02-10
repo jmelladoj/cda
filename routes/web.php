@@ -35,6 +35,11 @@ Route::get('/lugares/{tipo}', 'LugarController@index')->name('Listar lugares');
 Route::post('/lugar/crear/actualizar', 'LugarController@crear_actualizar')->name('Crear o actualizar lugar');
 Route::post('/lugar/borrar', 'LugarController@borrar')->name('Borrar lugar');
 
+//Rutas de facturas
+Route::get('/facturas/{tipo}', 'FacturaController@index')->name('Listar facturas');
+Route::post('/factura/crear/actualizar', 'FacturaController@crear_actualizar')->name('Crear o actualizar factura');
+Route::post('/factura/borrar', 'FacturaController@borrar')->name('Borrar factura');
+
 //Rutas de inventario
 Route::get('/inventario/{tipo}', 'ProductoInventarioController@index')->name('Listar inventario');
 Route::post('/inventario/crear/actualizar', 'ProductoInventarioController@crear_actualizar')->name('Crear o actualizar inventario');
@@ -61,6 +66,7 @@ Route::get('/ordenes/{tipo}', 'OrdenCompraController@index')->name('Listar orden
 Route::post('/orden/crear', 'OrdenCompraController@crear')->name('Crear o actualizar orden');
 Route::post('/orden/borrar', 'OrdenCompraController@borrar')->name('Borrar orden');
 Route::post('/orden/enviar', 'OrdenCompraController@enviar')->name('Enviar orden');
+Route::post('/orden/restar/sumar', 'OrdenCompraController@restar_sumar')->name('Sumar o restar inventario');
 Route::get('/orden/descargar/{id}', 'OrdenCompraController@descargar')->name('Descargar orden');
 
 //Rutas de noficaciones

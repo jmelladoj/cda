@@ -34,11 +34,20 @@ class OrdenCompra extends Model
         return explode('@', $this->unidad_medida);
     }
 
+    public function getEstadoAttribute(){
+        return explode('@', $this->estado_producto);
+    }
+
     public function usuario(){
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function lugar(){
+        return $this->belongsTo(Lugar::class, 'lugares_id');
     }
 
     public function getEmisorAttribute(){
         return empty($this->usuario) ? 'Desconocido' : $this->usuario->nombre;
     }
+
 }

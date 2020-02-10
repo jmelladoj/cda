@@ -62,7 +62,9 @@
                         </template>
 
                         <template v-slot:cell(acciones)="row">
-                            <orden-compra :id_proveedor="row.item.id"></orden-compra>
+                            <b-button size="xs" variant="success" title="Generar orden de compra" @click="abrir_modal_orden_compra(row.item.id)">
+                                <i class="fa fa-plus"></i>
+                            </b-button>
 
                             <b-button size="xs" variant="warning" title="Actualizar información" @click="abrir_modal_proveedor(row.item)">
                                 <i class="fa fa-pencil"></i>
@@ -292,6 +294,9 @@
         },
         methods: {
             ...mapMutations(['msg_success', 'msg_error']),
+            abrir_modal_orden_compra(id_proveedor){
+                Evento.$emit('cargar_modal_orden_compra', id_proveedor);
+            },
             onFiltered(filteredItems) {
                 this.totalRows = filteredItems.length
                 this.currentPage = 1
