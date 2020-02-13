@@ -114,7 +114,7 @@
                         </template>
 
                         <template v-slot:cell(lugar_nombre)="row">
-                            {{ row.item.lugar.nombre }}
+                            {{ row.item.lugar ? row.item.lugar.nombre : 'Desconocido' }}
                         </template>
 
                         <template v-slot:cell(acciones)="row">

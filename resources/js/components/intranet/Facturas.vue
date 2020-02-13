@@ -65,8 +65,8 @@
                             {{ data.item.orden_compra.total | currency }}
                         </template>
 
-                        <template v-slot:cell(centro_costo)="data">
-                            {{ data.item.lugar.nombre }}
+                        <template v-slot:cell(centro_costo)="row">
+                            {{ row.item.lugar ? row.item.lugar.nombre : 'Desconocido' }}
                         </template>
 
 

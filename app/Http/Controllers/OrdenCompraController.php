@@ -28,7 +28,7 @@ class OrdenCompraController extends Controller
         switch ($tipo) {
             case 1:
                 return [
-                            'ordenes' => OrdenCompra::join('proveedores', 'orden_compras.proveedor_id', '=', 'proveedores.id')
+                            'ordenes' => OrdenCompra::with('lugar')->join('proveedores', 'orden_compras.proveedor_id', '=', 'proveedores.id')
                                             ->select('orden_compras.*', 'proveedores.id as proveedor_id', 'proveedores.rut as proveedor_rut', 'proveedores.nombre as proveedor_nombre', 'proveedores.giro as proveedor_giro', 'proveedores.telefono as proveedor_telefono', 'proveedores.direccion as proveedor_direccion', 'proveedores.comuna as proveedor_comuna', 'proveedores.correo as proveedor_correo', 'proveedores.referencia as proveedor_referencia')
                                             ->orderBy('orden_compras.created_at', 'desc')->with('lugar')->get(),
                             'gasto_diario' => $gasto_diario,
@@ -39,9 +39,9 @@ class OrdenCompraController extends Controller
                 break;
             case 2:
                 return [
-                            'ordenes' => OrdenCompra::withTrashed()->join('proveedores', 'orden_compras.proveedor_id', '=', 'proveedores.id')
+                            'ordenes' => OrdenCompra::with('lugar')->withTrashed()->join('proveedores', 'orden_compras.proveedor_id', '=', 'proveedores.id')
                                             ->select('orden_compras.*', 'proveedores.id as proveedor_id', 'proveedores.rut as proveedor_rut', 'proveedores.nombre as proveedor_nombre', 'proveedores.giro as proveedor_giro', 'proveedores.telefono as proveedor_telefono', 'proveedores.direccion as proveedor_direccion', 'proveedores.comuna as proveedor_comuna', 'proveedores.correo as proveedor_correo', 'proveedores.referencia as proveedor_referencia')
-                                            ->orderBy('orden_compras.created_at', 'desc')->with('lugar')->get(),
+                                            ->orderBy('orden_compras.created_at', 'desc')->get(),
                             'gasto_diario' => $gasto_diario,
                             'gasto_semanal' => $gasto_semanal,
                             'gasto_mensual' => $gasto_mensual,
