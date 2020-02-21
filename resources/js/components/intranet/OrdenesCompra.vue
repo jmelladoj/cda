@@ -113,9 +113,10 @@
                             {{ row.item.total | currency }}
                         </template>
 
-                        <template v-slot:cell(lugar_nombre)="row">
-                            {{ row.item.lugar.nombre }}
+                        <template v-slot:cell(centro_costo)="row">
+                            {{ row.item.lugar ? row.item.lugar.nombre : 'Desconocido' }}
                         </template>
+
 
                         <template v-slot:cell(acciones)="row">
                             <b-button v-if="usuario && usuario.email" size="xs" variant="info" title="Enviar registro" @click="enviar_mail(row.item.id)">
@@ -158,7 +159,7 @@
                 fields: [
                     { key: 'id', label: '#', sortable: true, class: 'text-center' },
                     { key: 'proveedor_nombre', label: 'Proveedor', sortable: true, class: 'text-left' },
-                    { key: 'lugar_nombre', label: 'Centro de costo', sortable: true, class: 'text-left' },
+                    { key: 'centro_costo', label: 'Centro de costo', sortable: true, class: 'text-left' },
                     { key: 'asunto', label: 'Asunto', sortable: true, class: 'text-left' },
                     { key: 'total', label: 'Total', sortable: true, class: 'text-left' },
                     { key: 'emisor', label: 'Emisor', sortable: true, class: 'text-left' },
