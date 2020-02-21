@@ -65,8 +65,8 @@
                             {{ data.item.orden_compra.total | currency }}
                         </template>
 
-                        <template v-slot:cell(centro_costo)="data">
-                            {{ data.item.lugar.nombre }}
+                        <template v-slot:cell(centro_costo)="row">
+                            {{ row.item.lugar ? row.item.lugar.nombre : 'Desconocido' }}
                         </template>
 
 
@@ -189,7 +189,6 @@
 <script>
     import { required, minValue, minLength, between, numeric } from 'vuelidate/lib/validators'
     import { mapMutations, mapGetters } from 'vuex'
-
     export default {
         data() {
             return {
@@ -247,7 +246,6 @@
                     minValue: minValue(0)
                 },
                 observacion: {
-
                 }
             }
         },
@@ -266,7 +264,6 @@
             },
             listar_facturas(){
                 let me = this
-
                 axios.get('/facturas/1').then(function (response) {
                     me.items = response.data.facturas
                     me.totalRows = me.items.length;
@@ -277,23 +274,18 @@
             },
             abrir_modal_factura(data = []) {
                 let me = this
-
                 me.limpiar_datos_factura()
                 me.modal_factura.titulo = "Actualizar datos de factura"
-
                 me.factura.id = data.id
                 me.factura.fecha = data.fecha
                 me.factura.numero_factura = data.numero_factura
                 me.factura.observacion = data.observacion
-
                 me.orden_compra.id = data.orden_compra.id
-
                 var productos = data.orden_compra.descripcion.split("@")
                 var cantidades = data.orden_compra.cantidad.split("@")
                 var valores_unitarios = data.orden_compra.unidad_medida.split("@")
                 var totales = data.orden_compra.valor_unitario.split("@")
                 var estados = data.orden_compra.estado_producto.split("@")
-
                 for (let i = 0; i < productos.length; i++) {
                     var fila = new Object()
                     fila.producto_nombre = productos[i]
@@ -304,9 +296,7 @@
                     fila.estado = estados[i]
                     me.factura.detalle.push(fila)
                 }
-
                 this.$v.factura.$touch(true)
-
                 this.$refs['modal_factura'].show()
             },
             cerrar_modal_factura() {
@@ -319,9 +309,7 @@
                 this.factura.numero_factura = ''
                 this.factura.detalle = []
                 this.factura.observacion = ''
-
                 this.orden_compra.id = 0
-
                 this.$v.$reset();
             },
             crear_actualizar_factura() {
@@ -329,9 +317,7 @@
                     this.$v.factura.$touch()
                     return
                 }
-
                 let me = this
-
                 axios.post('/factura/crear/actualizar',{
                         'id': me.factura.id,
                         'fecha': me.factura.fecha,
@@ -356,7 +342,6 @@
                 }).then((result) => {
                     if (result.value) {
                         let me = this
-
                         axios.post('/orden/restar/sumar',{
                             'id': me.orden_compra.id,
                             'accion': accion,

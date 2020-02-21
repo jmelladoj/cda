@@ -87,8 +87,8 @@
                         </template>
 
                         <template v-slot:cell(valor_actual)="data">
-                            <div class="text-danger" v-if="data.item.valor_actual > data.item.valor_ultimo && data.item.valor_ultimo != 0">{{ data.item.valor_actual | currency }} <i class="ml-2 ti-arrow-up"></i></div>
-                            <div class="text-success" v-else-if="data.item.valor_actual < data.item.valor_ultimo && data.item.valor_ultimo != 0">{{ data.item.valor_actual | currency }} <i class="ml-2 ti-arrow-down"></i></div>
+                            <div class="text-danger" v-if="data.item.valor_actual > data.item.valor_ultimo">{{ data.item.valor_actual | currency }} <i class="ml-2 ti-arrow-up"></i></div>
+                            <div class="text-success" v-else-if="data.item.valor_actual < data.item.valor_ultimo">{{ data.item.valor_actual | currency }} <i class="ml-2 ti-arrow-down"></i></div>
                             <div v-else>{{ data.item.valor_actual | currency }}</div>
                         </template>
 

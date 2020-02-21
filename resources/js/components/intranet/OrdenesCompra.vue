@@ -122,9 +122,9 @@
                                 <i class="fa fa-paper-plane"></i>
                             </b-button>
 
-                            <b-button size="xs" variant="success" title="Duplicar registro" @click="abrir_modal_orden_compra(row.item, 1)">
+                            <!--<b-button size="xs" variant="success" title="Duplicar registro" @click="abrir_modal_orden_compra(row.item, 1)">
                                 <i class="fa fa-plus"></i>
-                            </b-button>
+                            </b-button>-->
 
                             <b-button size="xs" variant="warning" title="Descargar registro" @click="descargar(row.item.id)">
                                 <i class="fa fa-file-pdf-o"></i>

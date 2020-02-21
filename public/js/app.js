@@ -2465,6 +2465,80 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2475,6 +2549,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       productos: [],
       opciones_centro_costos: [],
       ordenes_compra: [],
+      lugares: [],
+      categorias: [],
       orden_compra_detalle: [{
         key: 'index',
         label: '#',
@@ -2528,7 +2604,33 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         comuna: '',
         correo: '',
         referencia: ''
-      }
+      },
+      producto_inventario: {
+        id: 0,
+        nombre: '',
+        unidad: null,
+        categoria_id: null,
+        stock: 0,
+        stock_critico: 0,
+        valor_actual: 0,
+        valor_ultimo: 0
+      },
+      opciones_unidad: [{
+        value: null,
+        text: 'Selecciona una opción ...'
+      }, {
+        value: 'KG',
+        text: 'KG'
+      }, {
+        value: 'LT',
+        text: 'LT'
+      }, {
+        value: 'UNI',
+        text: 'UNI'
+      }, {
+        value: 'MT3',
+        text: 'MT3'
+      }]
     };
   },
   validations: {
@@ -2563,6 +2665,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         email: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["email"]
       },
       referencia: {}
+    },
+    producto_inventario: {
+      nombre: {
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(3)
+      },
+      unidad: {
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"]
+      },
+      categoria_id: {
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+        minValue: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minValue"])(1)
+      }
     },
     ordenes_compra: {
       $each: {
@@ -2609,6 +2724,59 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])('usuario', ['usuario'])),
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])(['msg_success', 'msg_error']), {
+    verificar_producto: function verificar_producto(e) {
+      console.log(e);
+    },
+    listar_categorias: function listar_categorias() {
+      var me = this;
+      axios.get('/categorias/1').then(function (response) {
+        me.categorias = response.data.categorias;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    listar_lugares: function listar_lugares() {
+      var me = this;
+      axios.get('/lugares/1').then(function (response) {
+        me.lugares = response.data.lugares;
+        me.items_salida = [];
+        me.lugares.forEach(function (lugar, index) {
+          var fila = new Object();
+          fila.index = index;
+          fila.lugar_id = lugar.id;
+          fila.nombre = lugar.nombre;
+          fila.cantidad_retiro = 0;
+          fila.costo_salida = 0;
+          me.items_salida.push(fila);
+        });
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    crear_actualizar_productos_inventario: function crear_actualizar_productos_inventario() {
+      if (this.$v.producto_inventario.$invalid) {
+        this.$v.producto_inventario.$touch();
+        return;
+      }
+
+      var me = this;
+      axios.post('/inventario/crear/actualizar', {
+        'id': me.producto_inventario.id,
+        'nombre': me.producto_inventario.nombre,
+        'unidad': me.producto_inventario.unidad,
+        'categoria_id': me.producto_inventario.categoria_id,
+        'stock': me.producto_inventario.stock,
+        'stock_critico': me.producto_inventario.stock_critico,
+        'valor_actual': me.producto_inventario.valor_actual,
+        'valor_ultimo': me.producto_inventario.valor_ultimo
+      }).then(function (response) {
+        me.listar_productos_inventario();
+        me.$store.commit('msg_success', 'Registro agregado exitosamente.');
+        me.cerrar_modal_productos_inventario();
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
     agregar_orden_compra: function agregar_orden_compra(index) {
       var oc = new Object();
       oc.centro_costo_id = null;
@@ -2621,6 +2789,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       oc.observacion = 'Sin observaciones.';
       this.ordenes_compra.push(oc);
       this.agregar_fila(this.ordenes_compra.length - 1);
+    },
+    abrir_modal_productos_inventario: function abrir_modal_productos_inventario() {
+      var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var me = this;
+      me.limpiar_datos_producto_inventario();
+      this.$refs['modal_productos_inventario'].show();
+    },
+    cerrar_modal_productos_inventario: function cerrar_modal_productos_inventario() {
+      this.$refs['modal_productos_inventario'].hide();
+    },
+    limpiar_datos_producto_inventario: function limpiar_datos_producto_inventario() {
+      this.producto_inventario.id = 0;
+      this.producto_inventario.nombre = '';
+      this.producto_inventario.unidad = null;
+      this.producto_inventario.categoria_id = null;
+      this.$v.$reset();
     },
     eliminar_orden_compra: function eliminar_orden_compra(index) {
       this.ordenes_compra.splice(index, 1);
@@ -2725,6 +2909,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.listar_productos_inventario();
       this.fecha_actual();
       this.listar_centro_costos();
+      this.listar_categorias();
+      this.listar_lugares();
     },
     abrir_modal_orden_compra: function abrir_modal_orden_compra() {
       var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
@@ -2806,11 +2992,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         'referencia': me.proveedor.referencia,
         'ordenes_compra': me.ordenes_compra
       }).then(function (response) {
-        me.$refs.typeahead_proveedor.inputValue = "";
         me.obtener_registros();
         me.$store.commit('msg_success', accion == 0 ? 'Registro agregado exitosamente.' : 'Registro enviado y agregado exitosamente.');
         me.limpiar_datos_orden_compra();
         me.agregar_orden_compra();
+        me.$refs.typeahead_detalle_orden_compra[0].inputValue = "";
       })["catch"](function (error) {
         me.$store.commit('msg_error', accion == 0 ? 'Problemas al agregar el registro.' : 'Problemas al enviar y agregar el registro.');
         me.spinner.estado = 0;
@@ -78401,470 +78587,496 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "b-modal",
-    {
-      ref: "modal_orden_compra",
-      attrs: {
-        title: _vm.modal_orden_compra.titulo,
-        size: "xl",
-        "no-close-on-backdrop": "",
-        scrollable: "",
-        static: ""
-      }
-    },
+    "div",
     [
       _c(
-        "b-form",
+        "b-modal",
+        {
+          ref: "modal_orden_compra",
+          attrs: {
+            title: _vm.modal_orden_compra.titulo,
+            size: "xl",
+            "no-close-on-backdrop": "",
+            scrollable: "",
+            static: ""
+          }
+        },
         [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header bg-info text-right" }, [
-              _c("h6", { staticClass: "m-b-0 text-white" }, [
-                _vm._v("Proveedor de Servicios")
-              ])
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "card-body" },
-              [
+          _c(
+            "b-form",
+            [
+              _c("div", { staticClass: "card" }, [
+                _c("div", { staticClass: "card-header bg-info text-right" }, [
+                  _c("h6", { staticClass: "m-b-0 text-white" }, [
+                    _vm._v("Proveedor de Servicios")
+                  ])
+                ]),
+                _vm._v(" "),
                 _c(
-                  "b-row",
+                  "div",
+                  { staticClass: "card-body" },
                   [
                     _c(
-                      "b-col",
-                      { attrs: { xs: "12", sm: "12", md: "6" } },
+                      "b-row",
                       [
                         _c(
-                          "b-form-group",
-                          {
-                            staticClass: "mb-1",
-                            attrs: {
-                              label: "Razón Social ",
-                              "label-cols-md": "3",
-                              "label-cols-lg": "3"
-                            }
-                          },
+                          "b-col",
+                          { attrs: { xs: "12", sm: "12", md: "6" } },
                           [
-                            _c("vue-bootstrap-typeahead", {
-                              ref: "typeahead_proveedor",
-                              attrs: {
-                                data: _vm.proveedores,
-                                serializer: function(p) {
-                                  return p.nombre
-                                },
-                                placeholder: "Escribe para filtrar ...",
-                                state: _vm.$v.proveedor.nombre.$dirty
-                                  ? !_vm.$v.proveedor.nombre.$error
-                                  : null,
-                                "aria-describedby":
-                                  "orden-compra-proveedor-nombre"
-                              },
-                              on: {
-                                hit: function($event) {
-                                  return _vm.proveedor_seleccionado($event)
-                                }
-                              },
-                              model: {
-                                value: _vm.$v.proveedor.nombre.$model,
-                                callback: function($$v) {
-                                  _vm.$set(
-                                    _vm.$v.proveedor.nombre,
-                                    "$model",
-                                    $$v
-                                  )
-                                },
-                                expression: "$v.proveedor.nombre.$model"
-                              }
-                            }),
-                            _vm._v(" "),
                             _c(
-                              "b-form-invalid-feedback",
+                              "b-form-group",
                               {
-                                attrs: { id: "orden-compra-proveedor-nombre" }
+                                staticClass: "mb-1",
+                                attrs: {
+                                  label: "Razón Social ",
+                                  "label-cols-md": "3",
+                                  "label-cols-lg": "3"
+                                }
                               },
                               [
-                                _vm._v(
-                                  "\n                                Campo de texto, mínimo de 3 caracteres.\n                            "
+                                _c("vue-bootstrap-typeahead", {
+                                  ref: "typeahead_proveedor",
+                                  attrs: {
+                                    data: _vm.proveedores,
+                                    serializer: function(p) {
+                                      return p.nombre
+                                    },
+                                    placeholder: "Escribe para filtrar ...",
+                                    state: _vm.$v.proveedor.nombre.$dirty
+                                      ? !_vm.$v.proveedor.nombre.$error
+                                      : null,
+                                    "aria-describedby":
+                                      "orden-compra-proveedor-nombre"
+                                  },
+                                  on: {
+                                    hit: function($event) {
+                                      return _vm.proveedor_seleccionado($event)
+                                    }
+                                  },
+                                  model: {
+                                    value: _vm.$v.proveedor.nombre.$model,
+                                    callback: function($$v) {
+                                      _vm.$set(
+                                        _vm.$v.proveedor.nombre,
+                                        "$model",
+                                        $$v
+                                      )
+                                    },
+                                    expression: "$v.proveedor.nombre.$model"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "b-form-invalid-feedback",
+                                  {
+                                    attrs: {
+                                      id: "orden-compra-proveedor-nombre"
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                    Campo de texto, mínimo de 3 caracteres.\n                                "
+                                    )
+                                  ]
                                 )
-                              ]
-                            )
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "b-col",
-                      { attrs: { xs: "12", sm: "12", md: "6" } },
-                      [
-                        _c(
-                          "b-form-group",
-                          {
-                            staticClass: "mb-1",
-                            attrs: {
-                              label: "Rut ",
-                              "label-cols-md": "3",
-                              "label-cols-lg": "3"
-                            }
-                          },
-                          [
-                            _c("b-form-input", {
-                              directives: [
-                                {
-                                  name: "rut",
-                                  rawName: "v-rut:live",
-                                  arg: "live"
-                                }
                               ],
-                              attrs: {
-                                state: _vm.$v.proveedor.rut.$dirty
-                                  ? !_vm.$v.proveedor.rut.$error
-                                  : null,
-                                "aria-describedby":
-                                  "orden-compra-proveedor-rut",
-                                readonly: _vm.modal_orden_compra.accion == 2
-                              },
-                              model: {
-                                value: _vm.$v.proveedor.rut.$model,
-                                callback: function($$v) {
-                                  _vm.$set(_vm.$v.proveedor.rut, "$model", $$v)
-                                },
-                                expression: "$v.proveedor.rut.$model"
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c(
-                              "b-form-invalid-feedback",
-                              { attrs: { id: "orden-compra-proveedor-rut" } },
-                              [
-                                _vm._v(
-                                  "\n                                Campo de alfanúmerico, mínimo de 3 caracteres.\n                            "
-                                )
-                              ]
+                              1
                             )
                           ],
                           1
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "b-col",
-                      { attrs: { xs: "12", sm: "12", md: "6" } },
-                      [
+                        ),
+                        _vm._v(" "),
                         _c(
-                          "b-form-group",
-                          {
-                            staticClass: "mb-1",
-                            attrs: {
-                              label: "Giro ",
-                              "label-cols-md": "3",
-                              "label-cols-lg": "3"
-                            }
-                          },
+                          "b-col",
+                          { attrs: { xs: "12", sm: "12", md: "6" } },
                           [
-                            _c("b-form-input", {
-                              attrs: {
-                                state: _vm.$v.proveedor.giro.$dirty
-                                  ? !_vm.$v.proveedor.giro.$error
-                                  : null,
-                                "aria-describedby":
-                                  "orden-compra-proveedor-giro"
-                              },
-                              model: {
-                                value: _vm.$v.proveedor.giro.$model,
-                                callback: function($$v) {
-                                  _vm.$set(_vm.$v.proveedor.giro, "$model", $$v)
-                                },
-                                expression: "$v.proveedor.giro.$model"
-                              }
-                            }),
-                            _vm._v(" "),
                             _c(
-                              "b-form-invalid-feedback",
-                              { attrs: { id: "orden-compra-proveedor-giro" } },
-                              [
-                                _vm._v(
-                                  "\n                                Campo de texto, mínimo de 3 caracteres.\n                            "
-                                )
-                              ]
-                            )
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "b-col",
-                      { attrs: { xs: "12", sm: "12", md: "6" } },
-                      [
-                        _c(
-                          "b-form-group",
-                          {
-                            staticClass: "mb-1",
-                            attrs: {
-                              label: "Teléfono ",
-                              "label-cols-md": "3",
-                              "label-cols-lg": "3"
-                            }
-                          },
-                          [
-                            _c("b-form-input", {
-                              attrs: {
-                                state: _vm.$v.proveedor.telefono.$dirty
-                                  ? !_vm.$v.proveedor.telefono.$error
-                                  : null,
-                                "aria-describedby":
-                                  "orden-compra-proveedor-telefono"
-                              },
-                              model: {
-                                value: _vm.$v.proveedor.telefono.$model,
-                                callback: function($$v) {
-                                  _vm.$set(
-                                    _vm.$v.proveedor.telefono,
-                                    "$model",
-                                    $$v
-                                  )
-                                },
-                                expression: "$v.proveedor.telefono.$model"
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c(
-                              "b-form-invalid-feedback",
+                              "b-form-group",
                               {
-                                attrs: { id: "orden-compra-proveedor-telefono" }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                Campo de númerico, mínimo de 3 caracteres.\n                            "
-                                )
-                              ]
-                            )
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "b-col",
-                      { attrs: { xs: "12", sm: "12", md: "6" } },
-                      [
-                        _c(
-                          "b-form-group",
-                          {
-                            staticClass: "mb-1",
-                            attrs: {
-                              label: "Dirección ",
-                              "label-cols-md": "3",
-                              "label-cols-lg": "3"
-                            }
-                          },
-                          [
-                            _c("b-form-input", {
-                              attrs: {
-                                state: _vm.$v.proveedor.direccion.$dirty
-                                  ? !_vm.$v.proveedor.direccion.$error
-                                  : null,
-                                "aria-describedby":
-                                  "orden-compra-proveedor-direccion"
-                              },
-                              model: {
-                                value: _vm.$v.proveedor.direccion.$model,
-                                callback: function($$v) {
-                                  _vm.$set(
-                                    _vm.$v.proveedor.direccion,
-                                    "$model",
-                                    $$v
-                                  )
-                                },
-                                expression: "$v.proveedor.direccion.$model"
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c(
-                              "b-form-invalid-feedback",
-                              {
+                                staticClass: "mb-1",
                                 attrs: {
-                                  id: "orden-compra-proveedor-direccion"
+                                  label: "Rut ",
+                                  "label-cols-md": "3",
+                                  "label-cols-lg": "3"
                                 }
                               },
                               [
-                                _vm._v(
-                                  "\n                                Campo de alfanúmerico, mínimo de 3 caracteres.\n                            "
+                                _c("b-form-input", {
+                                  directives: [
+                                    {
+                                      name: "rut",
+                                      rawName: "v-rut:live",
+                                      arg: "live"
+                                    }
+                                  ],
+                                  attrs: {
+                                    state: _vm.$v.proveedor.rut.$dirty
+                                      ? !_vm.$v.proveedor.rut.$error
+                                      : null,
+                                    "aria-describedby":
+                                      "orden-compra-proveedor-rut",
+                                    readonly: _vm.modal_orden_compra.accion == 2
+                                  },
+                                  model: {
+                                    value: _vm.$v.proveedor.rut.$model,
+                                    callback: function($$v) {
+                                      _vm.$set(
+                                        _vm.$v.proveedor.rut,
+                                        "$model",
+                                        $$v
+                                      )
+                                    },
+                                    expression: "$v.proveedor.rut.$model"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "b-form-invalid-feedback",
+                                  {
+                                    attrs: { id: "orden-compra-proveedor-rut" }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                    Campo de alfanúmerico, mínimo de 3 caracteres.\n                                "
+                                    )
+                                  ]
                                 )
-                              ]
+                              ],
+                              1
                             )
                           ],
                           1
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "b-col",
-                      { attrs: { xs: "12", sm: "12", md: "6" } },
-                      [
+                        ),
+                        _vm._v(" "),
                         _c(
-                          "b-form-group",
-                          {
-                            staticClass: "mb-1",
-                            attrs: {
-                              label: "Comuna ",
-                              "label-cols-md": "3",
-                              "label-cols-lg": "3"
-                            }
-                          },
+                          "b-col",
+                          { attrs: { xs: "12", sm: "12", md: "6" } },
                           [
-                            _c("b-form-input", {
-                              attrs: {
-                                state: _vm.$v.proveedor.comuna.$dirty
-                                  ? !_vm.$v.proveedor.comuna.$error
-                                  : null,
-                                "aria-describedby":
-                                  "orden-compra-proveedor-comuna"
-                              },
-                              model: {
-                                value: _vm.$v.proveedor.comuna.$model,
-                                callback: function($$v) {
-                                  _vm.$set(
-                                    _vm.$v.proveedor.comuna,
-                                    "$model",
-                                    $$v
-                                  )
-                                },
-                                expression: "$v.proveedor.comuna.$model"
-                              }
-                            }),
-                            _vm._v(" "),
                             _c(
-                              "b-form-invalid-feedback",
+                              "b-form-group",
                               {
-                                attrs: { id: "orden-compra-proveedor-comuna" }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                Campo de texto, mínimo de 3 caracteres.\n                            "
-                                )
-                              ]
-                            )
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "b-col",
-                      { attrs: { xs: "12", sm: "12", md: "6" } },
-                      [
-                        _c(
-                          "b-form-group",
-                          {
-                            staticClass: "mb-1",
-                            attrs: {
-                              label: "Correo ",
-                              "label-cols-md": "3",
-                              "label-cols-lg": "3"
-                            }
-                          },
-                          [
-                            _c("b-form-input", {
-                              attrs: {
-                                state: _vm.$v.proveedor.correo.$dirty
-                                  ? !_vm.$v.proveedor.correo.$error
-                                  : null,
-                                "aria-describedby":
-                                  "orden-compra-proveedor-correo"
-                              },
-                              model: {
-                                value: _vm.$v.proveedor.correo.$model,
-                                callback: function($$v) {
-                                  _vm.$set(
-                                    _vm.$v.proveedor.correo,
-                                    "$model",
-                                    $$v
-                                  )
-                                },
-                                expression: "$v.proveedor.correo.$model"
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c(
-                              "b-form-invalid-feedback",
-                              {
-                                attrs: { id: "orden-compra-proveedor-correo" }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                Campo de alfanúmerico, mínimo de 3 caracteres y formato de email.\n                            "
-                                )
-                              ]
-                            )
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "b-col",
-                      { attrs: { xs: "12", sm: "12", md: "6" } },
-                      [
-                        _c(
-                          "b-form-group",
-                          {
-                            staticClass: "mb-1",
-                            attrs: {
-                              label: "Contacto ",
-                              "label-cols-md": "3",
-                              "label-cols-lg": "3"
-                            }
-                          },
-                          [
-                            _c("b-form-input", {
-                              attrs: {
-                                state: _vm.$v.proveedor.referencia.$dirty
-                                  ? !_vm.$v.proveedor.referencia.$error
-                                  : null,
-                                "aria-describedby":
-                                  "orden-compra-proveedor-referencia"
-                              },
-                              model: {
-                                value: _vm.$v.proveedor.referencia.$model,
-                                callback: function($$v) {
-                                  _vm.$set(
-                                    _vm.$v.proveedor.referencia,
-                                    "$model",
-                                    $$v
-                                  )
-                                },
-                                expression: "$v.proveedor.referencia.$model"
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c(
-                              "b-form-invalid-feedback",
-                              {
+                                staticClass: "mb-1",
                                 attrs: {
-                                  id: "orden-compra-proveedor-referencia"
+                                  label: "Giro ",
+                                  "label-cols-md": "3",
+                                  "label-cols-lg": "3"
                                 }
                               },
                               [
-                                _vm._v(
-                                  "\n                                Campo de texto, mínimo de 3 caracteres.\n                            "
+                                _c("b-form-input", {
+                                  attrs: {
+                                    state: _vm.$v.proveedor.giro.$dirty
+                                      ? !_vm.$v.proveedor.giro.$error
+                                      : null,
+                                    "aria-describedby":
+                                      "orden-compra-proveedor-giro"
+                                  },
+                                  model: {
+                                    value: _vm.$v.proveedor.giro.$model,
+                                    callback: function($$v) {
+                                      _vm.$set(
+                                        _vm.$v.proveedor.giro,
+                                        "$model",
+                                        $$v
+                                      )
+                                    },
+                                    expression: "$v.proveedor.giro.$model"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "b-form-invalid-feedback",
+                                  {
+                                    attrs: { id: "orden-compra-proveedor-giro" }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                    Campo de texto, mínimo de 3 caracteres.\n                                "
+                                    )
+                                  ]
                                 )
-                              ]
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "b-col",
+                          { attrs: { xs: "12", sm: "12", md: "6" } },
+                          [
+                            _c(
+                              "b-form-group",
+                              {
+                                staticClass: "mb-1",
+                                attrs: {
+                                  label: "Teléfono ",
+                                  "label-cols-md": "3",
+                                  "label-cols-lg": "3"
+                                }
+                              },
+                              [
+                                _c("b-form-input", {
+                                  attrs: {
+                                    state: _vm.$v.proveedor.telefono.$dirty
+                                      ? !_vm.$v.proveedor.telefono.$error
+                                      : null,
+                                    "aria-describedby":
+                                      "orden-compra-proveedor-telefono"
+                                  },
+                                  model: {
+                                    value: _vm.$v.proveedor.telefono.$model,
+                                    callback: function($$v) {
+                                      _vm.$set(
+                                        _vm.$v.proveedor.telefono,
+                                        "$model",
+                                        $$v
+                                      )
+                                    },
+                                    expression: "$v.proveedor.telefono.$model"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "b-form-invalid-feedback",
+                                  {
+                                    attrs: {
+                                      id: "orden-compra-proveedor-telefono"
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                    Campo de númerico, mínimo de 3 caracteres.\n                                "
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "b-col",
+                          { attrs: { xs: "12", sm: "12", md: "6" } },
+                          [
+                            _c(
+                              "b-form-group",
+                              {
+                                staticClass: "mb-1",
+                                attrs: {
+                                  label: "Dirección ",
+                                  "label-cols-md": "3",
+                                  "label-cols-lg": "3"
+                                }
+                              },
+                              [
+                                _c("b-form-input", {
+                                  attrs: {
+                                    state: _vm.$v.proveedor.direccion.$dirty
+                                      ? !_vm.$v.proveedor.direccion.$error
+                                      : null,
+                                    "aria-describedby":
+                                      "orden-compra-proveedor-direccion"
+                                  },
+                                  model: {
+                                    value: _vm.$v.proveedor.direccion.$model,
+                                    callback: function($$v) {
+                                      _vm.$set(
+                                        _vm.$v.proveedor.direccion,
+                                        "$model",
+                                        $$v
+                                      )
+                                    },
+                                    expression: "$v.proveedor.direccion.$model"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "b-form-invalid-feedback",
+                                  {
+                                    attrs: {
+                                      id: "orden-compra-proveedor-direccion"
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                    Campo de alfanúmerico, mínimo de 3 caracteres.\n                                "
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "b-col",
+                          { attrs: { xs: "12", sm: "12", md: "6" } },
+                          [
+                            _c(
+                              "b-form-group",
+                              {
+                                staticClass: "mb-1",
+                                attrs: {
+                                  label: "Comuna ",
+                                  "label-cols-md": "3",
+                                  "label-cols-lg": "3"
+                                }
+                              },
+                              [
+                                _c("b-form-input", {
+                                  attrs: {
+                                    state: _vm.$v.proveedor.comuna.$dirty
+                                      ? !_vm.$v.proveedor.comuna.$error
+                                      : null,
+                                    "aria-describedby":
+                                      "orden-compra-proveedor-comuna"
+                                  },
+                                  model: {
+                                    value: _vm.$v.proveedor.comuna.$model,
+                                    callback: function($$v) {
+                                      _vm.$set(
+                                        _vm.$v.proveedor.comuna,
+                                        "$model",
+                                        $$v
+                                      )
+                                    },
+                                    expression: "$v.proveedor.comuna.$model"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "b-form-invalid-feedback",
+                                  {
+                                    attrs: {
+                                      id: "orden-compra-proveedor-comuna"
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                    Campo de texto, mínimo de 3 caracteres.\n                                "
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "b-col",
+                          { attrs: { xs: "12", sm: "12", md: "6" } },
+                          [
+                            _c(
+                              "b-form-group",
+                              {
+                                staticClass: "mb-1",
+                                attrs: {
+                                  label: "Correo ",
+                                  "label-cols-md": "3",
+                                  "label-cols-lg": "3"
+                                }
+                              },
+                              [
+                                _c("b-form-input", {
+                                  attrs: {
+                                    state: _vm.$v.proveedor.correo.$dirty
+                                      ? !_vm.$v.proveedor.correo.$error
+                                      : null,
+                                    "aria-describedby":
+                                      "orden-compra-proveedor-correo"
+                                  },
+                                  model: {
+                                    value: _vm.$v.proveedor.correo.$model,
+                                    callback: function($$v) {
+                                      _vm.$set(
+                                        _vm.$v.proveedor.correo,
+                                        "$model",
+                                        $$v
+                                      )
+                                    },
+                                    expression: "$v.proveedor.correo.$model"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "b-form-invalid-feedback",
+                                  {
+                                    attrs: {
+                                      id: "orden-compra-proveedor-correo"
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                    Campo de alfanúmerico, mínimo de 3 caracteres y formato de email.\n                                "
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "b-col",
+                          { attrs: { xs: "12", sm: "12", md: "6" } },
+                          [
+                            _c(
+                              "b-form-group",
+                              {
+                                staticClass: "mb-1",
+                                attrs: {
+                                  label: "Contacto ",
+                                  "label-cols-md": "3",
+                                  "label-cols-lg": "3"
+                                }
+                              },
+                              [
+                                _c("b-form-input", {
+                                  attrs: {
+                                    state: _vm.$v.proveedor.referencia.$dirty
+                                      ? !_vm.$v.proveedor.referencia.$error
+                                      : null,
+                                    "aria-describedby":
+                                      "orden-compra-proveedor-referencia"
+                                  },
+                                  model: {
+                                    value: _vm.$v.proveedor.referencia.$model,
+                                    callback: function($$v) {
+                                      _vm.$set(
+                                        _vm.$v.proveedor.referencia,
+                                        "$model",
+                                        $$v
+                                      )
+                                    },
+                                    expression: "$v.proveedor.referencia.$model"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "b-form-invalid-feedback",
+                                  {
+                                    attrs: {
+                                      id: "orden-compra-proveedor-referencia"
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                    Campo de texto, mínimo de 3 caracteres.\n                                "
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
                             )
                           ],
                           1
@@ -78875,649 +79087,79 @@ var render = function() {
                   ],
                   1
                 )
-              ],
-              1
-            )
-          ]),
-          _vm._v(" "),
-          _vm._l(_vm.ordenes_compra, function(o, index) {
-            return _c("div", { key: index, staticClass: "card" }, [
-              _c(
-                "div",
-                { staticClass: "card-header bg-info text-right" },
-                [
-                  _c(
-                    "b-row",
-                    [
-                      _c("b-col", [
-                        _c("h6", { staticClass: "m-b-0 text-white" }, [
-                          _vm._v(
-                            "Detalle orden de Compra " + _vm._s(index + 1) + " "
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "text-rigth", attrs: { cols: "1" } },
-                        [
-                          _c(
-                            "b-button",
-                            {
-                              attrs: {
-                                size: "xs",
-                                variant: "success",
-                                title: "Agregar orden de compra"
-                              },
-                              on: {
-                                click: function($event) {
-                                  return _vm.agregar_orden_compra(index)
-                                }
-                              }
-                            },
-                            [_c("i", { staticClass: "fa fa-plus" })]
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "text-left", attrs: { cols: "1" } },
-                        [
-                          _c(
-                            "b-button",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: index > 0,
-                                  expression: "index > 0"
-                                }
-                              ],
-                              attrs: {
-                                size: "xs",
-                                variant: "danger",
-                                title: "Eliminar orden de compra"
-                              },
-                              on: {
-                                click: function($event) {
-                                  return _vm.eliminar_orden_compra(index)
-                                }
-                              }
-                            },
-                            [_c("i", { staticClass: "fa fa-remove" })]
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
+              ]),
               _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "card-body" },
-                [
+              _vm._l(_vm.ordenes_compra, function(o, index) {
+                return _c("div", { key: index, staticClass: "card" }, [
                   _c(
-                    "b-row",
+                    "div",
+                    { staticClass: "card-header bg-info text-right" },
                     [
                       _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "3" } },
+                        "b-row",
                         [
+                          _c("b-col", [
+                            _c("h6", { staticClass: "m-b-0 text-white" }, [
+                              _vm._v(
+                                "Detalle orden de Compra " +
+                                  _vm._s(index + 1) +
+                                  " "
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
                           _c(
-                            "b-form-group",
-                            {
-                              attrs: {
-                                label: "Centro de costo ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
+                            "b-col",
+                            { staticClass: "text-rigth", attrs: { cols: "1" } },
                             [
-                              _c("b-form-select", {
-                                attrs: {
-                                  state: _vm.$v.ordenes_compra.$each[index]
-                                    .centro_costo_id.$dirty
-                                    ? !_vm.$v.ordenes_compra.$each[index]
-                                        .centro_costo_id.$error
-                                    : null,
-                                  "aria-describedby":
-                                    "ordenes-compra-centro-costo",
-                                  options: _vm.opciones_centro_costos
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.ordenes_compra.$each[index]
-                                      .centro_costo_id.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.ordenes_compra.$each[index]
-                                        .centro_costo_id,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.ordenes_compra.$each[index].centro_costo_id.$model"
-                                }
-                              }),
-                              _vm._v(" "),
                               _c(
-                                "b-form-invalid-feedback",
+                                "b-button",
                                 {
-                                  attrs: { id: "ordenes-compra-centro-costo" }
+                                  attrs: {
+                                    size: "xs",
+                                    variant: "success",
+                                    title: "Agregar orden de compra"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.agregar_orden_compra(index)
+                                    }
+                                  }
                                 },
-                                [
-                                  _vm._v(
-                                    "\n                                Campo de alfanúmerico, mínimo de 3 caracteres.\n                            "
-                                  )
-                                ]
+                                [_c("i", { staticClass: "fa fa-plus" })]
                               )
                             ],
                             1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "3" } },
-                        [
+                          ),
+                          _vm._v(" "),
                           _c(
-                            "b-form-group",
-                            {
-                              attrs: {
-                                label: "Asunto ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
+                            "b-col",
+                            { staticClass: "text-left", attrs: { cols: "1" } },
                             [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.ordenes_compra.$each[index]
-                                    .asunto.$dirty
-                                    ? !_vm.$v.ordenes_compra.$each[index].asunto
-                                        .$error
-                                    : null,
-                                  "aria-describedby": "ordenes-compra-asunto"
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.ordenes_compra.$each[index].asunto
-                                      .$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.ordenes_compra.$each[index].asunto,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.ordenes_compra.$each[index].asunto.$model"
-                                }
-                              }),
-                              _vm._v(" "),
                               _c(
-                                "b-form-invalid-feedback",
-                                { attrs: { id: "ordenes-compra-asunto" } },
-                                [
-                                  _vm._v(
-                                    "\n                                Campo de alfanúmerico, mínimo de 3 caracteres.\n                            "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "3" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              attrs: {
-                                label: "Fecha ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.ordenes_compra.$each[index]
-                                    .fecha.$dirty
-                                    ? !_vm.$v.ordenes_compra.$each[index].fecha
-                                        .$error
-                                    : null,
-                                  "aria-describedby": "orden-compra-fecha",
-                                  readonly: ""
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.ordenes_compra.$each[index].fecha
-                                      .$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.ordenes_compra.$each[index].fecha,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.ordenes_compra.$each[index].fecha.$model"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { xs: "12", sm: "12", md: "3" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              attrs: {
-                                label: " N° Orden ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  value:
-                                    parseInt(_vm.num_orden_compra) +
-                                    parseInt(index + 1),
-                                  readonly: ""
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "b-row",
-                    { attrs: { "align-v": "center" } },
-                    [
-                      _c(
-                        "b-col",
-                        [
-                          _c(
-                            "b-form-group",
-                            [
-                              _c("b-table", {
-                                attrs: {
-                                  "show-empty": "",
-                                  small: "",
-                                  striped: "",
-                                  outlined: "",
-                                  stacked: "sm",
-                                  items: _vm.ordenes_compra[index].detalle,
-                                  fields: _vm.orden_compra_detalle
-                                },
-                                scopedSlots: _vm._u(
-                                  [
+                                "b-button",
+                                {
+                                  directives: [
                                     {
-                                      key: "empty",
-                                      fn: function() {
-                                        return [
-                                          _c("center", [
-                                            _c("h6", [
-                                              _vm._v("No hay registros")
-                                            ])
-                                          ])
-                                        ]
-                                      },
-                                      proxy: true
-                                    },
-                                    {
-                                      key: "cell(index)",
-                                      fn: function(data) {
-                                        return [
-                                          _vm._v(
-                                            "\n                                    " +
-                                              _vm._s(data.index + 1) +
-                                              "\n                                "
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "cell(descripcion)",
-                                      fn: function(data) {
-                                        return [
-                                          _c(
-                                            "b-form-group",
-                                            { staticClass: "mb-0" },
-                                            [
-                                              _c("vue-bootstrap-typeahead", {
-                                                ref:
-                                                  "typeahead_detalle_" +
-                                                  index +
-                                                  "[" +
-                                                  data.index +
-                                                  "]",
-                                                refInFor: true,
-                                                attrs: {
-                                                  size: "sm",
-                                                  data: _vm.productos,
-                                                  serializer: function(p) {
-                                                    return p.nombre
-                                                  },
-                                                  placeholder:
-                                                    "Escribe para filtrar ...",
-                                                  state: _vm.$v.ordenes_compra
-                                                    .$each[index].detalle.$each[
-                                                    data.index
-                                                  ].producto_nombre.$dirty
-                                                    ? !_vm.$v.ordenes_compra
-                                                        .$each[index].detalle
-                                                        .$each[data.index]
-                                                        .producto_nombre.$error
-                                                    : null,
-                                                  "aria-describedby":
-                                                    "detalle-orden-producto-nombre" +
-                                                    index +
-                                                    "-" +
-                                                    data.index
-                                                },
-                                                on: {
-                                                  hit: function($event) {
-                                                    return _vm.producto(
-                                                      $event,
-                                                      index,
-                                                      data.index
-                                                    )
-                                                  }
-                                                },
-                                                model: {
-                                                  value:
-                                                    _vm.$v.ordenes_compra.$each[
-                                                      index
-                                                    ].detalle.$each[data.index]
-                                                      .producto_nombre.$model,
-                                                  callback: function($$v) {
-                                                    _vm.$set(
-                                                      _vm.$v.ordenes_compra
-                                                        .$each[index].detalle
-                                                        .$each[data.index]
-                                                        .producto_nombre,
-                                                      "$model",
-                                                      $$v
-                                                    )
-                                                  },
-                                                  expression:
-                                                    "$v.ordenes_compra.$each[index].detalle.$each[data.index].producto_nombre.$model"
-                                                }
-                                              }),
-                                              _vm._v(" "),
-                                              _c(
-                                                "b-form-invalid-feedback",
-                                                {
-                                                  attrs: {
-                                                    id:
-                                                      "detalle-orden-producto-nombre" +
-                                                      index +
-                                                      "-" +
-                                                      data.index
-                                                  }
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "\n                                            Campo de texto, mínimo de 3 caracteres.\n                                        "
-                                                  )
-                                                ]
-                                              )
-                                            ],
-                                            1
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "cell(cantidad)",
-                                      fn: function(data) {
-                                        return [
-                                          _c(
-                                            "b-form-group",
-                                            { staticClass: "mb-0" },
-                                            [
-                                              _c("b-form-input", {
-                                                attrs: {
-                                                  size: "sm",
-                                                  state: _vm.$v.ordenes_compra
-                                                    .$each[index].detalle.$each[
-                                                    data.index
-                                                  ].cantidad.$dirty
-                                                    ? !_vm.$v.ordenes_compra
-                                                        .$each[index].detalle
-                                                        .$each[data.index]
-                                                        .cantidad.$error
-                                                    : null,
-                                                  "aria-describedby":
-                                                    "detalle-orden-cantidad" +
-                                                    data.index
-                                                },
-                                                on: {
-                                                  keyup: function($event) {
-                                                    return _vm.calcular_total_cantidad(
-                                                      index,
-                                                      data.index
-                                                    )
-                                                  }
-                                                },
-                                                model: {
-                                                  value:
-                                                    _vm.$v.ordenes_compra.$each[
-                                                      index
-                                                    ].detalle.$each[data.index]
-                                                      .cantidad.$model,
-                                                  callback: function($$v) {
-                                                    _vm.$set(
-                                                      _vm.$v.ordenes_compra
-                                                        .$each[index].detalle
-                                                        .$each[data.index]
-                                                        .cantidad,
-                                                      "$model",
-                                                      $$v
-                                                    )
-                                                  },
-                                                  expression:
-                                                    "$v.ordenes_compra.$each[index].detalle.$each[data.index].cantidad.$model"
-                                                }
-                                              }),
-                                              _vm._v(" "),
-                                              _c(
-                                                "b-form-invalid-feedback",
-                                                {
-                                                  attrs: {
-                                                    id:
-                                                      "detalle-orden-cantidad" +
-                                                      data.index
-                                                  }
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "\n                                            Campo númerico, valor mínimo 0.\n                                        "
-                                                  )
-                                                ]
-                                              )
-                                            ],
-                                            1
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "cell(valor_unitario)",
-                                      fn: function(data) {
-                                        return [
-                                          _c(
-                                            "b-form-group",
-                                            { staticClass: "mb-0" },
-                                            [
-                                              _c("b-form-input", {
-                                                attrs: {
-                                                  size: "sm",
-                                                  state: _vm.$v.ordenes_compra
-                                                    .$each[index].detalle.$each[
-                                                    data.index
-                                                  ].valor_unitario.$dirty
-                                                    ? !_vm.$v.ordenes_compra
-                                                        .$each[index].detalle
-                                                        .$each[data.index]
-                                                        .valor_unitario.$error
-                                                    : null,
-                                                  "aria-describedby":
-                                                    "detalle-orden-valor_unitario" +
-                                                    data.index
-                                                },
-                                                model: {
-                                                  value:
-                                                    _vm.$v.ordenes_compra.$each[
-                                                      index
-                                                    ].detalle.$each[data.index]
-                                                      .valor_unitario.$model,
-                                                  callback: function($$v) {
-                                                    _vm.$set(
-                                                      _vm.$v.ordenes_compra
-                                                        .$each[index].detalle
-                                                        .$each[data.index]
-                                                        .valor_unitario,
-                                                      "$model",
-                                                      $$v
-                                                    )
-                                                  },
-                                                  expression:
-                                                    "$v.ordenes_compra.$each[index].detalle.$each[data.index].valor_unitario.$model"
-                                                }
-                                              }),
-                                              _vm._v(" "),
-                                              _c(
-                                                "b-form-invalid-feedback",
-                                                {
-                                                  attrs: {
-                                                    id:
-                                                      "detalle-orden-valor_unitario" +
-                                                      data.index
-                                                  }
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "\n                                            Campo númerico, valor mínimo 1.\n                                        "
-                                                  )
-                                                ]
-                                              )
-                                            ],
-                                            1
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "cell(total)",
-                                      fn: function(data) {
-                                        return [
-                                          _vm._v(
-                                            "\n                                    " +
-                                              _vm._s(
-                                                _vm._f("currency")(
-                                                  data.item.total
-                                                )
-                                              ) +
-                                              "\n                                "
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "cell(acciones)",
-                                      fn: function(row) {
-                                        return [
-                                          _c(
-                                            "b-button",
-                                            {
-                                              attrs: {
-                                                size: "xs",
-                                                variant: "success",
-                                                title: "Agregar fila"
-                                              },
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.agregar_fila(index)
-                                                }
-                                              }
-                                            },
-                                            [
-                                              _c("i", {
-                                                staticClass: "fa fa-plus"
-                                              })
-                                            ]
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "b-button",
-                                            {
-                                              directives: [
-                                                {
-                                                  name: "show",
-                                                  rawName: "v-show",
-                                                  value: row.index > 0,
-                                                  expression: "row.index > 0"
-                                                }
-                                              ],
-                                              attrs: {
-                                                size: "xs",
-                                                variant: "danger",
-                                                title: "Eliminar fila"
-                                              },
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.eliminar_fila(
-                                                    index,
-                                                    row.index
-                                                  )
-                                                }
-                                              }
-                                            },
-                                            [
-                                              _c("i", {
-                                                staticClass: "fa fa-trash"
-                                              })
-                                            ]
-                                          )
-                                        ]
-                                      }
+                                      name: "show",
+                                      rawName: "v-show",
+                                      value: index > 0,
+                                      expression: "index > 0"
                                     }
                                   ],
-                                  null,
-                                  true
-                                )
-                              })
+                                  attrs: {
+                                    size: "xs",
+                                    variant: "danger",
+                                    title: "Eliminar orden de compra"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.eliminar_orden_compra(index)
+                                    }
+                                  }
+                                },
+                                [_c("i", { staticClass: "fa fa-remove" })]
+                              )
                             ],
                             1
                           )
@@ -79529,198 +79171,880 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c(
-                    "b-row",
+                    "div",
+                    { staticClass: "card-body" },
                     [
                       _c(
-                        "b-col",
-                        { attrs: { cols: "4" } },
+                        "b-row",
                         [
                           _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "NETO ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
+                            "b-col",
+                            { attrs: { xs: "12", sm: "12", md: "3" } },
                             [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.ordenes_compra.$each[index].neto
-                                    .$dirty
-                                    ? !_vm.$v.ordenes_compra.$each[index].neto
-                                        .$error
-                                    : null,
-                                  "aria-describedby": "orden-compra-neto",
-                                  readonly: ""
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.ordenes_compra.$each[index].neto
-                                      .$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.ordenes_compra.$each[index].neto,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.ordenes_compra.$each[index].neto.$model"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { cols: "4" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "IVA(19%) ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.ordenes_compra.$each[index].iva
-                                    .$dirty
-                                    ? !_vm.$v.ordenes_compra.$each[index].iva
-                                        .$error
-                                    : null,
-                                  "aria-describedby": "orden-compra-iva",
-                                  readonly: ""
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.ordenes_compra.$each[index].iva
-                                      .$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.ordenes_compra.$each[index].iva,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.ordenes_compra.$each[index].iva.$model"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { cols: "4" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: {
-                                label: "Total ",
-                                "label-cols-md": "3",
-                                "label-cols-lg": "3"
-                              }
-                            },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  state: _vm.$v.ordenes_compra.$each[index]
-                                    .total.$dirty
-                                    ? !_vm.$v.ordenes_compra.$each[index].total
-                                        .$error
-                                    : null,
-                                  "aria-describedby": "orden-compra-total",
-                                  readonly: ""
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.ordenes_compra.$each[index].total
-                                      .$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.ordenes_compra.$each[index].total,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.ordenes_compra.$each[index].total.$model"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { attrs: { cols: "12" } },
-                        [
-                          _c(
-                            "b-form-group",
-                            {
-                              staticClass: "mb-1",
-                              attrs: { label: "Observación " }
-                            },
-                            [
-                              _c("b-form-textarea", {
-                                attrs: {
-                                  state: _vm.$v.ordenes_compra.$each[index]
-                                    .observacion.$dirty
-                                    ? !_vm.$v.ordenes_compra.$each[index]
-                                        .observacion.$error
-                                    : null,
-                                  "aria-describedby":
-                                    "orden-compra-observacion",
-                                  rows: "3",
-                                  "max-rows": "6",
-                                  placeholder: "Sin onbservación."
-                                },
-                                model: {
-                                  value:
-                                    _vm.$v.ordenes_compra.$each[index]
-                                      .observacion.$model,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.$v.ordenes_compra.$each[index]
-                                        .observacion,
-                                      "$model",
-                                      $$v
-                                    )
-                                  },
-                                  expression:
-                                    "$v.ordenes_compra.$each[index].observacion.$model"
-                                }
-                              }),
-                              _vm._v(" "),
                               _c(
-                                "b-form-invalid-feedback",
-                                { attrs: { id: "orden-compra-observacion" } },
+                                "b-form-group",
+                                {
+                                  attrs: {
+                                    label: "Centro de costo ",
+                                    "label-cols-md": "3",
+                                    "label-cols-lg": "3"
+                                  }
+                                },
                                 [
-                                  _vm._v(
-                                    "\n                                Campo de alfanúmerico, mínimo de 3 caracteres.\n                            "
+                                  _c("b-form-select", {
+                                    attrs: {
+                                      state: _vm.$v.ordenes_compra.$each[index]
+                                        .centro_costo_id.$dirty
+                                        ? !_vm.$v.ordenes_compra.$each[index]
+                                            .centro_costo_id.$error
+                                        : null,
+                                      "aria-describedby":
+                                        "ordenes-compra-centro-costo",
+                                      options: _vm.opciones_centro_costos
+                                    },
+                                    model: {
+                                      value:
+                                        _vm.$v.ordenes_compra.$each[index]
+                                          .centro_costo_id.$model,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.$v.ordenes_compra.$each[index]
+                                            .centro_costo_id,
+                                          "$model",
+                                          $$v
+                                        )
+                                      },
+                                      expression:
+                                        "$v.ordenes_compra.$each[index].centro_costo_id.$model"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-form-invalid-feedback",
+                                    {
+                                      attrs: {
+                                        id: "ordenes-compra-centro-costo"
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                    Campo de alfanúmerico, mínimo de 3 caracteres.\n                                "
+                                      )
+                                    ]
                                   )
-                                ]
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "b-col",
+                            { attrs: { xs: "12", sm: "12", md: "3" } },
+                            [
+                              _c(
+                                "b-form-group",
+                                {
+                                  attrs: {
+                                    label: "Asunto ",
+                                    "label-cols-md": "3",
+                                    "label-cols-lg": "3"
+                                  }
+                                },
+                                [
+                                  _c("b-form-input", {
+                                    attrs: {
+                                      state: _vm.$v.ordenes_compra.$each[index]
+                                        .asunto.$dirty
+                                        ? !_vm.$v.ordenes_compra.$each[index]
+                                            .asunto.$error
+                                        : null,
+                                      "aria-describedby":
+                                        "ordenes-compra-asunto"
+                                    },
+                                    model: {
+                                      value:
+                                        _vm.$v.ordenes_compra.$each[index]
+                                          .asunto.$model,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.$v.ordenes_compra.$each[index]
+                                            .asunto,
+                                          "$model",
+                                          $$v
+                                        )
+                                      },
+                                      expression:
+                                        "$v.ordenes_compra.$each[index].asunto.$model"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-form-invalid-feedback",
+                                    { attrs: { id: "ordenes-compra-asunto" } },
+                                    [
+                                      _vm._v(
+                                        "\n                                    Campo de alfanúmerico, mínimo de 3 caracteres.\n                                "
+                                      )
+                                    ]
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "b-col",
+                            { attrs: { xs: "12", sm: "12", md: "3" } },
+                            [
+                              _c(
+                                "b-form-group",
+                                {
+                                  attrs: {
+                                    label: "Fecha ",
+                                    "label-cols-md": "3",
+                                    "label-cols-lg": "3"
+                                  }
+                                },
+                                [
+                                  _c("b-form-input", {
+                                    attrs: {
+                                      state: _vm.$v.ordenes_compra.$each[index]
+                                        .fecha.$dirty
+                                        ? !_vm.$v.ordenes_compra.$each[index]
+                                            .fecha.$error
+                                        : null,
+                                      "aria-describedby": "orden-compra-fecha",
+                                      readonly: ""
+                                    },
+                                    model: {
+                                      value:
+                                        _vm.$v.ordenes_compra.$each[index].fecha
+                                          .$model,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.$v.ordenes_compra.$each[index]
+                                            .fecha,
+                                          "$model",
+                                          $$v
+                                        )
+                                      },
+                                      expression:
+                                        "$v.ordenes_compra.$each[index].fecha.$model"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "b-col",
+                            { attrs: { xs: "12", sm: "12", md: "3" } },
+                            [
+                              _c(
+                                "b-form-group",
+                                {
+                                  attrs: {
+                                    label: " N° Orden ",
+                                    "label-cols-md": "3",
+                                    "label-cols-lg": "3"
+                                  }
+                                },
+                                [
+                                  _c("b-form-input", {
+                                    attrs: {
+                                      value:
+                                        parseInt(_vm.num_orden_compra) +
+                                        parseInt(index + 1),
+                                      readonly: ""
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-row",
+                        { attrs: { "align-v": "center" } },
+                        [
+                          _c(
+                            "b-col",
+                            [
+                              _c(
+                                "b-form-group",
+                                [
+                                  _c("b-table", {
+                                    attrs: {
+                                      "show-empty": "",
+                                      small: "",
+                                      striped: "",
+                                      outlined: "",
+                                      stacked: "sm",
+                                      items: _vm.ordenes_compra[index].detalle,
+                                      fields: _vm.orden_compra_detalle
+                                    },
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "empty",
+                                          fn: function() {
+                                            return [
+                                              _c("center", [
+                                                _c("h6", [
+                                                  _vm._v("No hay registros")
+                                                ])
+                                              ])
+                                            ]
+                                          },
+                                          proxy: true
+                                        },
+                                        {
+                                          key: "cell(index)",
+                                          fn: function(data) {
+                                            return [
+                                              _vm._v(
+                                                "\n                                        " +
+                                                  _vm._s(data.index + 1) +
+                                                  "\n                                    "
+                                              )
+                                            ]
+                                          }
+                                        },
+                                        {
+                                          key: "cell(descripcion)",
+                                          fn: function(data) {
+                                            return [
+                                              _c(
+                                                "b-row",
+                                                [
+                                                  _c(
+                                                    "b-col",
+                                                    [
+                                                      _c(
+                                                        "b-form-group",
+                                                        { staticClass: "mb-0" },
+                                                        [
+                                                          _c(
+                                                            "vue-bootstrap-typeahead",
+                                                            {
+                                                              ref:
+                                                                "typeahead_detalle_orden_compra",
+                                                              refInFor: true,
+                                                              attrs: {
+                                                                size: "sm",
+                                                                data:
+                                                                  _vm.productos,
+                                                                serializer: function(
+                                                                  p
+                                                                ) {
+                                                                  return p.nombre
+                                                                },
+                                                                placeholder:
+                                                                  "Escribe para filtrar ...",
+                                                                state: _vm.$v
+                                                                  .ordenes_compra
+                                                                  .$each[index]
+                                                                  .detalle
+                                                                  .$each[
+                                                                  data.index
+                                                                ]
+                                                                  .producto_nombre
+                                                                  .$dirty
+                                                                  ? !_vm.$v
+                                                                      .ordenes_compra
+                                                                      .$each[
+                                                                      index
+                                                                    ].detalle
+                                                                      .$each[
+                                                                      data.index
+                                                                    ]
+                                                                      .producto_nombre
+                                                                      .$error
+                                                                  : null,
+                                                                "aria-describedby":
+                                                                  "detalle-orden-producto-nombre" +
+                                                                  index +
+                                                                  "-" +
+                                                                  data.index
+                                                              },
+                                                              on: {
+                                                                hit: function(
+                                                                  $event
+                                                                ) {
+                                                                  return _vm.producto(
+                                                                    $event,
+                                                                    index,
+                                                                    data.index
+                                                                  )
+                                                                }
+                                                              },
+                                                              nativeOn: {
+                                                                blur: function(
+                                                                  $event
+                                                                ) {
+                                                                  return _vm.verificar_producto(
+                                                                    $event
+                                                                  )
+                                                                }
+                                                              },
+                                                              model: {
+                                                                value:
+                                                                  _vm.$v
+                                                                    .ordenes_compra
+                                                                    .$each[
+                                                                    index
+                                                                  ].detalle
+                                                                    .$each[
+                                                                    data.index
+                                                                  ]
+                                                                    .producto_nombre
+                                                                    .$model,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.$set(
+                                                                    _vm.$v
+                                                                      .ordenes_compra
+                                                                      .$each[
+                                                                      index
+                                                                    ].detalle
+                                                                      .$each[
+                                                                      data.index
+                                                                    ]
+                                                                      .producto_nombre,
+                                                                    "$model",
+                                                                    $$v
+                                                                  )
+                                                                },
+                                                                expression:
+                                                                  "$v.ordenes_compra.$each[index].detalle.$each[data.index].producto_nombre.$model"
+                                                              }
+                                                            }
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "b-form-invalid-feedback",
+                                                            {
+                                                              attrs: {
+                                                                id:
+                                                                  "detalle-orden-producto-nombre" +
+                                                                  index +
+                                                                  "-" +
+                                                                  data.index
+                                                              }
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "\n                                                        Campo de texto, mínimo de 3 caracteres.\n                                                    "
+                                                              )
+                                                            ]
+                                                          )
+                                                        ],
+                                                        1
+                                                      )
+                                                    ],
+                                                    1
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "b-col",
+                                                    { attrs: { cols: "2" } },
+                                                    [
+                                                      _c(
+                                                        "b-button",
+                                                        {
+                                                          staticClass: "mt-1",
+                                                          attrs: {
+                                                            size: "xs",
+                                                            variant: "success",
+                                                            title:
+                                                              "Agregar fila"
+                                                          },
+                                                          on: {
+                                                            click:
+                                                              _vm.abrir_modal_productos_inventario
+                                                          }
+                                                        },
+                                                        [
+                                                          _c("i", {
+                                                            staticClass:
+                                                              "fa fa-plus"
+                                                          })
+                                                        ]
+                                                      )
+                                                    ],
+                                                    1
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            ]
+                                          }
+                                        },
+                                        {
+                                          key: "cell(cantidad)",
+                                          fn: function(data) {
+                                            return [
+                                              _c(
+                                                "b-form-group",
+                                                { staticClass: "mb-0" },
+                                                [
+                                                  _c("b-form-input", {
+                                                    attrs: {
+                                                      size: "sm",
+                                                      state: _vm.$v
+                                                        .ordenes_compra.$each[
+                                                        index
+                                                      ].detalle.$each[
+                                                        data.index
+                                                      ].cantidad.$dirty
+                                                        ? !_vm.$v.ordenes_compra
+                                                            .$each[index]
+                                                            .detalle.$each[
+                                                            data.index
+                                                          ].cantidad.$error
+                                                        : null,
+                                                      "aria-describedby":
+                                                        "detalle-orden-cantidad" +
+                                                        data.index
+                                                    },
+                                                    on: {
+                                                      keyup: function($event) {
+                                                        return _vm.calcular_total_cantidad(
+                                                          index,
+                                                          data.index
+                                                        )
+                                                      }
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        _vm.$v.ordenes_compra
+                                                          .$each[index].detalle
+                                                          .$each[data.index]
+                                                          .cantidad.$model,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.$v.ordenes_compra
+                                                            .$each[index]
+                                                            .detalle.$each[
+                                                            data.index
+                                                          ].cantidad,
+                                                          "$model",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "$v.ordenes_compra.$each[index].detalle.$each[data.index].cantidad.$model"
+                                                    }
+                                                  }),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "b-form-invalid-feedback",
+                                                    {
+                                                      attrs: {
+                                                        id:
+                                                          "detalle-orden-cantidad" +
+                                                          data.index
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                Campo númerico, valor mínimo 0.\n                                            "
+                                                      )
+                                                    ]
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            ]
+                                          }
+                                        },
+                                        {
+                                          key: "cell(valor_unitario)",
+                                          fn: function(data) {
+                                            return [
+                                              _c(
+                                                "b-form-group",
+                                                { staticClass: "mb-0" },
+                                                [
+                                                  _c("b-form-input", {
+                                                    attrs: {
+                                                      size: "sm",
+                                                      state: _vm.$v
+                                                        .ordenes_compra.$each[
+                                                        index
+                                                      ].detalle.$each[
+                                                        data.index
+                                                      ].valor_unitario.$dirty
+                                                        ? !_vm.$v.ordenes_compra
+                                                            .$each[index]
+                                                            .detalle.$each[
+                                                            data.index
+                                                          ].valor_unitario
+                                                            .$error
+                                                        : null,
+                                                      "aria-describedby":
+                                                        "detalle-orden-valor_unitario" +
+                                                        data.index
+                                                    },
+                                                    on: {
+                                                      keyup: function($event) {
+                                                        return _vm.calcular_total_cantidad(
+                                                          index,
+                                                          data.index
+                                                        )
+                                                      }
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        _vm.$v.ordenes_compra
+                                                          .$each[index].detalle
+                                                          .$each[data.index]
+                                                          .valor_unitario
+                                                          .$model,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          _vm.$v.ordenes_compra
+                                                            .$each[index]
+                                                            .detalle.$each[
+                                                            data.index
+                                                          ].valor_unitario,
+                                                          "$model",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "$v.ordenes_compra.$each[index].detalle.$each[data.index].valor_unitario.$model"
+                                                    }
+                                                  }),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "b-form-invalid-feedback",
+                                                    {
+                                                      attrs: {
+                                                        id:
+                                                          "detalle-orden-valor_unitario" +
+                                                          data.index
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                Campo númerico, valor mínimo 1.\n                                            "
+                                                      )
+                                                    ]
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            ]
+                                          }
+                                        },
+                                        {
+                                          key: "cell(total)",
+                                          fn: function(data) {
+                                            return [
+                                              _vm._v(
+                                                "\n                                        " +
+                                                  _vm._s(
+                                                    _vm._f("currency")(
+                                                      data.item.total
+                                                    )
+                                                  ) +
+                                                  "\n                                    "
+                                              )
+                                            ]
+                                          }
+                                        },
+                                        {
+                                          key: "cell(acciones)",
+                                          fn: function(row) {
+                                            return [
+                                              _c(
+                                                "b-button",
+                                                {
+                                                  attrs: {
+                                                    size: "xs",
+                                                    variant: "success",
+                                                    title: "Agregar fila"
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.agregar_fila(
+                                                        index
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c("i", {
+                                                    staticClass: "fa fa-plus"
+                                                  })
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "b-button",
+                                                {
+                                                  directives: [
+                                                    {
+                                                      name: "show",
+                                                      rawName: "v-show",
+                                                      value: row.index > 0,
+                                                      expression:
+                                                        "row.index > 0"
+                                                    }
+                                                  ],
+                                                  attrs: {
+                                                    size: "xs",
+                                                    variant: "danger",
+                                                    title: "Eliminar fila"
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.eliminar_fila(
+                                                        index,
+                                                        row.index
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c("i", {
+                                                    staticClass: "fa fa-trash"
+                                                  })
+                                                ]
+                                              )
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      null,
+                                      true
+                                    )
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-row",
+                        [
+                          _c(
+                            "b-col",
+                            { attrs: { cols: "4" } },
+                            [
+                              _c(
+                                "b-form-group",
+                                {
+                                  staticClass: "mb-1",
+                                  attrs: {
+                                    label: "NETO ",
+                                    "label-cols-md": "3",
+                                    "label-cols-lg": "3"
+                                  }
+                                },
+                                [
+                                  _c("b-form-input", {
+                                    attrs: {
+                                      state: _vm.$v.ordenes_compra.$each[index]
+                                        .neto.$dirty
+                                        ? !_vm.$v.ordenes_compra.$each[index]
+                                            .neto.$error
+                                        : null,
+                                      "aria-describedby": "orden-compra-neto",
+                                      readonly: ""
+                                    },
+                                    model: {
+                                      value:
+                                        _vm.$v.ordenes_compra.$each[index].neto
+                                          .$model,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.$v.ordenes_compra.$each[index]
+                                            .neto,
+                                          "$model",
+                                          $$v
+                                        )
+                                      },
+                                      expression:
+                                        "$v.ordenes_compra.$each[index].neto.$model"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "b-col",
+                            { attrs: { cols: "4" } },
+                            [
+                              _c(
+                                "b-form-group",
+                                {
+                                  staticClass: "mb-1",
+                                  attrs: {
+                                    label: "IVA(19%) ",
+                                    "label-cols-md": "3",
+                                    "label-cols-lg": "3"
+                                  }
+                                },
+                                [
+                                  _c("b-form-input", {
+                                    attrs: {
+                                      state: _vm.$v.ordenes_compra.$each[index]
+                                        .iva.$dirty
+                                        ? !_vm.$v.ordenes_compra.$each[index]
+                                            .iva.$error
+                                        : null,
+                                      "aria-describedby": "orden-compra-iva",
+                                      readonly: ""
+                                    },
+                                    model: {
+                                      value:
+                                        _vm.$v.ordenes_compra.$each[index].iva
+                                          .$model,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.$v.ordenes_compra.$each[index]
+                                            .iva,
+                                          "$model",
+                                          $$v
+                                        )
+                                      },
+                                      expression:
+                                        "$v.ordenes_compra.$each[index].iva.$model"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "b-col",
+                            { attrs: { cols: "4" } },
+                            [
+                              _c(
+                                "b-form-group",
+                                {
+                                  staticClass: "mb-1",
+                                  attrs: {
+                                    label: "Total ",
+                                    "label-cols-md": "3",
+                                    "label-cols-lg": "3"
+                                  }
+                                },
+                                [
+                                  _c("b-form-input", {
+                                    attrs: {
+                                      state: _vm.$v.ordenes_compra.$each[index]
+                                        .total.$dirty
+                                        ? !_vm.$v.ordenes_compra.$each[index]
+                                            .total.$error
+                                        : null,
+                                      "aria-describedby": "orden-compra-total",
+                                      readonly: ""
+                                    },
+                                    model: {
+                                      value:
+                                        _vm.$v.ordenes_compra.$each[index].total
+                                          .$model,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.$v.ordenes_compra.$each[index]
+                                            .total,
+                                          "$model",
+                                          $$v
+                                        )
+                                      },
+                                      expression:
+                                        "$v.ordenes_compra.$each[index].total.$model"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "b-col",
+                            { attrs: { cols: "12" } },
+                            [
+                              _c(
+                                "b-form-group",
+                                {
+                                  staticClass: "mb-1",
+                                  attrs: { label: "Observación " }
+                                },
+                                [
+                                  _c("b-form-textarea", {
+                                    attrs: {
+                                      state: _vm.$v.ordenes_compra.$each[index]
+                                        .observacion.$dirty
+                                        ? !_vm.$v.ordenes_compra.$each[index]
+                                            .observacion.$error
+                                        : null,
+                                      "aria-describedby":
+                                        "orden-compra-observacion",
+                                      rows: "3",
+                                      "max-rows": "6",
+                                      placeholder: "Sin onbservación."
+                                    },
+                                    model: {
+                                      value:
+                                        _vm.$v.ordenes_compra.$each[index]
+                                          .observacion.$model,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.$v.ordenes_compra.$each[index]
+                                            .observacion,
+                                          "$model",
+                                          $$v
+                                        )
+                                      },
+                                      expression:
+                                        "$v.ordenes_compra.$each[index].observacion.$model"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-form-invalid-feedback",
+                                    {
+                                      attrs: { id: "orden-compra-observacion" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                    Campo de alfanúmerico, mínimo de 3 caracteres.\n                                "
+                                      )
+                                    ]
+                                  )
+                                ],
+                                1
                               )
                             ],
                             1
@@ -79731,40 +80055,65 @@ var render = function() {
                     ],
                     1
                   )
-                ],
-                1
-              )
-            ])
-          })
-        ],
-        2
-      ),
-      _vm._v(" "),
-      _c(
-        "template",
-        { slot: "modal-footer" },
-        [
-          _c("b-spinner", {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.spinner.estado == 1,
-                expression: "spinner.estado == 1"
-              }
+                ])
+              })
             ],
-            attrs: { variant: "info", label: "Spinning" },
-            model: {
-              value: _vm.spinner.estado,
-              callback: function($$v) {
-                _vm.$set(_vm.spinner, "estado", $$v)
-              },
-              expression: "spinner.estado"
-            }
-          }),
+            2
+          ),
           _vm._v(" "),
-          _vm.usuario && _vm.usuario.email
-            ? _c(
+          _c(
+            "template",
+            { slot: "modal-footer" },
+            [
+              _c("b-spinner", {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.spinner.estado == 1,
+                    expression: "spinner.estado == 1"
+                  }
+                ],
+                attrs: { variant: "info", label: "Spinning" },
+                model: {
+                  value: _vm.spinner.estado,
+                  callback: function($$v) {
+                    _vm.$set(_vm.spinner, "estado", $$v)
+                  },
+                  expression: "spinner.estado"
+                }
+              }),
+              _vm._v(" "),
+              _vm.usuario && _vm.usuario.email
+                ? _c(
+                    "b-button",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.spinner.estado == 0,
+                          expression: "spinner.estado == 0"
+                        }
+                      ],
+                      attrs: {
+                        disabled:
+                          _vm.$v.ordenes_compra.$invalid ||
+                          _vm.$v.proveedor.$invalid,
+                        size: "md",
+                        variant: "success"
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.crear_orden_compra(1)
+                        }
+                      }
+                    },
+                    [_vm._v(" Guardar y enviar ")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
                 "b-button",
                 {
                   directives: [
@@ -79784,53 +80133,245 @@ var render = function() {
                   },
                   on: {
                     click: function($event) {
-                      return _vm.crear_orden_compra(1)
+                      return _vm.crear_orden_compra()
                     }
                   }
                 },
-                [_vm._v(" Guardar y enviar ")]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _c(
-            "b-button",
-            {
-              directives: [
+                [_vm._v(" Guardar ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "b-button",
                 {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.spinner.estado == 0,
-                  expression: "spinner.estado == 0"
-                }
-              ],
-              attrs: {
-                disabled:
-                  _vm.$v.ordenes_compra.$invalid || _vm.$v.proveedor.$invalid,
-                size: "md",
-                variant: "success"
-              },
-              on: {
-                click: function($event) {
-                  return _vm.crear_orden_compra()
-                }
-              }
-            },
-            [_vm._v(" Guardar ")]
+                  attrs: { size: "md", variant: "danger" },
+                  on: { click: _vm.cerrar_modal_orden_compra }
+                },
+                [_vm._v(" Cerrar ")]
+              )
+            ],
+            1
+          )
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c(
+        "b-modal",
+        {
+          ref: "modal_productos_inventario",
+          attrs: {
+            title: "Agregar producto",
+            "no-close-on-backdrop": "",
+            scrollable: "",
+            static: ""
+          }
+        },
+        [
+          _c(
+            "b-form",
+            [
+              _c(
+                "b-row",
+                [
+                  _c(
+                    "b-col",
+                    { attrs: { xs: "12", sm: "12", md: "6" } },
+                    [
+                      _c(
+                        "b-form-group",
+                        { attrs: { label: "Nombre de producto" } },
+                        [
+                          _c("b-form-input", {
+                            attrs: {
+                              state: _vm.$v.producto_inventario.nombre.$dirty
+                                ? !_vm.$v.producto_inventario.nombre.$error
+                                : null,
+                              "aria-describedby": "producto-nombre"
+                            },
+                            model: {
+                              value: _vm.$v.producto_inventario.nombre.$model,
+                              callback: function($$v) {
+                                _vm.$set(
+                                  _vm.$v.producto_inventario.nombre,
+                                  "$model",
+                                  $$v
+                                )
+                              },
+                              expression: "$v.producto_inventario.nombre.$model"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-invalid-feedback",
+                            { attrs: { id: "producto-nombre" } },
+                            [
+                              _vm._v(
+                                "\n                            Campo de alfanúmerico, mínimo de 3 caracteres.\n                        "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-col",
+                    { attrs: { xs: "12", sm: "12", md: "6" } },
+                    [
+                      _c(
+                        "b-form-group",
+                        { attrs: { label: "Unidad" } },
+                        [
+                          _c("b-form-select", {
+                            attrs: {
+                              state: _vm.$v.producto_inventario.unidad.$dirty
+                                ? !_vm.$v.producto_inventario.unidad.$error
+                                : null,
+                              "aria-describedby": "producto-unidad",
+                              options: _vm.opciones_unidad
+                            },
+                            model: {
+                              value: _vm.$v.producto_inventario.unidad.$model,
+                              callback: function($$v) {
+                                _vm.$set(
+                                  _vm.$v.producto_inventario.unidad,
+                                  "$model",
+                                  $$v
+                                )
+                              },
+                              expression: "$v.producto_inventario.unidad.$model"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-invalid-feedback",
+                            { attrs: { id: "producto-unidad" } },
+                            [
+                              _vm._v(
+                                "\n                            Debes de seleccionar una opción.\n                        "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-col",
+                    { attrs: { xs: "12", sm: "12", md: "6" } },
+                    [
+                      _c(
+                        "b-form-group",
+                        { attrs: { label: "Categoría de producto" } },
+                        [
+                          _c(
+                            "b-form-select",
+                            {
+                              attrs: {
+                                state: _vm.$v.producto_inventario.categoria_id
+                                  .$dirty
+                                  ? !_vm.$v.producto_inventario.categoria_id
+                                      .$error
+                                  : null,
+                                "aria-describedby":
+                                  "producto-inventario-categoria-id"
+                              },
+                              model: {
+                                value:
+                                  _vm.$v.producto_inventario.categoria_id
+                                    .$model,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.$v.producto_inventario.categoria_id,
+                                    "$model",
+                                    $$v
+                                  )
+                                },
+                                expression:
+                                  "$v.producto_inventario.categoria_id.$model"
+                              }
+                            },
+                            [
+                              _c("option", { domProps: { value: null } }, [
+                                _vm._v("Selecciona una opción")
+                              ]),
+                              _vm._v(" "),
+                              _vm._l(_vm.categorias, function(categoria) {
+                                return _c("option", {
+                                  key: categoria.id,
+                                  domProps: {
+                                    value: categoria.id,
+                                    textContent: _vm._s(categoria.nombre)
+                                  }
+                                })
+                              })
+                            ],
+                            2
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-invalid-feedback",
+                            {
+                              attrs: { id: "producto-inventario-categoria-id" }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Debes de seleccionar una opción.\n                        "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
           ),
           _vm._v(" "),
           _c(
-            "b-button",
-            {
-              attrs: { size: "md", variant: "danger" },
-              on: { click: _vm.cerrar_modal_orden_compra }
-            },
-            [_vm._v(" Cerrar ")]
+            "template",
+            { slot: "modal-footer" },
+            [
+              _c(
+                "b-button",
+                {
+                  attrs: {
+                    disabled: _vm.$v.producto_inventario.$invalid,
+                    size: "md",
+                    variant: "success"
+                  },
+                  on: { click: _vm.crear_actualizar_productos_inventario }
+                },
+                [_vm._v(" Guardar ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                {
+                  attrs: { size: "md", variant: "danger" },
+                  on: { click: _vm.cerrar_modal_productos_inventario }
+                },
+                [_vm._v(" Cerrar ")]
+              )
+            ],
+            1
           )
         ],
-        1
+        2
       )
     ],
-    2
+    1
   )
 }
 var staticRenderFns = []
@@ -80760,11 +81301,15 @@ var render = function() {
                       },
                       {
                         key: "cell(centro_costo)",
-                        fn: function(data) {
+                        fn: function(row) {
                           return [
                             _vm._v(
                               "\n                        " +
-                                _vm._s(data.item.lugar.nombre) +
+                                _vm._s(
+                                  row.item.lugar
+                                    ? row.item.lugar.nombre
+                                    : "Desconocido"
+                                ) +
                                 "\n                    "
                             )
                           ]
@@ -82629,26 +83174,6 @@ var render = function() {
                               {
                                 attrs: {
                                   size: "xs",
-                                  variant: "success",
-                                  title: "Duplicar registro"
-                                },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.abrir_modal_orden_compra(
-                                      row.item,
-                                      1
-                                    )
-                                  }
-                                }
-                              },
-                              [_c("i", { staticClass: "fa fa-plus" })]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "b-button",
-                              {
-                                attrs: {
-                                  size: "xs",
                                   variant: "warning",
                                   title: "Descargar registro"
                                 },
@@ -83787,8 +84312,7 @@ var render = function() {
                         key: "cell(valor_actual)",
                         fn: function(data) {
                           return [
-                            data.item.valor_actual > data.item.valor_ultimo &&
-                            data.item.valor_ultimo != 0
+                            data.item.valor_actual > data.item.valor_ultimo
                               ? _c("div", { staticClass: "text-danger" }, [
                                   _vm._v(
                                     _vm._s(
@@ -83797,9 +84321,7 @@ var render = function() {
                                   ),
                                   _c("i", { staticClass: "ml-2 ti-arrow-up" })
                                 ])
-                              : data.item.valor_actual <
-                                  data.item.valor_ultimo &&
-                                data.item.valor_ultimo != 0
+                              : data.item.valor_actual < data.item.valor_ultimo
                               ? _c("div", { staticClass: "text-success" }, [
                                   _vm._v(
                                     _vm._s(
@@ -105181,14 +105703,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!*********************************************************!*\
   !*** ./resources/js/components/general/OrdenCompra.vue ***!
   \*********************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _OrdenCompra_vue_vue_type_template_id_91f26fb4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./OrdenCompra.vue?vue&type=template&id=91f26fb4& */ "./resources/js/components/general/OrdenCompra.vue?vue&type=template&id=91f26fb4&");
 /* harmony import */ var _OrdenCompra_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./OrdenCompra.vue?vue&type=script&lang=js& */ "./resources/js/components/general/OrdenCompra.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _OrdenCompra_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _OrdenCompra_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -105218,7 +105741,7 @@ component.options.__file = "resources/js/components/general/OrdenCompra.vue"
 /*!**********************************************************************************!*\
   !*** ./resources/js/components/general/OrdenCompra.vue?vue&type=script&lang=js& ***!
   \**********************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

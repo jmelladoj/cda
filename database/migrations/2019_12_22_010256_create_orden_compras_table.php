@@ -21,7 +21,7 @@ class CreateOrdenComprasTable extends Migration
             $table->text('cantidad');
             $table->text('unidad_medida')->nullable()->default(null);
             $table->text('valor_unitario');
-            $table->text('estado')->nullable()->default(null);
+            $table->text('estado_producto')->nullable()->default(null);
             $table->integer('valor_neto');
             $table->integer('iva');
             $table->integer('total');

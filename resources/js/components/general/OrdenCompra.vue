@@ -1,332 +1,406 @@
 <template>
-    <b-modal ref="modal_orden_compra" :title="modal_orden_compra.titulo" size="xl" no-close-on-backdrop scrollable static>
-        <b-form>
-            <div class="card">
-                <div class="card-header bg-info text-right">
-                    <h6 class="m-b-0 text-white">Proveedor de Servicios</h6>
+
+    <div>
+        <b-modal ref="modal_orden_compra" :title="modal_orden_compra.titulo" size="xl" no-close-on-backdrop scrollable static>
+            <b-form>
+                <div class="card">
+                    <div class="card-header bg-info text-right">
+                        <h6 class="m-b-0 text-white">Proveedor de Servicios</h6>
+                    </div>
+                    <div class="card-body">
+                        <b-row>
+                            <b-col xs="12" sm="12" md="6">
+                                <b-form-group label="Razón Social " label-cols-md="3" label-cols-lg="3" class="mb-1">
+                                    <vue-bootstrap-typeahead
+                                        ref="typeahead_proveedor"
+                                        :data="proveedores"
+                                        v-model="$v.proveedor.nombre.$model"
+                                        :serializer="p => p.nombre"
+                                        placeholder="Escribe para filtrar ..."
+                                        @hit="proveedor_seleccionado($event)"
+                                        :state="$v.proveedor.nombre.$dirty ? !$v.proveedor.nombre.$error : null"
+                                        aria-describedby="orden-compra-proveedor-nombre"
+                                    />
+
+                                    <b-form-invalid-feedback id="orden-compra-proveedor-nombre">
+                                        Campo de texto, mínimo de 3 caracteres.
+                                    </b-form-invalid-feedback>
+                                </b-form-group>
+                            </b-col>
+                            <b-col xs="12" sm="12" md="6">
+                                <b-form-group label="Rut " label-cols-md="3" label-cols-lg="3" class="mb-1">
+                                    <b-form-input
+                                        v-rut:live
+                                        v-model="$v.proveedor.rut.$model"
+                                        :state="$v.proveedor.rut.$dirty ? !$v.proveedor.rut.$error : null"
+                                        aria-describedby="orden-compra-proveedor-rut"
+                                        :readonly="modal_orden_compra.accion == 2"
+                                    ></b-form-input>
+
+                                    <b-form-invalid-feedback id="orden-compra-proveedor-rut">
+                                        Campo de alfanúmerico, mínimo de 3 caracteres.
+                                    </b-form-invalid-feedback>
+                                </b-form-group>
+                            </b-col>
+                            <b-col xs="12" sm="12" md="6">
+                                <b-form-group label="Giro " label-cols-md="3" label-cols-lg="3" class="mb-1">
+                                    <b-form-input
+                                        v-model="$v.proveedor.giro.$model"
+                                        :state="$v.proveedor.giro.$dirty ? !$v.proveedor.giro.$error : null"
+                                        aria-describedby="orden-compra-proveedor-giro"
+                                    ></b-form-input>
+
+                                    <b-form-invalid-feedback id="orden-compra-proveedor-giro">
+                                        Campo de texto, mínimo de 3 caracteres.
+                                    </b-form-invalid-feedback>
+                                </b-form-group>
+                            </b-col>
+                            <b-col xs="12" sm="12" md="6">
+                                <b-form-group label="Teléfono " label-cols-md="3" label-cols-lg="3" class="mb-1">
+                                    <b-form-input
+                                        v-model="$v.proveedor.telefono.$model"
+                                        :state="$v.proveedor.telefono.$dirty ? !$v.proveedor.telefono.$error : null"
+                                        aria-describedby="orden-compra-proveedor-telefono"
+                                    ></b-form-input>
+
+                                    <b-form-invalid-feedback id="orden-compra-proveedor-telefono">
+                                        Campo de númerico, mínimo de 3 caracteres.
+                                    </b-form-invalid-feedback>
+                                </b-form-group>
+                            </b-col>
+                            <b-col xs="12" sm="12" md="6">
+                                <b-form-group label="Dirección " label-cols-md="3" label-cols-lg="3" class="mb-1">
+                                    <b-form-input
+                                        v-model="$v.proveedor.direccion.$model"
+                                        :state="$v.proveedor.direccion.$dirty ? !$v.proveedor.direccion.$error : null"
+                                        aria-describedby="orden-compra-proveedor-direccion"
+                                    ></b-form-input>
+
+                                    <b-form-invalid-feedback id="orden-compra-proveedor-direccion">
+                                        Campo de alfanúmerico, mínimo de 3 caracteres.
+                                    </b-form-invalid-feedback>
+                                </b-form-group>
+                            </b-col>
+                            <b-col xs="12" sm="12" md="6">
+                                <b-form-group label="Comuna " label-cols-md="3" label-cols-lg="3" class="mb-1">
+                                    <b-form-input
+                                        v-model="$v.proveedor.comuna.$model"
+                                        :state="$v.proveedor.comuna.$dirty ? !$v.proveedor.comuna.$error : null"
+                                        aria-describedby="orden-compra-proveedor-comuna"
+                                    ></b-form-input>
+
+                                    <b-form-invalid-feedback id="orden-compra-proveedor-comuna">
+                                        Campo de texto, mínimo de 3 caracteres.
+                                    </b-form-invalid-feedback>
+                                </b-form-group>
+                            </b-col>
+                            <b-col xs="12" sm="12" md="6">
+                                <b-form-group label="Correo " label-cols-md="3" label-cols-lg="3" class="mb-1">
+                                    <b-form-input
+                                        v-model="$v.proveedor.correo.$model"
+                                        :state="$v.proveedor.correo.$dirty ? !$v.proveedor.correo.$error : null"
+                                        aria-describedby="orden-compra-proveedor-correo"
+                                    ></b-form-input>
+
+                                    <b-form-invalid-feedback id="orden-compra-proveedor-correo">
+                                        Campo de alfanúmerico, mínimo de 3 caracteres y formato de email.
+                                    </b-form-invalid-feedback>
+                                </b-form-group>
+                            </b-col>
+                            <b-col xs="12" sm="12" md="6">
+                                <b-form-group label="Contacto " label-cols-md="3" label-cols-lg="3" class="mb-1">
+                                    <b-form-input
+                                        v-model="$v.proveedor.referencia.$model"
+                                        :state="$v.proveedor.referencia.$dirty ? !$v.proveedor.referencia.$error : null"
+                                        aria-describedby="orden-compra-proveedor-referencia"
+                                    ></b-form-input>
+
+                                    <b-form-invalid-feedback id="orden-compra-proveedor-referencia">
+                                        Campo de texto, mínimo de 3 caracteres.
+                                    </b-form-invalid-feedback>
+                                </b-form-group>
+                            </b-col>
+                        </b-row>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <b-row>
-                        <b-col xs="12" sm="12" md="6">
-                            <b-form-group label="Razón Social " label-cols-md="3" label-cols-lg="3" class="mb-1">
-                                <vue-bootstrap-typeahead
-                                    ref="typeahead_proveedor"
-                                    :data="proveedores"
-                                    v-model="$v.proveedor.nombre.$model"
-                                    :serializer="p => p.nombre"
-                                    placeholder="Escribe para filtrar ..."
-                                    @hit="proveedor_seleccionado($event)"
-                                    :state="$v.proveedor.nombre.$dirty ? !$v.proveedor.nombre.$error : null"
-                                    aria-describedby="orden-compra-proveedor-nombre"
-                                />
 
-                                <b-form-invalid-feedback id="orden-compra-proveedor-nombre">
-                                    Campo de texto, mínimo de 3 caracteres.
-                                </b-form-invalid-feedback>
-                            </b-form-group>
-                        </b-col>
-                        <b-col xs="12" sm="12" md="6">
-                            <b-form-group label="Rut " label-cols-md="3" label-cols-lg="3" class="mb-1">
-                                <b-form-input
-                                    v-rut:live
-                                    v-model="$v.proveedor.rut.$model"
-                                    :state="$v.proveedor.rut.$dirty ? !$v.proveedor.rut.$error : null"
-                                    aria-describedby="orden-compra-proveedor-rut"
-                                    :readonly="modal_orden_compra.accion == 2"
-                                ></b-form-input>
+                <div class="card" v-for="(o,index) in ordenes_compra" :key="index">
+                    <div class="card-header bg-info text-right">
+                        <b-row>
+                            <b-col>
+                                <h6 class="m-b-0 text-white">Detalle orden de Compra {{ index + 1 }} </h6>
+                            </b-col>
+                            <b-col cols="1" class="text-rigth">
+                                <b-button size="xs" variant="success" title="Agregar orden de compra" @click="agregar_orden_compra(index)">
+                                    <i class="fa fa-plus"></i>
+                                </b-button>
+                            </b-col>
+                            <b-col cols="1" class="text-left">
+                                <b-button v-show="index > 0" size="xs" variant="danger" title="Eliminar orden de compra" @click="eliminar_orden_compra(index)">
+                                    <i class="fa fa-remove"></i>
+                                </b-button>
+                            </b-col>
+                        </b-row>
+                    </div>
+                    <div class="card-body">
+                        <b-row>
+                            <b-col xs="12" sm="12" md="3">
+                                <b-form-group label="Centro de costo " label-cols-md="3" label-cols-lg="3">
+                                    <b-form-select
+                                        v-model="$v.ordenes_compra.$each[index].centro_costo_id.$model"
+                                        :state="$v.ordenes_compra.$each[index].centro_costo_id.$dirty ? !$v.ordenes_compra.$each[index].centro_costo_id.$error : null"
+                                        aria-describedby="ordenes-compra-centro-costo"
+                                        :options="opciones_centro_costos">
+                                    </b-form-select>
 
-                                <b-form-invalid-feedback id="orden-compra-proveedor-rut">
-                                    Campo de alfanúmerico, mínimo de 3 caracteres.
-                                </b-form-invalid-feedback>
-                            </b-form-group>
-                        </b-col>
-                        <b-col xs="12" sm="12" md="6">
-                            <b-form-group label="Giro " label-cols-md="3" label-cols-lg="3" class="mb-1">
-                                <b-form-input
-                                    v-model="$v.proveedor.giro.$model"
-                                    :state="$v.proveedor.giro.$dirty ? !$v.proveedor.giro.$error : null"
-                                    aria-describedby="orden-compra-proveedor-giro"
-                                ></b-form-input>
+                                    <b-form-invalid-feedback id="ordenes-compra-centro-costo">
+                                        Campo de alfanúmerico, mínimo de 3 caracteres.
+                                    </b-form-invalid-feedback>
+                                </b-form-group>
+                            </b-col>
+                            <b-col xs="12" sm="12" md="3">
+                                <b-form-group label="Asunto " label-cols-md="3" label-cols-lg="3">
+                                    <b-form-input
+                                        v-model="$v.ordenes_compra.$each[index].asunto.$model"
+                                        :state="$v.ordenes_compra.$each[index].asunto.$dirty ? !$v.ordenes_compra.$each[index].asunto.$error : null"
+                                        aria-describedby="ordenes-compra-asunto"
+                                    ></b-form-input>
 
-                                <b-form-invalid-feedback id="orden-compra-proveedor-giro">
-                                    Campo de texto, mínimo de 3 caracteres.
-                                </b-form-invalid-feedback>
-                            </b-form-group>
-                        </b-col>
-                        <b-col xs="12" sm="12" md="6">
-                            <b-form-group label="Teléfono " label-cols-md="3" label-cols-lg="3" class="mb-1">
-                                <b-form-input
-                                    v-model="$v.proveedor.telefono.$model"
-                                    :state="$v.proveedor.telefono.$dirty ? !$v.proveedor.telefono.$error : null"
-                                    aria-describedby="orden-compra-proveedor-telefono"
-                                ></b-form-input>
+                                    <b-form-invalid-feedback id="ordenes-compra-asunto">
+                                        Campo de alfanúmerico, mínimo de 3 caracteres.
+                                    </b-form-invalid-feedback>
+                                </b-form-group>
+                            </b-col>
+                            <b-col xs="12" sm="12" md="3">
+                                <b-form-group label="Fecha " label-cols-md="3" label-cols-lg="3">
+                                    <b-form-input
+                                        v-model="$v.ordenes_compra.$each[index].fecha.$model"
+                                        :state="$v.ordenes_compra.$each[index].fecha.$dirty ? !$v.ordenes_compra.$each[index].fecha.$error : null"
+                                        aria-describedby="orden-compra-fecha"
+                                        readonly
+                                    ></b-form-input>
+                                </b-form-group>
+                            </b-col>
+                            <b-col xs="12" sm="12" md="3">
+                                <b-form-group label=" N° Orden " label-cols-md="3" label-cols-lg="3">
+                                    <b-form-input
+                                        :value="parseInt(num_orden_compra) + parseInt(index + 1)"
+                                        readonly
+                                    ></b-form-input>
+                                </b-form-group>
+                            </b-col>
+                        </b-row>
+                        <b-row align-v="center">
+                            <b-col>
+                                <b-form-group>
+                                    <b-table show-empty small striped outlined stacked="sm" :items="ordenes_compra[index].detalle" :fields="orden_compra_detalle">
+                                        <template v-slot:empty>
+                                            <center><h6>No hay registros</h6></center>
+                                        </template>
 
-                                <b-form-invalid-feedback id="orden-compra-proveedor-telefono">
-                                    Campo de númerico, mínimo de 3 caracteres.
-                                </b-form-invalid-feedback>
-                            </b-form-group>
-                        </b-col>
-                        <b-col xs="12" sm="12" md="6">
-                            <b-form-group label="Dirección " label-cols-md="3" label-cols-lg="3" class="mb-1">
-                                <b-form-input
-                                    v-model="$v.proveedor.direccion.$model"
-                                    :state="$v.proveedor.direccion.$dirty ? !$v.proveedor.direccion.$error : null"
-                                    aria-describedby="orden-compra-proveedor-direccion"
-                                ></b-form-input>
+                                        <template v-slot:cell(index)="data">
+                                            {{ data.index + 1 }}
+                                        </template>
 
-                                <b-form-invalid-feedback id="orden-compra-proveedor-direccion">
-                                    Campo de alfanúmerico, mínimo de 3 caracteres.
-                                </b-form-invalid-feedback>
-                            </b-form-group>
-                        </b-col>
-                        <b-col xs="12" sm="12" md="6">
-                            <b-form-group label="Comuna " label-cols-md="3" label-cols-lg="3" class="mb-1">
-                                <b-form-input
-                                    v-model="$v.proveedor.comuna.$model"
-                                    :state="$v.proveedor.comuna.$dirty ? !$v.proveedor.comuna.$error : null"
-                                    aria-describedby="orden-compra-proveedor-comuna"
-                                ></b-form-input>
+                                        <template v-slot:cell(descripcion)="data">
+                                            <b-row>
+                                                <b-col>
+                                                    <b-form-group class="mb-0">
+                                                        <vue-bootstrap-typeahead
+                                                        :ref="'typeahead_detalle_orden_compra'"
+                                                        size="sm"
+                                                        :data="productos"
+                                                        v-model="$v.ordenes_compra.$each[index].detalle.$each[data.index].producto_nombre.$model"
+                                                        :serializer="p => p.nombre"
+                                                        placeholder="Escribe para filtrar ..."
+                                                        @blur.native="verificar_producto"
+                                                        @hit="producto($event, index ,data.index)"
+                                                            :state="$v.ordenes_compra.$each[index].detalle.$each[data.index].producto_nombre.$dirty ? !$v.ordenes_compra.$each[index].detalle.$each[data.index].producto_nombre.$error : null"
+                                                            :aria-describedby="'detalle-orden-producto-nombre' + index + '-' + data.index"/>
 
-                                <b-form-invalid-feedback id="orden-compra-proveedor-comuna">
-                                    Campo de texto, mínimo de 3 caracteres.
-                                </b-form-invalid-feedback>
-                            </b-form-group>
-                        </b-col>
-                        <b-col xs="12" sm="12" md="6">
-                            <b-form-group label="Correo " label-cols-md="3" label-cols-lg="3" class="mb-1">
-                                <b-form-input
-                                    v-model="$v.proveedor.correo.$model"
-                                    :state="$v.proveedor.correo.$dirty ? !$v.proveedor.correo.$error : null"
-                                    aria-describedby="orden-compra-proveedor-correo"
-                                ></b-form-input>
+                                                        <b-form-invalid-feedback :id="'detalle-orden-producto-nombre' + index + '-' + data.index">
+                                                            Campo de texto, mínimo de 3 caracteres.
+                                                        </b-form-invalid-feedback>
+                                                    </b-form-group>
+                                                </b-col>
+                                                <b-col cols="2">
+                                                    <b-button size="xs" variant="success" title="Agregar fila" class="mt-1" @click="abrir_modal_productos_inventario">
+                                                        <i class="fa fa-plus"></i>
+                                                    </b-button>
+                                                </b-col>
+                                            </b-row>
 
-                                <b-form-invalid-feedback id="orden-compra-proveedor-correo">
-                                    Campo de alfanúmerico, mínimo de 3 caracteres y formato de email.
-                                </b-form-invalid-feedback>
-                            </b-form-group>
-                        </b-col>
-                        <b-col xs="12" sm="12" md="6">
-                            <b-form-group label="Contacto " label-cols-md="3" label-cols-lg="3" class="mb-1">
-                                <b-form-input
-                                    v-model="$v.proveedor.referencia.$model"
-                                    :state="$v.proveedor.referencia.$dirty ? !$v.proveedor.referencia.$error : null"
-                                    aria-describedby="orden-compra-proveedor-referencia"
-                                ></b-form-input>
 
-                                <b-form-invalid-feedback id="orden-compra-proveedor-referencia">
-                                    Campo de texto, mínimo de 3 caracteres.
-                                </b-form-invalid-feedback>
-                            </b-form-group>
-                        </b-col>
-                    </b-row>
+
+                                        </template>
+
+                                        <template v-slot:cell(cantidad)="data">
+                                            <b-form-group class="mb-0">
+                                                <b-form-input
+                                                    size="sm"
+                                                    v-model="$v.ordenes_compra.$each[index].detalle.$each[data.index].cantidad.$model"
+                                                    :state="$v.ordenes_compra.$each[index].detalle.$each[data.index].cantidad.$dirty ? !$v.ordenes_compra.$each[index].detalle.$each[data.index].cantidad.$error : null"
+                                                    :aria-describedby="'detalle-orden-cantidad' + data.index"
+                                                    @keyup="calcular_total_cantidad(index ,data.index)"
+                                                ></b-form-input>
+                                                <b-form-invalid-feedback :id="'detalle-orden-cantidad' + data.index">
+                                                    Campo númerico, valor mínimo 0.
+                                                </b-form-invalid-feedback>
+                                            </b-form-group>
+                                        </template>
+
+                                        <template v-slot:cell(valor_unitario)="data">
+                                            <b-form-group class="mb-0">
+                                                <b-form-input
+                                                    size="sm"
+                                                    v-model="$v.ordenes_compra.$each[index].detalle.$each[data.index].valor_unitario.$model"
+                                                    :state="$v.ordenes_compra.$each[index].detalle.$each[data.index].valor_unitario.$dirty ? !$v.ordenes_compra.$each[index].detalle.$each[data.index].valor_unitario.$error : null"
+                                                    :aria-describedby="'detalle-orden-valor_unitario' + data.index"
+                                                    @keyup="calcular_total_cantidad(index ,data.index)"
+                                                ></b-form-input>
+
+                                                <b-form-invalid-feedback :id="'detalle-orden-valor_unitario' + data.index">
+                                                    Campo númerico, valor mínimo 1.
+                                                </b-form-invalid-feedback>
+                                            </b-form-group>
+                                        </template>
+
+                                        <template v-slot:cell(total)="data">
+                                            {{ data.item.total | currency }}
+                                        </template>
+
+                                        <template v-slot:cell(acciones)="row">
+                                            <b-button size="xs" variant="success" title="Agregar fila" @click="agregar_fila(index)">
+                                                <i class="fa fa-plus"></i>
+                                            </b-button>
+
+                                            <b-button size="xs" variant="danger" title="Eliminar fila" @click="eliminar_fila(index, row.index)" v-show="row.index > 0">
+                                                <i class="fa fa-trash"></i>
+                                            </b-button>
+                                        </template>
+
+                                    </b-table>
+                                </b-form-group>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col cols="4">
+                                <b-form-group label="NETO " label-cols-md="3" label-cols-lg="3" class="mb-1">
+                                    <b-form-input
+                                        v-model="$v.ordenes_compra.$each[index].neto.$model"
+                                        :state="$v.ordenes_compra.$each[index].neto.$dirty ? !$v.ordenes_compra.$each[index].neto.$error : null"
+                                        aria-describedby="orden-compra-neto"
+                                        readonly
+                                    ></b-form-input>
+                                </b-form-group>
+                            </b-col>
+                            <b-col cols="4">
+                                <b-form-group label="IVA(19%) " label-cols-md="3" label-cols-lg="3" class="mb-1">
+                                    <b-form-input
+                                        v-model="$v.ordenes_compra.$each[index].iva.$model"
+                                        :state="$v.ordenes_compra.$each[index].iva.$dirty ? !$v.ordenes_compra.$each[index].iva.$error : null"
+                                        aria-describedby="orden-compra-iva"
+                                        readonly
+                                    ></b-form-input>
+                                </b-form-group>
+                            </b-col>
+                            <b-col cols="4">
+                                <b-form-group label="Total " label-cols-md="3" label-cols-lg="3" class="mb-1">
+                                    <b-form-input
+                                        v-model="$v.ordenes_compra.$each[index].total.$model"
+                                        :state="$v.ordenes_compra.$each[index].total.$dirty ? !$v.ordenes_compra.$each[index].total.$error : null"
+                                        aria-describedby="orden-compra-total"
+                                        readonly
+                                    ></b-form-input>
+                                </b-form-group>
+                            </b-col>
+                            <b-col cols="12">
+                                <b-form-group label="Observación " class="mb-1">
+                                    <b-form-textarea
+                                        v-model="$v.ordenes_compra.$each[index].observacion.$model"
+                                        :state="$v.ordenes_compra.$each[index].observacion.$dirty ? !$v.ordenes_compra.$each[index].observacion.$error : null"
+                                        aria-describedby="orden-compra-observacion"
+                                        rows="3"
+                                        max-rows="6"
+                                        placeholder="Sin onbservación."
+                                    ></b-form-textarea>
+
+                                    <b-form-invalid-feedback id="orden-compra-observacion">
+                                        Campo de alfanúmerico, mínimo de 3 caracteres.
+                                    </b-form-invalid-feedback>
+                                </b-form-group>
+                            </b-col>
+                        </b-row>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card" v-for="(o,index) in ordenes_compra" :key="index">
-                <div class="card-header bg-info text-right">
-                    <b-row>
-                        <b-col>
-                            <h6 class="m-b-0 text-white">Detalle orden de Compra {{ index + 1 }} </h6>
-                        </b-col>
-                        <b-col cols="1" class="text-rigth">
-                            <b-button size="xs" variant="success" title="Agregar orden de compra" @click="agregar_orden_compra(index)">
-                                <i class="fa fa-plus"></i>
-                            </b-button>
-                        </b-col>
-                        <b-col cols="1" class="text-left">
-                            <b-button v-show="index > 0" size="xs" variant="danger" title="Eliminar orden de compra" @click="eliminar_orden_compra(index)">
-                                <i class="fa fa-remove"></i>
-                            </b-button>
-                        </b-col>
-                    </b-row>
-                </div>
-                <div class="card-body">
-                    <b-row>
-                        <b-col xs="12" sm="12" md="3">
-                            <b-form-group label="Centro de costo " label-cols-md="3" label-cols-lg="3">
-                                <b-form-select
-                                    v-model="$v.ordenes_compra.$each[index].centro_costo_id.$model"
-                                    :state="$v.ordenes_compra.$each[index].centro_costo_id.$dirty ? !$v.ordenes_compra.$each[index].centro_costo_id.$error : null"
-                                    aria-describedby="ordenes-compra-centro-costo"
-                                    :options="opciones_centro_costos">
-                                </b-form-select>
+            </b-form>
 
-                                <b-form-invalid-feedback id="ordenes-compra-centro-costo">
-                                    Campo de alfanúmerico, mínimo de 3 caracteres.
-                                </b-form-invalid-feedback>
-                            </b-form-group>
-                        </b-col>
-                        <b-col xs="12" sm="12" md="3">
-                            <b-form-group label="Asunto " label-cols-md="3" label-cols-lg="3">
-                                <b-form-input
-                                    v-model="$v.ordenes_compra.$each[index].asunto.$model"
-                                    :state="$v.ordenes_compra.$each[index].asunto.$dirty ? !$v.ordenes_compra.$each[index].asunto.$error : null"
-                                    aria-describedby="ordenes-compra-asunto"
-                                ></b-form-input>
+            <template slot="modal-footer">
+                <b-spinner v-model="spinner.estado" variant="info" label="Spinning" v-show="spinner.estado == 1"></b-spinner>
+                <b-button v-show="spinner.estado == 0" :disabled="$v.ordenes_compra.$invalid || $v.proveedor.$invalid" size="md" variant="success" @click="crear_orden_compra(1)" v-if="usuario && usuario.email"> Guardar y enviar </b-button>
+                <b-button v-show="spinner.estado == 0" :disabled="$v.ordenes_compra.$invalid || $v.proveedor.$invalid" size="md" variant="success" @click="crear_orden_compra()"> Guardar </b-button>
+                <b-button size="md" variant="danger" @click="cerrar_modal_orden_compra"> Cerrar </b-button>
+            </template>
+        </b-modal>
 
-                                <b-form-invalid-feedback id="ordenes-compra-asunto">
-                                    Campo de alfanúmerico, mínimo de 3 caracteres.
-                                </b-form-invalid-feedback>
-                            </b-form-group>
-                        </b-col>
-                        <b-col xs="12" sm="12" md="3">
-                            <b-form-group label="Fecha " label-cols-md="3" label-cols-lg="3">
-                                <b-form-input
-                                    v-model="$v.ordenes_compra.$each[index].fecha.$model"
-                                    :state="$v.ordenes_compra.$each[index].fecha.$dirty ? !$v.ordenes_compra.$each[index].fecha.$error : null"
-                                    aria-describedby="orden-compra-fecha"
-                                    readonly
-                                ></b-form-input>
-                            </b-form-group>
-                        </b-col>
-                        <b-col xs="12" sm="12" md="3">
-                            <b-form-group label=" N° Orden " label-cols-md="3" label-cols-lg="3">
-                                <b-form-input
-                                    :value="parseInt(num_orden_compra) + parseInt(index + 1)"
-                                    readonly
-                                ></b-form-input>
-                            </b-form-group>
-                        </b-col>
-                    </b-row>
-                    <b-row align-v="center">
-                        <b-col>
-                            <b-form-group>
-                                <b-table show-empty small striped outlined stacked="sm" :items="ordenes_compra[index].detalle" :fields="orden_compra_detalle">
-                                    <template v-slot:empty>
-                                        <center><h6>No hay registros</h6></center>
-                                    </template>
+        <b-modal ref="modal_productos_inventario" title="Agregar producto" no-close-on-backdrop scrollable static>
+            <b-form>
+                <b-row>
+                    <b-col xs="12" sm="12" md="6">
+                        <b-form-group label="Nombre de producto">
+                            <b-form-input
+                                v-model="$v.producto_inventario.nombre.$model"
+                                :state="$v.producto_inventario.nombre.$dirty ? !$v.producto_inventario.nombre.$error : null"
+                                aria-describedby="producto-nombre"
+                            ></b-form-input>
 
-                                    <template v-slot:cell(index)="data">
-                                        {{ data.index + 1 }}
-                                    </template>
+                            <b-form-invalid-feedback id="producto-nombre">
+                                Campo de alfanúmerico, mínimo de 3 caracteres.
+                            </b-form-invalid-feedback>
+                        </b-form-group>
+                    </b-col>
+                    <b-col xs="12" sm="12" md="6">
+                        <b-form-group label="Unidad">
+                            <b-form-select
+                                v-model="$v.producto_inventario.unidad.$model"
+                                :state="$v.producto_inventario.unidad.$dirty ? !$v.producto_inventario.unidad.$error : null"
+                                aria-describedby="producto-unidad"
+                                :options="opciones_unidad">
+                            </b-form-select>
 
-                                    <template v-slot:cell(descripcion)="data">
-                                        <b-form-group class="mb-0">
-                                            <vue-bootstrap-typeahead
-                                            :ref="'typeahead_detalle_'+ index +'[' + data.index + ']'"
-                                            size="sm"
-                                            :data="productos"
-                                            v-model="$v.ordenes_compra.$each[index].detalle.$each[data.index].producto_nombre.$model"
-                                            :serializer="p => p.nombre"
-                                            placeholder="Escribe para filtrar ..."
-                                            @hit="producto($event, index ,data.index)"
-                                                :state="$v.ordenes_compra.$each[index].detalle.$each[data.index].producto_nombre.$dirty ? !$v.ordenes_compra.$each[index].detalle.$each[data.index].producto_nombre.$error : null"
-                                                :aria-describedby="'detalle-orden-producto-nombre' + index + '-' + data.index"/>
+                            <b-form-invalid-feedback id="producto-unidad">
+                                Debes de seleccionar una opción.
+                            </b-form-invalid-feedback>
+                        </b-form-group>
+                    </b-col>
 
-                                            <b-form-invalid-feedback :id="'detalle-orden-producto-nombre' + index + '-' + data.index">
-                                                Campo de texto, mínimo de 3 caracteres.
-                                            </b-form-invalid-feedback>
-                                        </b-form-group>
-                                    </template>
+                    <b-col xs="12" sm="12" md="6">
+                        <b-form-group label="Categoría de producto">
+                            <b-form-select
+                                v-model="$v.producto_inventario.categoria_id.$model"
+                                :state="$v.producto_inventario.categoria_id.$dirty ? !$v.producto_inventario.categoria_id.$error : null"
+                                aria-describedby="producto-inventario-categoria-id">
+                                <option :value="null">Selecciona una opción</option>
+                                <option v-for="categoria in categorias" :key="categoria.id" :value="categoria.id" v-text="categoria.nombre"></option>
+                            </b-form-select>
 
-                                    <template v-slot:cell(cantidad)="data">
-                                        <b-form-group class="mb-0">
-                                            <b-form-input
-                                                size="sm"
-                                                v-model="$v.ordenes_compra.$each[index].detalle.$each[data.index].cantidad.$model"
-                                                :state="$v.ordenes_compra.$each[index].detalle.$each[data.index].cantidad.$dirty ? !$v.ordenes_compra.$each[index].detalle.$each[data.index].cantidad.$error : null"
-                                                :aria-describedby="'detalle-orden-cantidad' + data.index"
-                                                @keyup="calcular_total_cantidad(index ,data.index)"
-                                            ></b-form-input>
-                                            <b-form-invalid-feedback :id="'detalle-orden-cantidad' + data.index">
-                                                Campo númerico, valor mínimo 0.
-                                            </b-form-invalid-feedback>
-                                        </b-form-group>
-                                    </template>
+                            <b-form-invalid-feedback id="producto-inventario-categoria-id">
+                                Debes de seleccionar una opción.
+                            </b-form-invalid-feedback>
+                        </b-form-group>
+                    </b-col>
 
-                                    <template v-slot:cell(valor_unitario)="data">
-                                        <b-form-group class="mb-0">
-                                            <b-form-input
-                                                size="sm"
-                                                v-model="$v.ordenes_compra.$each[index].detalle.$each[data.index].valor_unitario.$model"
-                                                :state="$v.ordenes_compra.$each[index].detalle.$each[data.index].valor_unitario.$dirty ? !$v.ordenes_compra.$each[index].detalle.$each[data.index].valor_unitario.$error : null"
-                                                :aria-describedby="'detalle-orden-valor_unitario' + data.index"
-                                            ></b-form-input>
+                </b-row>
+            </b-form>
 
-                                            <b-form-invalid-feedback :id="'detalle-orden-valor_unitario' + data.index">
-                                                Campo númerico, valor mínimo 1.
-                                            </b-form-invalid-feedback>
-                                        </b-form-group>
-                                    </template>
+            <template slot="modal-footer">
+                <b-button :disabled="$v.producto_inventario.$invalid" size="md" variant="success" @click="crear_actualizar_productos_inventario"> Guardar </b-button>
+                <b-button size="md" variant="danger" @click="cerrar_modal_productos_inventario"> Cerrar </b-button>
+            </template>
+        </b-modal>
+    </div>
 
-                                    <template v-slot:cell(total)="data">
-                                        {{ data.item.total | currency }}
-                                    </template>
-
-                                    <template v-slot:cell(acciones)="row">
-                                        <b-button size="xs" variant="success" title="Agregar fila" @click="agregar_fila(index)">
-                                            <i class="fa fa-plus"></i>
-                                        </b-button>
-
-                                        <b-button size="xs" variant="danger" title="Eliminar fila" @click="eliminar_fila(index, row.index)" v-show="row.index > 0">
-                                            <i class="fa fa-trash"></i>
-                                        </b-button>
-                                    </template>
-
-                                </b-table>
-                            </b-form-group>
-                        </b-col>
-                    </b-row>
-                    <b-row>
-                        <b-col cols="4">
-                            <b-form-group label="NETO " label-cols-md="3" label-cols-lg="3" class="mb-1">
-                                <b-form-input
-                                    v-model="$v.ordenes_compra.$each[index].neto.$model"
-                                    :state="$v.ordenes_compra.$each[index].neto.$dirty ? !$v.ordenes_compra.$each[index].neto.$error : null"
-                                    aria-describedby="orden-compra-neto"
-                                    readonly
-                                ></b-form-input>
-                            </b-form-group>
-                        </b-col>
-                        <b-col cols="4">
-                            <b-form-group label="IVA(19%) " label-cols-md="3" label-cols-lg="3" class="mb-1">
-                                <b-form-input
-                                    v-model="$v.ordenes_compra.$each[index].iva.$model"
-                                    :state="$v.ordenes_compra.$each[index].iva.$dirty ? !$v.ordenes_compra.$each[index].iva.$error : null"
-                                    aria-describedby="orden-compra-iva"
-                                    readonly
-                                ></b-form-input>
-                            </b-form-group>
-                        </b-col>
-                        <b-col cols="4">
-                            <b-form-group label="Total " label-cols-md="3" label-cols-lg="3" class="mb-1">
-                                <b-form-input
-                                    v-model="$v.ordenes_compra.$each[index].total.$model"
-                                    :state="$v.ordenes_compra.$each[index].total.$dirty ? !$v.ordenes_compra.$each[index].total.$error : null"
-                                    aria-describedby="orden-compra-total"
-                                    readonly
-                                ></b-form-input>
-                            </b-form-group>
-                        </b-col>
-                        <b-col cols="12">
-                            <b-form-group label="Observación " class="mb-1">
-                                <b-form-textarea
-                                    v-model="$v.ordenes_compra.$each[index].observacion.$model"
-                                    :state="$v.ordenes_compra.$each[index].observacion.$dirty ? !$v.ordenes_compra.$each[index].observacion.$error : null"
-                                    aria-describedby="orden-compra-observacion"
-                                    rows="3"
-                                    max-rows="6"
-                                    placeholder="Sin onbservación."
-                                ></b-form-textarea>
-
-                                <b-form-invalid-feedback id="orden-compra-observacion">
-                                    Campo de alfanúmerico, mínimo de 3 caracteres.
-                                </b-form-invalid-feedback>
-                            </b-form-group>
-                        </b-col>
-                    </b-row>
-                </div>
-            </div>
-
-        </b-form>
-
-        <template slot="modal-footer">
-            <b-spinner v-model="spinner.estado" variant="info" label="Spinning" v-show="spinner.estado == 1"></b-spinner>
-            <b-button v-show="spinner.estado == 0" :disabled="$v.ordenes_compra.$invalid || $v.proveedor.$invalid" size="md" variant="success" @click="crear_orden_compra(1)" v-if="usuario && usuario.email"> Guardar y enviar </b-button>
-            <b-button v-show="spinner.estado == 0" :disabled="$v.ordenes_compra.$invalid || $v.proveedor.$invalid" size="md" variant="success" @click="crear_orden_compra()"> Guardar </b-button>
-            <b-button size="md" variant="danger" @click="cerrar_modal_orden_compra"> Cerrar </b-button>
-        </template>
-    </b-modal>
 </template>
 
 <script>
@@ -341,6 +415,8 @@
                 productos: [],
                 opciones_centro_costos: [],
                 ordenes_compra: [],
+                lugares: [],
+                categorias: [],
                 orden_compra_detalle: [
                     { key: 'index', label: '#', sortable: true, class: 'text-center' },
                     { key: 'descripcion', label: 'Descripción', sortable: true, class: 'text-left' },
@@ -367,7 +443,24 @@
                     comuna: '',
                     correo: '',
                     referencia: ''
-                }
+                },
+                producto_inventario: {
+                    id: 0,
+                    nombre: '',
+                    unidad: null,
+                    categoria_id: null,
+                    stock: 0,
+                    stock_critico: 0,
+                    valor_actual: 0,
+                    valor_ultimo: 0
+                },
+                opciones_unidad: [
+                    { value: null, text: 'Selecciona una opción ...' },
+                    { value: 'KG', text: 'KG' },
+                    { value: 'LT', text: 'LT' },
+                    { value: 'UNI', text: 'UNI' },
+                    { value: 'MT3', text: 'MT3' }
+                ]
             }
         },
         validations:{
@@ -403,6 +496,19 @@
                 },
                 referencia: {
 
+                }
+            },
+            producto_inventario: {
+                nombre: {
+                    required,
+                    minLength: minLength(3)
+                },
+                unidad: {
+                    required
+                },
+                categoria_id: {
+                    required,
+                    minValue: minValue(1)
                 }
             },
             ordenes_compra: {
@@ -459,6 +565,67 @@
         },
         methods: {
             ...mapMutations(['msg_success', 'msg_error']),
+            verificar_producto(e){
+                console.log(e)
+            },
+            listar_categorias(){
+                let me = this
+
+                axios.get('/categorias/1').then(function (response) {
+                    me.categorias = response.data.categorias
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+            listar_lugares(){
+                let me = this
+
+                axios.get('/lugares/1').then(function (response) {
+                    me.lugares = response.data.lugares
+
+                    me.items_salida = []
+
+                    me.lugares.forEach( function(lugar, index) {
+                        var fila = new Object()
+                        fila.index = index
+                        fila.lugar_id = lugar.id
+                        fila.nombre = lugar.nombre
+                        fila.cantidad_retiro = 0
+                        fila.costo_salida = 0
+                        me.items_salida.push(fila)
+                    })
+
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+            crear_actualizar_productos_inventario() {
+                if(this.$v.producto_inventario.$invalid){
+                    this.$v.producto_inventario.$touch()
+                    return
+                }
+
+                let me = this
+
+                axios.post('/inventario/crear/actualizar',{
+                        'id': me.producto_inventario.id,
+                        'nombre': me.producto_inventario.nombre,
+                        'unidad': me.producto_inventario.unidad,
+                        'categoria_id' : me.producto_inventario.categoria_id,
+                        'stock': me.producto_inventario.stock,
+                        'stock_critico': me.producto_inventario.stock_critico,
+                        'valor_actual': me.producto_inventario.valor_actual,
+                        'valor_ultimo': me.producto_inventario.valor_ultimo
+                    }).then(function (response) {
+                        me.listar_productos_inventario()
+                        me.$store.commit('msg_success', 'Registro agregado exitosamente.')
+                        me.cerrar_modal_productos_inventario()
+                    }).catch(function (error) {
+                        console.log(error)
+                })
+            },
             agregar_orden_compra(index){
                 var oc = new Object();
                 oc.centro_costo_id = null
@@ -473,6 +640,24 @@
                 this.ordenes_compra.push(oc)
 
                 this.agregar_fila(this.ordenes_compra.length - 1)
+            },
+            abrir_modal_productos_inventario(data = []) {
+                let me = this
+
+                me.limpiar_datos_producto_inventario()
+
+                this.$refs['modal_productos_inventario'].show()
+            },
+            cerrar_modal_productos_inventario() {
+                this.$refs['modal_productos_inventario'].hide()
+            },
+            limpiar_datos_producto_inventario() {
+                this.producto_inventario.id = 0
+                this.producto_inventario.nombre = ''
+                this.producto_inventario.unidad = null
+                this.producto_inventario.categoria_id = null
+
+                this.$v.$reset();
             },
             eliminar_orden_compra(index){
                 this.ordenes_compra.splice(index, 1);
@@ -593,6 +778,8 @@
                 this.listar_productos_inventario()
                 this.fecha_actual()
                 this.listar_centro_costos()
+                this.listar_categorias()
+                this.listar_lugares()
             },
             abrir_modal_orden_compra(data = [], accion = 0) {
                 let me = this
@@ -680,11 +867,11 @@
                     'referencia': me.proveedor.referencia,
                     'ordenes_compra': me.ordenes_compra
                 }).then(function (response) {
-                    me.$refs.typeahead_proveedor.inputValue = ""
                     me.obtener_registros()
                     me.$store.commit('msg_success', accion == 0 ? 'Registro agregado exitosamente.' :  'Registro enviado y agregado exitosamente.')
                     me.limpiar_datos_orden_compra()
                     me.agregar_orden_compra()
+                    me.$refs.typeahead_detalle_orden_compra[0].inputValue = ""
                 }).catch(function (error) {
                     me.$store.commit('msg_error', accion == 0 ? 'Problemas al agregar el registro.' :  'Problemas al enviar y agregar el registro.')
                     me.spinner.estado = 0
