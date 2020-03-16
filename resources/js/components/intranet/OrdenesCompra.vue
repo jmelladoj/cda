@@ -224,7 +224,7 @@
         methods: {
             ...mapMutations(['msg_success', 'msg_error']),
             abrir_modal_orden_compra(id_proveedor){
-                Evento.$emit('cargar_modal_orden_compra', id_proveedor);
+                Evento.$emit('cargar_modal_orden_compra', id_proveedor)
             },
             onFiltered(filteredItems) {
                 this.totalRows = filteredItems.length
@@ -369,6 +369,10 @@
         },
         mounted() {
             this.obtener_registros()
+
+            Evento.$on('listar_oc', () => {
+                this.listar_orden_compras()
+            })
         }
     }
 </script>

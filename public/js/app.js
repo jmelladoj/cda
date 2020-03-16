@@ -2997,6 +2997,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         me.limpiar_datos_orden_compra();
         me.agregar_orden_compra();
         me.$refs.typeahead_detalle_orden_compra[0].inputValue = "";
+        Evento.$emit('listar_oc');
       })["catch"](function (error) {
         me.$store.commit('msg_error', accion == 0 ? 'Problemas al agregar el registro.' : 'Problemas al enviar y agregar el registro.');
         me.spinner.estado = 0;
@@ -4709,7 +4710,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   }),
   mounted: function mounted() {
+    var _this4 = this;
+
     this.obtener_registros();
+    Evento.$on('listar_oc', function () {
+      _this4.listar_orden_compras();
+    });
   }
 });
 
@@ -78361,7 +78367,7 @@ var staticRenderFns = [
           "a",
           {
             staticClass:
-              "nav-link sidebartoggler d-none d-lg-block d-md-block waves-effect waves-dark",
+              "nav-link sidebartoggler d-lg-block d-md-block waves-effect waves-dark",
             attrs: { href: "javascript:void(0)" }
           },
           [_c("i", { staticClass: "icon-menu" })]

@@ -872,6 +872,8 @@
                     me.limpiar_datos_orden_compra()
                     me.agregar_orden_compra()
                     me.$refs.typeahead_detalle_orden_compra[0].inputValue = ""
+
+                    Evento.$emit('listar_oc')
                 }).catch(function (error) {
                     me.$store.commit('msg_error', accion == 0 ? 'Problemas al agregar el registro.' :  'Problemas al enviar y agregar el registro.')
                     me.spinner.estado = 0
